@@ -20,6 +20,7 @@ const Navbar = () => {
   const xp = progress?.xp ?? 0;
 
   const navLinks = [
+    { path: '/', label: t?.nav?.home || 'Accueil' },
     { path: '/levels', label: t?.nav?.lessons || 'Leçons' },
     { path: '/vocabulary', label: t?.nav?.vocabulary || 'Vocabulaire' },
     { path: '/exercises', label: t?.nav?.exercises || 'Exercices' },

@@ -6,6 +6,7 @@ import { createContext, useContext, useState } from 'react';
 const T = {
   FR: {
     nav: {
+      home:       'Accueil',
       lessons:    'Leçons',
       vocabulary: 'Vocabulaire',
       exercises:  'Exercices',
@@ -145,6 +146,7 @@ const T = {
   /* ───────────────────────────── MALAGASY ───────────────────────── */
   MG: {
     nav: {
+      home:       'Fanombohana',
       lessons:    'Lesona',
       vocabulary: 'Teny',
       exercises:  'Fanaovana',
@@ -284,6 +286,7 @@ const T = {
   /* ────────────────────────────── DEUTSCH ───────────────────────── */
   DE: {
     nav: {
+      home:       'Startseite',
       lessons:    'Lektionen',
       vocabulary: 'Wortschatz',
       exercises:  'Übungen',
