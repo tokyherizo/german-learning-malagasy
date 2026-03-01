@@ -82,6 +82,32 @@ export const AuthProvider = ({ children }) => {
     return true; // always succeeds — don't leak account existence
   }, []);
 
+  /* ── Update profile ──────────────────────────────────────────── */
+  const updateProfile = useCallback(({ name }) => {
+    setError('');
+    const trimName = (name || '').trim();
+    if (!trimName) { setError('Le nom ne peut pas être vide'); return false; }
+    const updated = { ...user, name: trimName, avatar: initials(trimName) };
+    const accounts = loadAccounts();
+    const idx = accounts.findIndex(a => a.email.toLowerCase() === user.email.toLowerCase());
+    if (idx !== -1) { accounts[idx].name = trimName; accounts[idx].avatar = initials(trimName); saveAccounts(accounts); }
+    persist(updated);
+    return true;
+  }, [user]);
+
+  /* ── Change password ─────────────────────────────────────────── */
+  const changePassword = useCallback(({ current, newPass }) => {
+    setError('');
+    const accounts = loadAccounts();
+    const idx = accounts.findIndex(
+      a => a.email.toLowerCase() === (user?.email || '').toLowerCase() && a.password === current
+    );
+    if (idx === -1) { setError('Mot de passe actuel incorrect'); return false; }
+    accounts[idx].password = newPass;
+    saveAccounts(accounts);
+    return true;
+  }, [user]);
+
   /* ── Logout ─────────────────────────────────────────────────── */
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
@@ -94,6 +120,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{
       user, login, register, loginWithGoogle, forgotPassword,
+      updateProfile, changePassword,
       logout, error, clearError, isAuthenticated: !!user,
     }}>
       {children}
@@ -101,6 +128,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');

@@ -5,63 +5,63 @@
    Palette: Blue • Violet • White
 ============================================ */
 :root, [data-theme="dark"] {
-  --bg-base:         #040814;
-  --bg-surface:      #080c1e;
-  --bg-card:         rgba(59,130,246,0.05);
-  --bg-nav:          rgba(4,8,20,0.95);
+  --bg-base:         #0d0d0d;
+  --bg-surface:      #111111;
+  --bg-card:         rgba(255,255,255,0.04);
+  --bg-nav:          rgba(13,13,13,0.97);
 
-  --border-card:     rgba(99,102,241,0.15);
-  --border-nav:      rgba(59,130,246,0.22);
-  --border-strong:   rgba(139,92,246,0.30);
+  --border-card:     rgba(255,255,255,0.08);
+  --border-nav:      rgba(255,255,255,0.09);
+  --border-strong:   rgba(255,255,255,0.18);
 
-  --text-primary:    rgba(235,240,255,0.93);
-  --text-muted:      rgba(180,190,230,0.56);
-  --text-subtle:     rgba(140,155,210,0.38);
+  --text-primary:    rgba(255,255,255,0.92);
+  --text-muted:      rgba(255,255,255,0.45);
+  --text-subtle:     rgba(255,255,255,0.22);
 
-  --accent:          #60a5fa;           /* blue-400   */
-  --accent-vivid:    #3b82f6;           /* blue-500   */
-  --accent-sky:      #38bdf8;           /* sky-400    */
-  --accent-violet:   #a78bfa;           /* violet-400 */
-  --accent-soft:     rgba(59,130,246,0.12);
-  --accent-glow:     rgba(59,130,246,0.28);
-  --sky-glow:        rgba(56,189,248,0.22);
+  --accent:          #818cf8;
+  --accent-vivid:    #6366f1;
+  --accent-sky:      #38bdf8;
+  --accent-violet:   #a78bfa;
+  --accent-soft:     rgba(129,140,248,0.10);
+  --accent-glow:     rgba(129,140,248,0.20);
+  --sky-glow:        rgba(56,189,248,0.15);
 
-  --gradient-main:   linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
-  --gradient-soft:   linear-gradient(135deg, rgba(37,99,235,0.18) 0%, rgba(79,70,229,0.14) 50%, rgba(124,58,237,0.10) 100%);
-  --gradient-text:   linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
+  --gradient-main:   linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --gradient-soft:   linear-gradient(135deg, rgba(79,70,229,0.12) 0%, rgba(124,58,237,0.08) 100%);
+  --gradient-text:   linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
 
-  --scrollbar-bg:    #040814;
-  --scrollbar-thumb: rgba(59,130,246,0.30);
+  --scrollbar-bg:    #0d0d0d;
+  --scrollbar-thumb: rgba(255,255,255,0.12);
 }
 
 [data-theme="light"] {
-  --bg-base:         #ffffff;
-  --bg-surface:      #f0f4ff;
-  --bg-card:         rgba(255,255,255,0.90);
-  --bg-nav:          rgba(255,255,255,0.97);
+  --bg-base:         #f5f5f5;
+  --bg-surface:      #ebebeb;
+  --bg-card:         rgba(0,0,0,0.04);
+  --bg-nav:          rgba(245,245,245,0.97);
 
-  --border-card:     rgba(59,130,246,0.15);
-  --border-nav:      rgba(59,130,246,0.18);
-  --border-strong:   rgba(99,102,241,0.28);
+  --border-card:     rgba(0,0,0,0.08);
+  --border-nav:      rgba(0,0,0,0.09);
+  --border-strong:   rgba(0,0,0,0.18);
 
-  --text-primary:    rgba(10,15,40,0.90);
-  --text-muted:      rgba(20,30,90,0.56);
-  --text-subtle:     rgba(20,30,90,0.36);
+  --text-primary:    rgba(10,10,10,0.90);
+  --text-muted:      rgba(10,10,10,0.50);
+  --text-subtle:     rgba(10,10,10,0.28);
 
-  --accent:          #2563eb;           /* blue-600   */
-  --accent-vivid:    #1d4ed8;           /* blue-700   */
-  --accent-sky:      #0284c7;           /* sky-700    */
-  --accent-violet:   #7c3aed;           /* violet-700 */
-  --accent-soft:     rgba(37,99,235,0.10);
-  --accent-glow:     rgba(37,99,235,0.18);
-  --sky-glow:        rgba(2,132,199,0.15);
+  --accent:          #4f46e5;
+  --accent-vivid:    #4338ca;
+  --accent-sky:      #0284c7;
+  --accent-violet:   #7c3aed;
+  --accent-soft:     rgba(79,70,229,0.10);
+  --accent-glow:     rgba(79,70,229,0.18);
+  --sky-glow:        rgba(2,132,199,0.12);
 
-  --gradient-main:   linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
-  --gradient-soft:   linear-gradient(135deg, rgba(37,99,235,0.10) 0%, rgba(79,70,229,0.08) 50%, rgba(124,58,237,0.06) 100%);
-  --gradient-text:   linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
+  --gradient-main:   linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --gradient-soft:   linear-gradient(135deg, rgba(79,70,229,0.10) 0%, rgba(124,58,237,0.07) 100%);
+  --gradient-text:   linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
 
-  --scrollbar-bg:    #ffffff;
-  --scrollbar-thumb: rgba(37,99,235,0.25);
+  --scrollbar-bg:    #f5f5f5;
+  --scrollbar-thumb: rgba(0,0,0,0.15);
 }
 
 /* ============================================
@@ -82,31 +82,8 @@
     overflow-x: hidden;
   }
 
-  /* Animated mesh gradient layer – dark mode */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(ellipse 80% 65% at 0% 0%,    rgba(37,99,235,0.16) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 55% at 100% 100%, rgba(124,58,237,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 45% 40% at 50% 88%,   rgba(56,189,248,0.08) 0%, transparent 58%),
-      radial-gradient(ellipse 55% 45% at 82% 8%,    rgba(59,130,246,0.11) 0%, transparent 55%),
-      radial-gradient(ellipse 35% 35% at 18% 60%,   rgba(139,92,246,0.09) 0%, transparent 50%);
-    animation: meshDrift 28s ease-in-out infinite alternate;
-    transition: opacity 0.5s ease;
-  }
-
-  /* Light-mode overlay – soft blue/violet orbs on white */
-  [data-theme="light"] body::before {
-    background:
-      radial-gradient(ellipse 75% 60% at 0% 0%,    rgba(37,99,235,0.06)   0%, transparent 60%),
-      radial-gradient(ellipse 55% 50% at 100% 100%, rgba(124,58,237,0.05)  0%, transparent 60%),
-      radial-gradient(ellipse 40% 35% at 50% 88%,   rgba(56,189,248,0.04)  0%, transparent 58%),
-      radial-gradient(ellipse 50% 40% at 80% 8%,    rgba(59,130,246,0.04)  0%, transparent 55%);
-  }
+  /* No animated colored mesh overlay — pure black bg */
+  body::before { display: none; }
 
   #root { min-height: 100vh; display: flex; flex-direction: column; position: relative; z-index: 1; }
   a      { color: inherit; text-decoration: none; }
@@ -135,19 +112,15 @@
 
   /* ─ Glass card ──────────────────────────── */
   .glass-card {
-    background: var(--bg-card);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--border-card);
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 1.25rem;
   }
 
-  /* ─ Gradient card (featured) ──────────────── */
+  /* ─ Gradient card (featured) ────────── */
   .grad-card {
-    background: var(--gradient-soft);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-strong);
+    background: #1a1a2e;
+    border: 1px solid rgba(255,255,255,0.10);
     border-radius: 1.25rem;
   }
 
@@ -171,10 +144,10 @@
   .glow-teal   { box-shadow: 0 0 30px rgba(56,189,248,0.18); } /* legacy – remapped to sky */
 
   /* ─ Card hover ─────────────────────────── */
-  .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+  .card-hover { transition: transform 0.22s ease, border-color 0.22s ease; }
   .card-hover:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 24px 64px rgba(6,5,20,0.55), 0 0 0 1px var(--border-strong);
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.18) !important;
   }
 
   /* ─ Noise overlay (subtle texture) ────────── */
@@ -202,6 +175,10 @@
   .delay-300 { animation-delay: 0.3s; }
   .delay-400 { animation-delay: 0.4s; }
   .delay-500 { animation-delay: 0.5s; }
+
+  /* ─ No scrollbar (chip row) ────────────── */
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 }
 
 /* ============================================
@@ -220,11 +197,8 @@
   100% { background-position: 0% 50%; }
 }
 @keyframes meshDrift {
-  0%   { opacity: 0.75; transform: scale(1)     translateX(0px)   translateY(0px); }
-  25%  { opacity: 0.90; transform: scale(1.02)  translateX(6px)   translateY(-8px); }
-  50%  { opacity: 1.00; transform: scale(1.04)  translateX(-4px)  translateY(5px); }
-  75%  { opacity: 0.88; transform: scale(1.01)  translateX(8px)   translateY(3px); }
-  100% { opacity: 0.80; transform: scale(0.98)  translateX(-6px)  translateY(-4px); }
+  /* unused — kept for compatibility */
+  0%, 100% { opacity: 1; }
 }
 
 /* ============================================
@@ -241,4 +215,4 @@
 /* ============================================
    Selection
 ============================================ */
-::selection { background: rgba(59,130,246,0.28); color: var(--text-primary); }
+::selection { background: rgba(129,140,248,0.28); color: #fff; }

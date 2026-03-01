@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom';
+import { writeFileSync } from 'fs';
 
-const LEVELS  = ['A1', 'A2', 'B1', 'B2'];
+const code = `import { Link } from 'react-router-dom';
+
+const LEVELS = ['A1', 'A2', 'B1', 'B2'];
 const NAV_LINKS = [
   { label: 'Accueil',     to: '/' },
   { label: 'Niveaux',     to: '/levels' },
@@ -14,7 +16,6 @@ const STATS = [
   { value: '4',    label: 'Niveaux' },
   { value: '100%', label: 'Gratis' },
 ];
-
 const lnk = {
   fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.42)',
   textDecoration: 'none', transition: 'color 0.15s', display: 'block',
@@ -23,11 +24,10 @@ const lnk = {
 
 const Footer = () => {
   const y = new Date().getFullYear();
-
   return (
     <footer style={{ background: '#0a0a0a', borderTop: '1px solid rgba(255,255,255,0.07)', position: 'relative', overflow: 'hidden' }}>
 
-      {/* Big decorative word */}
+      {/* Decorative background word */}
       <div aria-hidden style={{
         position: 'absolute', bottom: '-0.15em', left: '50%', transform: 'translateX(-50%)',
         fontSize: 'clamp(6rem,20vw,13rem)', fontWeight: 900, letterSpacing: '-0.04em',
@@ -35,7 +35,6 @@ const Footer = () => {
         userSelect: 'none', pointerEvents: 'none',
       }}>DEUTSCH</div>
 
-      {/* Main grid */}
       <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-10">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-10">
 
@@ -72,12 +71,12 @@ const Footer = () => {
             </nav>
           </div>
 
-          {/* Levels */}
+          {/* Niveaux */}
           <div className="flex flex-col gap-3">
             <span style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.28)' }}>Niveaux</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {LEVELS.map(lvl => (
-                <Link key={lvl} to={`/lessons/${lvl}`}
+                <Link key={lvl} to={\`/lessons/\${lvl}\`}
                   style={{ ...lnk, display: 'inline-flex', alignItems: 'center', gap: 8 }}
                   onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }}
                   onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.42)'; }}>
@@ -137,3 +136,7 @@ const Footer = () => {
 };
 
 export default Footer;
+`;
+
+writeFileSync('./src/components/Footer.jsx', code, 'utf8');
+console.log('Footer.jsx written successfully — lines:', code.split('\n').length);

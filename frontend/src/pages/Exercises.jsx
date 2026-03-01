@@ -5,6 +5,21 @@ import ProgressBar from '../components/ProgressBar';
 
 const LEVELS = ['Rehetra', 'A1', 'A2'];
 
+/* ── Chip (matches Home design) ── */
+const Chip = ({ label, active, onClick }) => (
+  <button
+    onClick={onClick}
+    className="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150"
+    style={{
+      background: active ? '#fff' : 'rgba(255,255,255,0.06)',
+      color: active ? '#0d0d0d' : 'rgba(255,255,255,0.55)',
+      border: active ? '1px solid #fff' : '1px solid rgba(255,255,255,0.12)',
+    }}
+  >
+    {label}
+  </button>
+);
+
 const ExerciseCard = ({ exercise, onAnswer, answered }) => {
   const [selected, setSelected] = useState(null);
 
@@ -19,18 +34,36 @@ const ExerciseCard = ({ exercise, onAnswer, answered }) => {
   const isCorrect = selected === exercise.correct;
 
   return (
-    <div className="glass-card p-6 md:p-7 border-purple-400/12">
+    <div
+      style={{
+        background: '#111',
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: 16,
+        padding: '24px 28px',
+        transition: 'border-color 0.15s',
+      }}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className={`text-xs px-2.5 py-1 rounded-full font-bold border ${
-            exercise.level === 'A1'
-              ? 'bg-indigo-500/12 border-indigo-400/28 text-indigo-400'
-              : 'bg-violet-500/12 border-violet-400/28 text-violet-400'
-          }`}>{exercise.level}</span>
-          <span className="text-xs text-white/30 bg-white/4 px-2 py-0.5 rounded-full capitalize">{exercise.type?.replace('_', ' ')}</span>
+          <span
+            className="text-xs px-2.5 py-1 rounded-full font-bold"
+            style={{
+              background: exercise.level === 'A1' ? 'rgba(129,140,248,0.12)' : 'rgba(167,139,250,0.12)',
+              color: exercise.level === 'A1' ? '#818cf8' : '#a78bfa',
+              border: `1px solid ${exercise.level === 'A1' ? 'rgba(129,140,248,0.25)' : 'rgba(167,139,250,0.25)'}`,
+            }}
+          >
+            {exercise.level}
+          </span>
+          <span
+            className="text-xs capitalize"
+            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.30)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 999, padding: '2px 8px' }}
+          >
+            {exercise.type?.replace('_', ' ')}
+          </span>
         </div>
-        <span className="text-xs font-bold text-indigo-400">+{exercise.xp || 10} XP</span>
+        <span className="text-xs font-bold" style={{ color: '#818cf8' }}>+{exercise.xp || 10} XP</span>
       </div>
 
       {/* Question */}
@@ -60,12 +93,15 @@ const ExerciseCard = ({ exercise, onAnswer, answered }) => {
 
       {/* Explanation */}
       {selected !== null && (
-        <div className={`mt-4 p-4 rounded-xl text-sm leading-relaxed animate-fade-up ${
-          isCorrect
-            ? 'bg-green-500/8 border border-green-400/20 text-green-300/90'
-            : 'bg-sky-500/10 border border-sky-400/22 text-sky-300/90'
-        }`}>
-          <span className="font-bold mr-2">{isCorrect ? '✅ Marina!' : '❌ Diso!'}</span>
+        <div
+          className="mt-4 p-4 rounded-xl text-sm leading-relaxed"
+          style={{
+            background: isCorrect ? 'rgba(74,222,128,0.06)' : 'rgba(56,189,248,0.07)',
+            border: `1px solid ${isCorrect ? 'rgba(74,222,128,0.20)' : 'rgba(56,189,248,0.22)'}`,
+            color: isCorrect ? 'rgba(134,239,172,0.90)' : 'rgba(125,211,252,0.90)',
+          }}
+        >
+          <span className="font-bold mr-2">{isCorrect ? 'Marina!' : 'Diso!'}</span>
           {exercise.explanation}
         </div>
       )}
@@ -98,85 +134,100 @@ const Exercises = () => {
     : 0;
 
   return (
-    <div className="min-h-screen pt-[68px]">
-      {/* Header */}
-      <section className="relative py-12 border-b border-white/6 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.04),transparent_60%)] pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-6">
+    <div style={{ background: '#0d0d0d', minHeight: '100vh', paddingTop: '52px' }}>
+
+      {/* ── Hero header ── */}
+      <section
+        className="relative py-14 overflow-hidden"
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
+      >
+        {/* Big decorative background word */}
+        <div
+          className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center font-black select-none pointer-events-none"
+          style={{ fontSize: 'clamp(5rem,18vw,11rem)', color: 'rgba(255,255,255,0.03)', letterSpacing: '-0.04em', lineHeight: 1 }}
+        >
+          ÜBUNGEN
+        </div>
+
+        <div className="relative max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <h1 className="text-3xl md:text-5xl font-black mb-2">
+              <h1 className="text-3xl md:text-5xl font-black mb-2" style={{ letterSpacing: '-0.03em' }}>
                 <span className="text-white">Fanazaran-tsaina /</span>{' '}
                 <span className="text-grad">Übungen</span>
               </h1>
-              <p className="text-white/40 text-sm">Valiana ny fanontaniana — manavao ny fahatakaranao</p>
+              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>
+                Valiana ny fanontaniana — manavao ny fahatakaranao
+              </p>
             </div>
 
-            {/* Session stats */}
+            {/* Live session stats */}
             {sessionStats.total > 0 && (
-              <div className="flex items-center gap-4 bg-white/3 border border-white/8 rounded-2xl px-5 py-3">
-                <div className="text-center">
-                  <div className="text-xl font-black text-indigo-400">{sessionStats.total}</div>
-                  <div className="text-[10px] text-white/35 uppercase tracking-wide">Valiana</div>
-                </div>
-                <div className="w-px h-8 bg-white/10" />
-                <div className="text-center">
-                  <div className="text-xl font-black text-green-400">{sessionStats.correct}</div>
-                  <div className="text-[10px] text-white/35 uppercase tracking-wide">Marina</div>
-                </div>
-                <div className="w-px h-8 bg-white/10" />
-                <div className="text-center">
-                  <div className={`text-xl font-black ${accuracy >= 70 ? 'text-green-400' : accuracy >= 50 ? 'text-violet-400' : 'text-sky-400'}`}>{accuracy}%</div>
-                  <div className="text-[10px] text-white/35 uppercase tracking-wide">Fahamarinana</div>
-                </div>
+              <div
+                className="flex items-center gap-4 px-5 py-3 rounded-2xl"
+                style={{ background: '#111', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                {[
+                  { label: 'Valiana',      value: sessionStats.total,   color: '#818cf8' },
+                  { label: 'Marina',       value: sessionStats.correct, color: '#4ade80' },
+                  { label: 'Fahamarinana', value: `${accuracy}%`,       color: accuracy >= 70 ? '#4ade80' : accuracy >= 50 ? '#a78bfa' : '#38bdf8' },
+                ].reduce((acc, stat, i) => [
+                  ...acc,
+                  ...(i > 0 ? [<div key={`d${i}`} className="w-px h-8" style={{ background: 'rgba(255,255,255,0.10)' }} />] : []),
+                  <div key={stat.label} className="text-center">
+                    <div className="text-xl font-black" style={{ color: stat.color }}>{stat.value}</div>
+                    <div className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>{stat.label}</div>
+                  </div>,
+                ], [])}
               </div>
             )}
           </div>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Overall progress */}
+      {/* ── Sticky chip filter bar (matches Home) ── */}
+      <div
+        className="sticky z-40 flex items-center gap-2 overflow-x-auto px-6 py-3 no-scrollbar"
+        style={{ top: '52px', background: 'rgba(13,13,13,0.96)', borderBottom: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(10px)' }}
+      >
+        {LEVELS.map(l => {
+          const count = l === 'Rehetra' ? getAllExercises().length : getExercisesByLevel(l).length;
+          return (
+            <Chip
+              key={l}
+              label={`${l} (${count})`}
+              active={level === l}
+              onClick={() => setLevel(l)}
+            />
+          );
+        })}
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-10">
+
+        {/* Stats overview */}
         {progress && (
-            <div className="glass-card p-5 mb-8 border-indigo-400/14">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <div
+            className="mb-8 p-5 rounded-2xl"
+            style={{ background: '#111', border: '1px solid rgba(255,255,255,0.07)' }}
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: 'XP Total', value: progress.stats.totalXP, color: 'text-indigo-400' },
-                { label: 'Fanazaran', value: progress.stats.exercisesCompleted, color: 'text-violet-400' },
-                { label: 'Marina', value: `${progressService.getAccuracyRate()}%`, color: 'text-green-400' },
-                { label: 'Streak', value: `🔥 ${progress.streak}`, color: 'text-sky-400' },
+                { label: 'XP Total',  value: progress?.stats?.totalXP ?? 0,                         color: '#818cf8' },
+                { label: 'Fanazaran', value: progress?.stats?.exercisesCompleted ?? 0,               color: '#a78bfa' },
+                { label: 'Marina',    value: `${progressService.getAccuracyRate()}%`,                 color: '#4ade80' },
+                { label: 'Streak',    value: `${progress?.streak ?? 0}j`,                            color: '#fb923c' },
               ].map(({ label, value, color }) => (
-                <div key={label} className="text-center bg-white/3 rounded-xl p-3">
-                  <div className={`text-xl font-black ${color}`}>{value}</div>
-                  <div className="text-[10px] text-white/35 uppercase tracking-wide mt-0.5">{label}</div>
+                <div key={label} className="text-center rounded-xl p-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <div className="text-xl font-black" style={{ color }}>{value}</div>
+                  <div className="text-[10px] uppercase tracking-wide mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>{label}</div>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* Level filter */}
-        <div className="flex gap-2 mb-8 flex-wrap">
-          {LEVELS.map(l => (
-            <button key={l} onClick={() => setLevel(l)}
-              className={`px-5 py-2 rounded-xl border text-sm font-semibold transition-all duration-200 ${
-                level === l
-                  ? l === 'A1'
-                    ? 'bg-indigo-500/17 border-indigo-400/32 text-indigo-400'
-                      : l === 'A2'
-                        ? 'bg-violet-500/17 border-violet-400/32 text-violet-400'
-                      : 'bg-white/10 border-white/25 text-white'
-                  : 'bg-white/3 border-white/8 text-white/50 hover:bg-white/6 hover:text-white/80'
-              }`}>
-              {l === 'Rehetra' ? '🌐 ' : l === 'A1' ? '🌱 ' : '🔥 '}{l}
-              <span className="ml-1.5 text-xs opacity-60">
-                ({l === 'Rehetra' ? getAllExercises().length : getExercisesByLevel(l).length})
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {/* Progress bar */}
+        {/* Session progress bar */}
         {answeredCount > 0 && (
           <div className="mb-6">
             <ProgressBar
@@ -190,7 +241,7 @@ const Exercises = () => {
         )}
 
         {/* Exercise cards */}
-        <div className="grid gap-5">
+        <div className="grid gap-4">
           {exercises.map(ex => (
             <ExerciseCard
               key={ex.id}
@@ -201,20 +252,34 @@ const Exercises = () => {
           ))}
         </div>
 
-        {/* All done message */}
+        {/* All done — big bold text instead of emoji */}
         {answeredCount === exercises.length && exercises.length > 0 && (
-          <div className="mt-10 glass-card p-8 text-center border-violet-400/22 animate-bounce-in glow-violet">
-            <div className="text-5xl mb-4">
-              {accuracy === 100 ? '🏆' : accuracy >= 70 ? '🎉' : '💪'}
+          <div
+            className="mt-10 rounded-3xl p-10 text-center"
+            style={{ background: '#111', border: '1px solid rgba(255,255,255,0.10)' }}
+          >
+            <div
+              className="font-black leading-none mb-4 select-none"
+              style={{
+                fontSize: 'clamp(4rem,14vw,8rem)',
+                color: accuracy >= 70 ? 'rgba(74,222,128,0.15)' : 'rgba(56,189,248,0.12)',
+                letterSpacing: '-0.04em',
+                marginBottom: '0.5rem',
+              }}
+            >
+              {accuracy === 100 ? 'TOP!' : accuracy >= 70 ? 'GUT!' : 'OK!'}
             </div>
-            <div className="text-2xl font-black animate-pulse-grad mb-2" style={{ color: 'var(--accent)' }}>
+            <div className="text-2xl font-black text-white mb-2">
               {accuracy === 100 ? 'Tonga Lafatra!' : accuracy >= 70 ? 'Tsara Tokoa!' : 'Miezaha Indray!'}
             </div>
-            <p className="text-white/50 text-sm mb-6">
-              Nahazo {sessionStats.correct}/{sessionStats.total} ({accuracy}%) ianao an'ity fampiharana ity!
+            <p className="text-sm mb-8" style={{ color: 'rgba(255,255,255,0.50)' }}>
+              Nahazo {sessionStats.correct}/{sessionStats.total} ({accuracy}%) ianao an&apos;ity fampiharana ity!
             </p>
-            <button onClick={() => { setAnswered({}); setSessionStats({ correct: 0, total: 0 }); }}
-              className="btn-grad px-8 py-3 rounded-2xl text-sm">
+            <button
+              onClick={() => { setAnswered({}); setSessionStats({ correct: 0, total: 0 }); }}
+              className="px-8 py-3 rounded-xl text-sm font-semibold transition-opacity hover:opacity-80"
+              style={{ background: '#fff', color: '#0d0d0d' }}
+            >
               Manao Indray
             </button>
           </div>
