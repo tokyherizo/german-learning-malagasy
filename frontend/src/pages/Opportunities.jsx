@@ -17,9 +17,9 @@ const PROGRAMS = [
       'Titre de séjour valide ou visa D',
       'Casier judiciaire vierge',
     ],
-    level: { code: 'B1–B2', label: 'B1 minimum, B2 recommandé', color: '#f472b6' },
+    level: { code: 'B1–C2', label: 'B1 minimum, B2 recommandé', color: '#7e90f4' },
     advantages: [
-      'Salaire mensuel : 600 € – 1 200 € pendant la formation',
+      'Salaire mensuel : 900 € – 1 200 € pendant la formation',
       'Logement & transports parfois pris en charge',
       'Permis de résidence automatique pendant 3 ans',
       'Accès direct à l\'emploi à la fin',
@@ -456,7 +456,7 @@ const Opportunities = () => {
           <div className="flex flex-wrap items-center gap-6 mt-8">
             {[
               { value: PROGRAMS.length, label: 'Programmes', color: '#818cf8' },
-              { value: 'A1 → C1', label: 'Niveaux couverts', color: '#34d399' },
+              { value: 'A1 → C2', label: 'Niveaux couverts', color: '#34d399' },
               { value: 'Gratuit', label: 'Accès aux infos', color: '#fbbf24' },
             ].map(({ value, label, color }) => (
               <div key={label} className="flex items-center gap-2.5">

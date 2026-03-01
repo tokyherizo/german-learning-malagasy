@@ -400,14 +400,14 @@ const BrandPanel = ({ view, t }) => {
 
   return (
     <div
-      className="hidden lg:flex flex-col items-center justify-center w-[48%] relative overflow-hidden"
+      className="hidden md:flex flex-col items-center justify-center w-[48%] relative overflow-hidden"
       style={{ background: '#0d0d0d', borderRight: '1px solid rgba(255,255,255,0.07)', minHeight: '100vh' }}
     >
       {/* FloatTiles — left side */}
       <FloatTile bg="#9e10ab" label="der/die/das" size="1.3rem" style={{ left: '6%',  top: '14%' }} delay={0}   />
       <FloatTile bg="#da0909" label="A1"          size="2rem"   style={{ left: '10%', top: '44%' }} delay={400} />
       <FloatTile bg="#0ab2af" label="Dativ"       size="1.4rem" style={{ left: '5%',  top: '72%' }} delay={200} />
-      <FloatTile bg="#23c77d" label="B1/B2"       size="0.9rem" style={{ left: '55%', top: '82%' }} delay={800} />
+      <FloatTile bg="#23c77d" label="B1/B2"       size="0.9rem" style={{ left: '42%', top: '82%' }} delay={800} />
 
       {/* FloatTiles — right side */}
       <FloatTile bg="#0d0dcb" label="Akkusativ"   size="1.5rem" style={{ right: '6%', top: '16%' }} delay={300} />
@@ -524,6 +524,30 @@ const Login = () => {
       }`}>
         <div className="w-full max-w-[420px]">
 
+          {/* ── Mobile-only hero header (badge + tagline) ── */}
+          <div className="flex md:hidden flex-col items-center text-center mb-6">
+            {/* Badge */}
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4 text-xs font-semibold uppercase tracking-widest"
+              style={{
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                color: 'rgba(255,255,255,0.6)',
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              {t?.login?.pageDecor || 'DEUTSCH'}
+            </div>
+            {/* Headline */}
+            <h1 className="text-2xl font-black leading-tight mb-2" style={{ letterSpacing: '-0.03em' }}>
+              <span className="text-white">Apprenez </span>
+              <span className="text-grad">l&apos;Allemand</span>
+            </h1>
+            <p className="text-xs max-w-[260px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              {t?.home?.subtitle || "La plateforme gratuite pour Malgaches qui apprennent l'allemand."}
+            </p>
+          </div>
+
           {/* Card */}
           <div
             className="relative overflow-hidden"
@@ -539,7 +563,7 @@ const Login = () => {
               style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)' }} />
 
             {/* Mobile logo */}
-            <div className="flex lg:hidden items-center gap-3 mb-7">
+            <div className="flex md:hidden items-center gap-3 mb-7">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black" style={{ background: '#fff', color: '#0d0d0d' }}>DE</div>
               <div className="text-lg font-black text-white">DeutschMG</div>
             </div>

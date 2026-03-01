@@ -15,6 +15,7 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const { lang, changeLang, t } = useLanguage();
   const isDark = theme === 'dark';
+  const il = theme === 'light';
 
   const progress = progressService.getProgress();
   const xp = progress?.xp ?? 0;
@@ -48,8 +49,8 @@ const Navbar = () => {
     <nav
       className="fixed top-0 inset-x-0 z-50 transition-all duration-200"
       style={{
-        background: scrolled ? 'rgba(13,13,13,0.97)' : 'transparent',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : '1px solid transparent',
+        background: scrolled ? (il ? 'rgba(240,242,245,0.97)' : 'rgba(13,13,13,0.97)') : 'transparent',
+        borderBottom: scrolled ? `1px solid ${il ? 'rgba(0,0,0,0.09)' : 'rgba(255,255,255,0.08)'}` : '1px solid transparent',
         backdropFilter: scrolled ? 'blur(12px)' : 'none',
       }}
     >
@@ -60,23 +61,23 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
             <div
               className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black"
-              style={{ background: '#fff', color: '#0d0d0d' }}
+              style={{ background: il ? '#0f172a' : '#fff', color: il ? '#fff' : '#0d0d0d' }}
             >
               DE
             </div>
-            <span className="text-sm font-bold text-white">DeutschMG</span>
+            <span className="text-sm font-bold" style={{ color: il ? '#0f172a' : '#fff' }}>DeutschMG</span>
           </Link>
         </div>
 
         {/* ── CENTRE: Navigation ── */}
-        <div className="hidden md:flex items-center gap-1 absolute left-1/2 transform -translate-x-1/2">
+        <div className="hidden md:flex items-center gap-0.5 absolute left-1/2 transform -translate-x-1/2">
           {navLinks.map(({ path, label, badge, badgeStyle }) => (
             <Link
               key={path}
               to={path}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm transition-colors duration-150"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 whitespace-nowrap lg:px-3.5 lg:text-sm lg:gap-1.5"
               style={{
-                color: isActive(path) ? '#fff' : 'rgba(255,255,255,0.5)',
+                color: isActive(path) ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)'),
                 fontWeight: isActive(path) ? 600 : 400,
                 background: isActive(path) ? purpleColor + '20' : 'transparent',
                 border: isActive(path) ? `1px solid ${purpleColor}40` : 'none',
@@ -98,37 +99,23 @@ const Navbar = () => {
         {/* ── DROITE: Actions (XP, Langue, Thème, Profil) ── */}
         <div className="flex items-center gap-2.5">
 
-          {/* XP */}
-          {xp > 0 && (
-            <div
-              className="hidden md:flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-lg"
-              style={{ 
-                color: 'rgba(255,255,255,0.55)', 
-                background: 'rgba(255,255,255,0.06)', 
-                border: '1px solid rgba(255,255,255,0.10)' 
-              }}
-            >
-              ⚡ {xp} XP
-            </div>
-          )}
-
           {/* ── Language Switcher (FR/DE seulement) ── */}
-          <div className="relative hidden md:block">
+          <div className="relative">
             <button
               onClick={() => setLangOpen(o => !o)}
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-colors"
               style={{
-                color: 'rgba(255,255,255,0.70)',
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.12)',
+                color: il ? 'rgba(15,23,42,0.65)' : 'rgba(255,255,255,0.70)',
+                background: il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)',
+                border: il ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.12)',
                 letterSpacing: '0.04em',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+              onMouseEnter={e => { e.currentTarget.style.background = il ? 'rgba(0,0,0,0.10)' : 'rgba(255,255,255,0.10)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'; }}
             >
-              {LangFlag[lang] || '🇫🇷'} {lang}
+              {LangFlag[lang] || '🇫🇷'}
               <svg width="8" height="8" viewBox="0 0 8 8" fill="none" style={{ opacity: 0.5, marginLeft: 1 }}>
-                <path d="M1 2.5l3 3 3-3" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M1 2.5l3 3 3-3" stroke={il ? '#0f172a' : 'white'} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
             {langOpen && (
@@ -140,9 +127,9 @@ const Navbar = () => {
                 <div
                   className="absolute right-0 mt-2 z-50 rounded-xl overflow-hidden"
                   style={{
-                    background: '#1a1a1a',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    boxShadow: '0 16px 40px rgba(0,0,0,0.6)',
+                    background: il ? '#ffffff' : '#1a1a1a',
+                    border: il ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.12)',
+                    boxShadow: il ? '0 16px 40px rgba(0,0,0,0.12)' : '0 16px 40px rgba(0,0,0,0.6)',
                     minWidth: 100,
                   }}
                 >
@@ -151,11 +138,11 @@ const Navbar = () => {
                     onClick={() => { changeLang('FR'); setLangOpen(false); }}
                     className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-xs font-semibold transition-colors"
                     style={{
-                      color: 'FR' === lang ? '#fff' : 'rgba(255,255,255,0.50)',
+                      color: 'FR' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.50)'),
                       background: 'FR' === lang ? purpleColor + '20' : 'transparent',
                       borderLeft: 'FR' === lang ? `2px solid ${purpleColor}` : 'none',
                     }}
-                    onMouseEnter={e => { if ('FR' !== lang) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                    onMouseEnter={e => { if ('FR' !== lang) e.currentTarget.style.background = il ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)'; }}
                     onMouseLeave={e => { if ('FR' !== lang) e.currentTarget.style.background = 'transparent'; }}
                   >
                     <span>{LangFlag.FR}</span>
@@ -168,11 +155,11 @@ const Navbar = () => {
                     onClick={() => { changeLang('DE'); setLangOpen(false); }}
                     className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-xs font-semibold transition-colors"
                     style={{
-                      color: 'DE' === lang ? '#fff' : 'rgba(255,255,255,0.50)',
+                      color: 'DE' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.50)'),
                       background: 'DE' === lang ? purpleColor + '20' : 'transparent',
                       borderLeft: 'DE' === lang ? `2px solid ${purpleColor}` : 'none',
                     }}
-                    onMouseEnter={e => { if ('DE' !== lang) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                    onMouseEnter={e => { if ('DE' !== lang) e.currentTarget.style.background = il ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)'; }}
                     onMouseLeave={e => { if ('DE' !== lang) e.currentTarget.style.background = 'transparent'; }}
                   >
                     <span>{LangFlag.DE}</span>
@@ -193,7 +180,7 @@ const Navbar = () => {
             style={{ 
               color: isDark ? '#fbbf24' : purpleColor,
               background: isDark ? 'rgba(255,255,255,0.06)' : purpleColor + '20',
-              border: isDark ? 'none' : `1px solid ${purpleColor}40`,
+              border: isDark ? (il ? `1px solid rgba(0,0,0,0.10)` : 'none') : `1px solid ${purpleColor}40`,
             }}
             aria-label="Theme"
           >
@@ -204,7 +191,7 @@ const Navbar = () => {
           {user && (
             <button
               onClick={() => navigate('/profile')}
-              className="hidden md:flex items-center justify-center w-7 h-7 rounded-full text-xs font-black transition-opacity hover:opacity-80"
+              className="flex items-center justify-center w-7 h-7 rounded-full text-xs font-black transition-opacity hover:opacity-80"
               style={{ 
                 background: purpleColor, 
                 color: '#fff' 
@@ -219,7 +206,7 @@ const Navbar = () => {
           <button
             onClick={() => setIsOpen(o => !o)}
             className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors"
-            style={{ color: 'rgba(255,255,255,0.7)', background: 'rgba(255,255,255,0.06)' }}
+            style={{ color: il ? 'rgba(15,23,42,0.65)' : 'rgba(255,255,255,0.7)', background: il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)' }}
             aria-label="Menu"
           >
             {isOpen ? '✕' : '☰'}
@@ -231,7 +218,7 @@ const Navbar = () => {
       {isOpen && (
         <div
           className="md:hidden flex flex-col"
-          style={{ background: '#111', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '10px 12px 16px' }}
+          style={{ background: il ? '#ffffff' : '#111', borderTop: il ? '1px solid rgba(0,0,0,0.09)' : '1px solid rgba(255,255,255,0.08)', padding: '10px 12px 16px' }}
         >
           {navLinks.map(({ path, label, badge, badgeStyle }) => (
             <Link
@@ -239,7 +226,7 @@ const Navbar = () => {
               to={path}
               className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
               style={{
-                color: isActive(path) ? '#fff' : 'rgba(255,255,255,0.5)',
+                color: isActive(path) ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)'),
                 background: isActive(path) ? purpleColor + '20' : 'transparent',
                 borderLeft: isActive(path) ? `2px solid ${purpleColor}` : 'none',
               }}
@@ -255,15 +242,15 @@ const Navbar = () => {
           ))}
 
           {/* Mobile language switcher (FR/DE seulement) */}
-          <div className="h-px my-2" style={{ background: 'rgba(255,255,255,0.08)' }} />
+          <div className="h-px my-2" style={{ background: il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)' }} />
           <div className="flex items-center gap-1.5 px-3 py-1 mb-1">
             <button
               onClick={() => changeLang('FR')}
               className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
               style={{
-                background: 'FR' === lang ? purpleColor + '20' : 'rgba(255,255,255,0.04)',
-                color: 'FR' === lang ? '#fff' : 'rgba(255,255,255,0.40)',
-                border: `1px solid ${'FR' === lang ? purpleColor + '40' : 'rgba(255,255,255,0.08)'}`,
+                background: 'FR' === lang ? purpleColor + '20' : (il ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)'),
+                color: 'FR' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.40)'),
+                border: `1px solid ${'FR' === lang ? purpleColor + '40' : (il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)')}`
               }}
             >
               {LangFlag.FR} FR
@@ -272,16 +259,16 @@ const Navbar = () => {
               onClick={() => changeLang('DE')}
               className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
               style={{
-                background: 'DE' === lang ? purpleColor + '20' : 'rgba(255,255,255,0.04)',
-                color: 'DE' === lang ? '#fff' : 'rgba(255,255,255,0.40)',
-                border: `1px solid ${'DE' === lang ? purpleColor + '40' : 'rgba(255,255,255,0.08)'}`,
+                background: 'DE' === lang ? purpleColor + '20' : (il ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)'),
+                color: 'DE' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.40)'),
+                border: `1px solid ${'DE' === lang ? purpleColor + '40' : (il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)')}`
               }}
             >
               {LangFlag.DE} DE
             </button>
           </div>
 
-          <div className="h-px my-1" style={{ background: 'rgba(255,255,255,0.08)' }} />
+          <div className="h-px my-1" style={{ background: il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)' }} />
           <div className="flex items-center justify-between px-3 py-1">
             <Link 
               to="/levels" 
@@ -291,7 +278,7 @@ const Navbar = () => {
               {t?.nav?.start || 'Commencer'}
             </Link>
             {user && !user.isGuest && (
-              <button onClick={logout} className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              <button onClick={logout} className="text-xs" style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.35)' }}>
                 {t?.nav?.logout || 'Déconnexion'}
               </button>
             )}

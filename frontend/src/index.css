@@ -35,33 +35,192 @@
 }
 
 [data-theme="light"] {
-  --bg-base:         #f5f5f5;
-  --bg-surface:      #ebebeb;
+  --bg-base:         #f0f2f5;
+  --bg-surface:      #e8eaed;
   --bg-card:         rgba(0,0,0,0.04);
-  --bg-nav:          rgba(245,245,245,0.97);
+  --bg-nav:          rgba(240,242,245,0.97);
 
-  --border-card:     rgba(0,0,0,0.08);
-  --border-nav:      rgba(0,0,0,0.09);
-  --border-strong:   rgba(0,0,0,0.18);
+  --border-card:     rgba(0,0,0,0.09);
+  --border-nav:      rgba(0,0,0,0.10);
+  --border-strong:   rgba(0,0,0,0.20);
 
-  --text-primary:    rgba(10,10,10,0.90);
-  --text-muted:      rgba(10,10,10,0.50);
-  --text-subtle:     rgba(10,10,10,0.28);
+  --text-primary:    #0f172a;
+  --text-muted:      rgba(15,23,42,0.55);
+  --text-subtle:     rgba(15,23,42,0.32);
 
-  --accent:          #4f46e5;
-  --accent-vivid:    #4338ca;
-  --accent-sky:      #0284c7;
-  --accent-violet:   #7c3aed;
-  --accent-soft:     rgba(79,70,229,0.10);
-  --accent-glow:     rgba(79,70,229,0.18);
-  --sky-glow:        rgba(2,132,199,0.12);
+  /* Darker indigo/violet for better contrast on light bg */
+  --accent:          #3730a3;
+  --accent-vivid:    #312e81;
+  --accent-sky:      #0369a1;
+  --accent-violet:   #5b21b6;
+  --accent-soft:     rgba(55,48,163,0.10);
+  --accent-glow:     rgba(55,48,163,0.18);
+  --sky-glow:        rgba(3,105,161,0.12);
 
-  --gradient-main:   linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  --gradient-soft:   linear-gradient(135deg, rgba(79,70,229,0.10) 0%, rgba(124,58,237,0.07) 100%);
-  --gradient-text:   linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --gradient-main:   linear-gradient(135deg, #3730a3 0%, #5b21b6 100%);
+  --gradient-soft:   linear-gradient(135deg, rgba(55,48,163,0.10) 0%, rgba(91,33,182,0.07) 100%);
+  --gradient-text:   linear-gradient(135deg, #3730a3 0%, #5b21b6 100%);
 
-  --scrollbar-bg:    #f5f5f5;
-  --scrollbar-thumb: rgba(0,0,0,0.15);
+  --scrollbar-bg:    #f0f2f5;
+  --scrollbar-thumb: rgba(0,0,0,0.18);
+
+  color-scheme: light;
+}
+
+/* ── Light mode: force dark text on white/light bg ───────────── */
+[data-theme="light"] body {
+  background: #f0f2f5 !important;
+}
+
+/* Page wrappers that use hardcoded dark backgrounds */
+[data-theme="light"] #root > div,
+[data-theme="light"] main > div {
+  background: #f0f2f5 !important;
+}
+
+/* Tailwind .text-white → dark slate */
+[data-theme="light"] .text-white           { color: #0f172a !important; }
+[data-theme="light"] .text-white\/90       { color: rgba(15,23,42,0.90) !important; }
+[data-theme="light"] .text-white\/70       { color: rgba(15,23,42,0.70) !important; }
+[data-theme="light"] .text-white\/60       { color: rgba(15,23,42,0.60) !important; }
+[data-theme="light"] .text-white\/55       { color: rgba(15,23,42,0.55) !important; }
+[data-theme="light"] .text-white\/50       { color: rgba(15,23,42,0.50) !important; }
+[data-theme="light"] .text-white\/40       { color: rgba(15,23,42,0.40) !important; }
+[data-theme="light"] .text-white\/35       { color: rgba(15,23,42,0.35) !important; }
+[data-theme="light"] .text-white\/30       { color: rgba(15,23,42,0.30) !important; }
+[data-theme="light"] .text-white\/28       { color: rgba(15,23,42,0.28) !important; }
+[data-theme="light"] .text-white\/25       { color: rgba(15,23,42,0.25) !important; }
+[data-theme="light"] .text-white\/22       { color: rgba(15,23,42,0.22) !important; }
+[data-theme="light"] .text-white\/20       { color: rgba(15,23,42,0.20) !important; }
+
+/* Cards / surfaces → light */
+[data-theme="light"] .glass-card,
+[data-theme="light"] .grad-card {
+  background: #fff !important;
+  border-color: rgba(0,0,0,0.09) !important;
+}
+
+/* Navbar */
+[data-theme="light"] nav {
+  background: rgba(240,242,245,0.97) !important;
+  border-bottom-color: rgba(0,0,0,0.09) !important;
+}
+
+/* Text gradient uses CSS var — already updated above, just ensure fill */
+[data-theme="light"] .text-grad {
+  background: var(--gradient-text) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* Buttons with white bg + dark text stay correct */
+[data-theme="light"] button.text-white { color: #fff !important; }
+
+/* ────────────────────────────────────────────────────────────
+   Light mode: override hardcoded inline-style dark colors
+   CSS attribute selectors + !important override inline styles
+   per the CSS cascade (author !important > inline style).
+──────────────────────────────────────────────────────────── */
+
+/* ── Page-level dark backgrounds ── */
+[data-theme="light"] [style*="#0d0d0d"],
+[data-theme="light"] [style*="13,13,13"] {
+  background: #f0f2f5 !important;
+}
+
+/* ── Card / surface dark backgrounds ── */
+[data-theme="light"] [style*="background: #111;"],
+[data-theme="light"] [style*="background: #111 "],
+[data-theme="light"] [style*="background: #111111"],
+[data-theme="light"] [style*="background:#111"] {
+  background: #ffffff !important;
+}
+[data-theme="light"] [style*="#1a1a1a"],
+[data-theme="light"] [style*="#1a1a2e"],
+[data-theme="light"] [style*="#0a0a0a"] {
+  background: #f1f5f9 !important;
+}
+
+/* ── Dark rgba sticky / filter bars ── */
+[data-theme="light"] [style*="rgba(13,13,13"] {
+  background: rgba(240,242,245,0.97) !important;
+}
+
+/* ── Semi-transparent white bg (glass tiles) → light neutral ── */
+[data-theme="light"] [style*="background: rgba(255,255,255,0.0"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.1"] {
+  background: rgba(0,0,0,0.04) !important;
+}
+[data-theme="light"] [style*="background: rgba(255,255,255,0.2"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.3"] {
+  background: rgba(0,0,0,0.07) !important;
+}
+
+/* ── White inline text colors → dark slate (preserving opacity hierarchy) ── */
+[data-theme="light"] [style*="color: #fff"],
+[data-theme="light"] [style*="color: white"],
+[data-theme="light"] [style*="color: #ffffff"],
+[data-theme="light"] [style*="color: rgba(255,255,255,1)"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.9"] {
+  color: #0f172a !important;
+}
+[data-theme="light"] [style*="color: rgba(255,255,255,0.8"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.7"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.6"] {
+  color: rgba(15,23,42,0.72) !important;
+}
+[data-theme="light"] [style*="color: rgba(255,255,255,0.5"] {
+  color: rgba(15,23,42,0.58) !important;
+}
+[data-theme="light"] [style*="color: rgba(255,255,255,0.4"] {
+  color: rgba(15,23,42,0.48) !important;
+}
+[data-theme="light"] [style*="color: rgba(255,255,255,0.3"] {
+  color: rgba(15,23,42,0.38) !important;
+}
+[data-theme="light"] [style*="color: rgba(255,255,255,0.2"] {
+  color: rgba(15,23,42,0.28) !important;
+}
+
+/* ── White rgba border colors → dark borders ── */
+[data-theme="light"] [style*="border: 1px solid rgba(255,255,255"],
+[data-theme="light"] [style*="border-top: 1px solid rgba(255,255,255"],
+[data-theme="light"] [style*="border-bottom: 1px solid rgba(255,255,255"] {
+  border-color: rgba(0,0,0,0.10) !important;
+}
+
+/* ── Decorative background watermark text (DEUTSCHLAND etc.) ── */
+[data-theme="light"] [style*="color: rgba(255,255,255,0.02"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.03"] {
+  color: rgba(0,0,0,0.04) !important;
+}
+
+/* ── Override strong/em/span that inherit forced color ── */
+[data-theme="light"] [style*="color: rgba(255,255,255"] strong,
+[data-theme="light"] [style*="color: rgba(255,255,255"] em {
+  color: #0f172a !important;
+}
+
+/* ── Tip banners with rgba(255,255,255,X) background ── */
+[data-theme="light"] [style*="background: rgba(129,140,248,0.07)"] {
+  background: rgba(55,48,163,0.06) !important;
+  border-color: rgba(55,48,163,0.20) !important;
+}
+
+/* ── Hero section border ── */
+[data-theme="light"] section[style*="border-bottom: 1px solid rgba(255,255,255,0.07)"] {
+  border-bottom-color: rgba(0,0,0,0.09) !important;
+}
+
+/* ── SVG presentation attributes (stroke/fill with white) ──
+   SVG attrs have lower specificity than CSS, so CSS wins here. */
+[data-theme="light"] svg path[stroke*="rgba(255,255,255"] {
+  stroke: rgba(15,23,42,0.38) !important;
+}
+[data-theme="light"] svg circle[fill*="rgba(255,255,255"],
+[data-theme="light"] svg rect[fill*="rgba(255,255,255"] {
+  fill: rgba(15,23,42,0.38) !important;
 }
 
 /* ============================================
@@ -69,21 +228,31 @@
 ============================================ */
 @layer base {
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;        /* no horizontal scroll on any device */
+    min-width: 320px;          /* never shrink below 320px (smallest phones) */
+    -webkit-text-size-adjust: 100%; /* prevent iOS font-size inflation in landscape */
+    text-size-adjust: 100%;
+  }
 
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background-color: var(--bg-base);
     color: var(--text-primary);
     min-height: 100vh;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.35s ease, color 0.35s ease;
-    overflow-x: hidden;
   }
 
-  /* No animated colored mesh overlay — pure black bg */
-  body::before { display: none; }
+  /* Responsive images / media */
+  img, video, svg { max-width: 100%; height: auto; }
+
+  /* Prevent tap highlight flash on mobile */
+  a, button { -webkit-tap-highlight-color: transparent; }
 
   #root { min-height: 100vh; display: flex; flex-direction: column; position: relative; z-index: 1; }
   a      { color: inherit; text-decoration: none; }

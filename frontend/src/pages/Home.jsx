@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { progressService } from '../services/progress';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
 /* --- Floating word tile */
 const FloatTile = ({ bg, label, style, delay = 0, size = '1rem' }) => (
@@ -9,7 +10,7 @@ const FloatTile = ({ bg, label, style, delay = 0, size = '1rem' }) => (
     className="absolute rounded-2xl flex items-center justify-center font-black select-none animate-float tracking-tight"
     style={{
       background: bg,
-      boxShadow: '0 12px 40px rgba(69, 64, 60, 0.96)',
+      boxShadow: '0 12px 40px rgba(0, 0, 0, 0)',
       animationDelay: `${delay}ms`,
       fontSize: size,
       padding: '15px 20px',
@@ -23,77 +24,90 @@ const FloatTile = ({ bg, label, style, delay = 0, size = '1rem' }) => (
 );
 
 /* --- Category chip */
-const Chip = ({ label, active, onClick }) => (
-  <button
-    onClick={onClick}
-    className="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150"
-    style={{
-      background: active ? '#fff' : 'rgba(255,255,255,0.06)',
-      color: active ? '#0d0d0d' : 'rgba(255,255,255,0.55)',
-      border: active ? '1px solid #fff' : '1px solid rgba(255,255,255,0.12)',
-    }}
-  >
-    {label}
-  </button>
-);
-
-/* --- Resource card */
-const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, openBtn }) => (
-  <Link
-    to={to}
-    className="group relative flex flex-col justify-end overflow-hidden rounded-2xl transition-all duration-200"
-    style={{ background: '#111', border: '1px solid rgba(255,255,255,0.07)', minHeight: 200 }}
-    onMouseEnter={e => {
-      e.currentTarget.style.border = '1px solid rgba(255,255,255,0.20)';
-      e.currentTarget.style.transform = 'translateY(-3px)';
-    }}
-    onMouseLeave={e => {
-      e.currentTarget.style.border = '1px solid rgba(255,255,255,0.07)';
-      e.currentTarget.style.transform = 'translateY(0)';
-    }}
-  >
-    <div
-      className="absolute top-0 left-0 w-full flex items-start px-5 pt-5 pointer-events-none select-none"
+const Chip = ({ label, active, onClick }) => {
+  const { theme } = useTheme();
+  const il = theme === 'light';
+  return (
+    <button
+      onClick={onClick}
+      className="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150"
       style={{
-        fontSize: 'clamp(3.5rem, 8vw, 5.5rem)',
-        fontWeight: 900,
-        letterSpacing: '-0.04em',
-        lineHeight: 1,
-        color: bigWordColor ?? 'rgba(255,255,255,0.06)',
-        userSelect: 'none',
+        background: active ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'),
+        color: active ? '#fff' : (il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.55)'),
+        border: active
+          ? `1px solid ${il ? '#0f172a' : '#fff'}`
+          : `1px solid ${il ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)'}`,
       }}
     >
-      {bigWord}
-    </div>
-    <div
-      className="relative z-10 p-5 pt-0"
-      style={{ background: 'linear-gradient(to top, rgba(125,125,125,0.04) 55%, transparent)' }}
+      {label}
+    </button>
+  );
+};
+
+/* --- Resource card */
+const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, openBtn }) => {
+  const { theme } = useTheme();
+  const il = theme === 'light';
+  const cardBg = il ? '#ffffff' : '#111';
+  const cardBorder = il ? 'rgba(0,0,0,0.09)' : 'rgba(255,255,255,0.07)';
+  const cardBorderHover = il ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.20)';
+  return (
+    <Link
+      to={to}
+      className="group relative flex flex-col justify-end overflow-hidden rounded-2xl transition-all duration-200"
+      style={{ background: cardBg, border: `1px solid ${cardBorder}`, minHeight: 200 }}
+      onMouseEnter={e => {
+        e.currentTarget.style.border = `1px solid ${cardBorderHover}`;
+        e.currentTarget.style.transform = 'translateY(-3px)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.border = `1px solid ${cardBorder}`;
+        e.currentTarget.style.transform = 'translateY(0)';
+      }}
     >
-      {tag && (
-        <div className="mb-2">
-          <span
-            className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded"
-            style={{
-              background: accent ? accent + '22' : 'rgba(255,255,255,0.08)',
-              color: accent ?? 'rgba(255,255,255,0.38)',
-              border: `1px solid ${accent ? accent + '33' : 'rgba(255,255,255,0.10)'}`,
-            }}
-          >
-            {tag}
-          </span>
-        </div>
-      )}
-      <div className="text-sm font-bold text-white mb-1">{title}</div>
-      <div className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.38)' }}>{desc}</div>
       <div
-        className="mt-3 text-xs font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-        style={{ color: accent ?? '#fff' }}
+        className="absolute top-0 left-0 w-full flex items-start px-5 pt-5 pointer-events-none select-none"
+        style={{
+          fontSize: 'clamp(3.5rem, 8vw, 5.5rem)',
+          fontWeight: 900,
+          letterSpacing: '-0.04em',
+          lineHeight: 1,
+          color: bigWordColor ?? (il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'),
+          userSelect: 'none',
+        }}
       >
-        {openBtn}
+        {bigWord}
       </div>
-    </div>
-  </Link>
-);
+      <div
+        className="relative z-10 p-5 pt-0"
+        style={{ background: 'linear-gradient(to top, rgba(0, 0, 0, 0) 55%, transparent)' }}
+      >
+        {tag && (
+          <div className="mb-2">
+            <span
+              className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded"
+              style={{
+                background: accent ? accent + '22' : (il ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.08)'),
+                color: accent ?? (il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.38)'),
+                border: `1px solid ${accent ? accent + '33' : (il ? 'rgba(0,0,0,0.10)' : 'rgba(255,255,255,0.10)')}`,
+              }}
+            >
+              {tag}
+            </span>
+          </div>
+        )}
+        <div className="text-sm font-bold mb-1" style={{ color: il ? '#0f172a' : '#fff' }}>{title}</div>
+        <div className="text-xs leading-relaxed" style={{ color: il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.38)' }}>{desc}</div>
+        <div
+          className="mt-3 text-xs font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{ color: accent ?? (il ? '#0f172a' : '#fff') }}
+        >
+          {openBtn}
+        </div>
+      </div>
+    </Link>
+  );
+};
 
 /* ================================================================ */
 /* Card visual metadata (fixed — only layout/accent info)           */
@@ -118,6 +132,8 @@ const Home = () => {
   const [activeIdx, setActiveIdx] = useState(0);
   const [animIn, setAnimIn] = useState(false);
   const { t } = useLanguage();
+  const { theme } = useTheme();
+  const il = theme === 'light';
 
   useEffect(() => { setTimeout(() => setAnimIn(true), 80); }, []);
 
@@ -144,12 +160,12 @@ const Home = () => {
     : allCards.filter(c => c.cat === CAT_INTERNAL[activeIdx]);
 
   return (
-    <div style={{ paddingTop: '52px' }}>
+    <div style={{ paddingTop: '52px', background: il ? '#f0f2f5' : '#0d0d0d', minHeight: '100vh' }}>
 
       {/* HERO */}
       <section
         className="relative overflow-hidden flex flex-col items-center justify-center text-center"
-        style={{ minHeight: '88vh', background: '#0d0d0d' }}
+        style={{ minHeight: '88vh', background: il ? '#f0f2f5' : '#0d0d0d' }}
       >
         {/* LEFT floating tiles */}
         <div className="hidden lg:block">
@@ -175,24 +191,29 @@ const Home = () => {
         >
           {/* Badge pill */}
           <div
-            className="flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 text-xs font-semibold uppercase tracking-widest"
-            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.6)' }}
+            className="flex items-center gap-2 rounded-full px-3 py-1 mb-8 text-[10px] md:px-4 md:py-1.5 md:text-xs font-semibold uppercase tracking-widest"
+            style={{
+              background: il ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.08)',
+              border: il ? '1px solid rgba(0,0,0,0.13)' : '1px solid rgba(255,255,255,0.15)',
+              color: il ? 'rgba(15,23,42,0.60)' : 'rgba(255,255,255,0.6)',
+            }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            {t?.home?.badge || 'Plateforme d\'apprentissage de l\'allemand pour les Malagasy'}
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
+            <span className="block md:hidden">DEUTSCH · MALAGASY</span>
+            <span className="hidden md:block">{t?.home?.badge || "Plateforme d'apprentissage de l'allemand pour les Malagasy"}</span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-4xl md:text-[3.6rem] font-black text-white leading-[1.1] mb-5" style={{ letterSpacing: '-0.03em' }}>
+          <h1 className="text-4xl md:text-[3.6rem] font-black leading-[1.1] mb-5" style={{ letterSpacing: '-0.03em', color: il ? '#0f172a' : '#fff' }}>
             {t?.home?.h1a || 'Apprenez l\'Allemand'}<br />
             {t?.home?.h1b || 'en Malagasy.'}
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base md:text-lg mb-2" style={{ color: 'rgba(255,255,255,0.45)', maxWidth: 480, lineHeight: 1.65 }}>
+          <p className="text-base md:text-lg mb-2" style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)', maxWidth: 480, lineHeight: 1.65 }}>
             {t?.home?.subtitle || 'La plateforme gratuite pour Malgaches qui apprennent l\'allemand — leçons, vocabulaire et exercices.'}
           </p>
-          <p className="text-sm italic mb-10" style={{ color: 'rgba(255,255,255,0.2)' }}>
+          <p className="text-sm italic mb-10" style={{ color: il ? 'rgba(15,23,42,0.30)' : 'rgba(255,255,255,0.2)' }}>
             {t?.home?.subtitleDe || 'Die kostenlose Lernplattform für Madagassen.'}
           </p>
 
@@ -208,7 +229,11 @@ const Home = () => {
             <Link
               to="/vocabulary"
               className="flex items-center gap-2 text-sm font-medium px-6 py-2.5 rounded-lg transition-colors"
-              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.7)' }}
+              style={{
+                background: il ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.07)',
+                border: il ? '1px solid rgba(0,0,0,0.13)' : '1px solid rgba(255,255,255,0.14)',
+                color: il ? 'rgba(15,23,42,0.70)' : 'rgba(255,255,255,0.7)',
+              }}
             >
               {t?.home?.cta2 || 'Voir le vocabulaire'}
             </Link>
@@ -218,11 +243,15 @@ const Home = () => {
           {progress && progress.stats?.totalXP > 0 && (
             <div
               className="mt-8 flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.5)' }}
+              style={{
+                background: il ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)',
+                border: il ? '1px solid rgba(0,0,0,0.10)' : '1px solid rgba(255,255,255,0.10)',
+                color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)',
+              }}
             >
               <span>⚡</span>
               <span>
-                <strong style={{ color: '#fff' }}>{progress.stats.totalXP} XP</strong> gagnés au niveau {progress.level || 1}
+                <strong style={{ color: il ? '#0f172a' : '#fff' }}>{progress.stats.totalXP} XP</strong> gagnés au niveau {progress.level || 1}
               </span>
             </div>
           )}
@@ -230,12 +259,12 @@ const Home = () => {
       </section>
 
       {/* FILTER + CARDS */}
-      <section style={{ background: '#0d0d0d', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+      <section style={{ background: il ? '#f0f2f5' : '#0d0d0d', borderTop: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)' }}>
 
         {/* Sticky chip bar */}
         <div
           className="sticky top-[52px] z-40 flex items-center justify-center gap-2 overflow-x-auto px-6 py-3 no-scrollbar"
-          style={{ background: 'rgba(13,13,13,0.96)', borderBottom: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(10px)' }}
+          style={{ background: il ? 'rgba(240,242,245,0.97)' : 'rgba(13,13,13,0.96)', borderBottom: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(10px)' }}
         >
           {cats.map((cat, idx) => (
             <Chip key={cat} label={cat} active={activeIdx === idx} onClick={() => setActiveIdx(idx)} />
@@ -254,14 +283,14 @@ const Home = () => {
         {/* Footer strip */}
         <div
           className="max-w-6xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
+          style={{ borderTop: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)' }}
         >
           <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black" style={{ background: '#fff', color: '#0d0d0d' }}>DE</div>
-            <span className="text-sm font-semibold text-white">DeutschMG</span>
-            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>— Malagasy × Alemà 🇲🇬 🇩🇪</span>
+            <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black" style={{ background: il ? '#0f172a' : '#fff', color: il ? '#fff' : '#0d0d0d' }}>DE</div>
+            <span className="text-sm font-semibold" style={{ color: il ? '#0f172a' : '#fff' }}>DeutschMG</span>
+            <span className="text-xs" style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.3)' }}>— Malagasy × Alemà 🇲🇬 🇩🇪</span>
           </div>
-          <div className="flex items-center gap-4 text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          <div className="flex items-center gap-4 text-xs" style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.3)' }}>
             {t?.home?.footerLinks?.map((lbl, i) => (
               <Link key={i} to={FOOTER_PATHS[i]} className="hover:text-white transition-colors">{lbl}</Link>
             )) || FOOTER_PATHS.map((path, i) => (
