@@ -3,24 +3,28 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { progressService } from '../services/progress';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
-
-const navLinks = [
-  { path: '/levels',     label: 'Lesona',      badge: null  },
-  { path: '/vocabulary', label: 'Vocabulaire', badge: null  },
-  { path: '/exercises',  label: 'Exercices',   badge: 'NEW' },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const location = useLocation();
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { lang, changeLang, t } = useLanguage();
   const isDark = theme === 'dark';
 
   const progress = progressService.getProgress();
   const xp = progress?.xp ?? 0;
+
+  const navLinks = [
+    { path: '/levels', label: t?.nav?.lessons || 'Leçons' },
+    { path: '/vocabulary', label: t?.nav?.vocabulary || 'Vocabulaire' },
+    { path: '/exercises', label: t?.nav?.exercises || 'Exercices' },
+    { path: '/opportunities', label: 'Opportunités', badge: '🇩🇪', badgeStyle: 'flag' },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -28,10 +32,16 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { setIsOpen(false); }, [location.pathname]);
+  useEffect(() => { 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsOpen(false); 
+  }, [location.pathname]);
 
   const isActive = (p) => location.pathname === p;
+
+  const LangFlag = { FR: '🇫🇷', DE: '🇩🇪' }; // Seulement FR et DE
+
+  const purpleColor = '#8b5cf6';
 
   return (
     <nav
@@ -44,8 +54,8 @@ const Navbar = () => {
     >
       <div className="max-w-6xl mx-auto px-6 h-[52px] flex items-center justify-between gap-6">
 
-        {/* ── Left: Logo + links ── */}
-        <div className="flex items-center gap-8">
+        {/* ── GAUCHE: Logo ── */}
+        <div className="flex items-center">
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
             <div
               className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black"
@@ -55,70 +65,156 @@ const Navbar = () => {
             </div>
             <span className="text-sm font-bold text-white">DeutschMG</span>
           </Link>
-
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map(({ path, label, badge }) => (
-              <Link
-                key={path}
-                to={path}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm transition-colors duration-150"
-                style={{
-                  color: isActive(path) ? '#fff' : 'rgba(255,255,255,0.5)',
-                  fontWeight: isActive(path) ? 600 : 400,
-                  background: isActive(path) ? 'rgba(255,255,255,0.08)' : 'transparent',
-                }}
-              >
-                {label}
-                {badge && (
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: '#16a34a', color: '#fff', letterSpacing: '0.04em' }}>
-                    {badge}
-                  </span>
-                )}
-              </Link>
-            ))}
-          </div>
         </div>
 
-        {/* ── Right: actions ── */}
+        {/* ── CENTRE: Navigation ── */}
+        <div className="hidden md:flex items-center gap-1 absolute left-1/2 transform -translate-x-1/2">
+          {navLinks.map(({ path, label, badge, badgeStyle }) => (
+            <Link
+              key={path}
+              to={path}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm transition-colors duration-150"
+              style={{
+                color: isActive(path) ? '#fff' : 'rgba(255,255,255,0.5)',
+                fontWeight: isActive(path) ? 600 : 400,
+                background: isActive(path) ? purpleColor + '20' : 'transparent',
+                border: isActive(path) ? `1px solid ${purpleColor}40` : 'none',
+              }}
+            >
+              {label}
+              {badge && badgeStyle === 'flag' && (
+                <span style={{ fontSize: 14 }}>{badge}</span>
+              )}
+              {badge && badgeStyle !== 'flag' && (
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: purpleColor, color: '#fff', letterSpacing: '0.04em' }}>
+                  {badge}
+                </span>
+              )}
+            </Link>
+          ))}
+        </div>
+
+        {/* ── DROITE: Actions (XP, Langue, Thème, Profil) ── */}
         <div className="flex items-center gap-2.5">
 
+          {/* XP */}
           {xp > 0 && (
             <div
               className="hidden md:flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-lg"
-              style={{ color: 'rgba(255,255,255,0.55)', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
+              style={{ 
+                color: 'rgba(255,255,255,0.55)', 
+                background: 'rgba(255,255,255,0.06)', 
+                border: '1px solid rgba(255,255,255,0.10)' 
+              }}
             >
               ⚡ {xp} XP
             </div>
           )}
 
+          {/* ── Language Switcher (FR/DE seulement) ── */}
+          <div className="relative hidden md:block">
+            <button
+              onClick={() => setLangOpen(o => !o)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-colors"
+              style={{
+                color: 'rgba(255,255,255,0.70)',
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                letterSpacing: '0.04em',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+            >
+              {LangFlag[lang] || '🇫🇷'} {lang}
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" style={{ opacity: 0.5, marginLeft: 1 }}>
+                <path d="M1 2.5l3 3 3-3" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            {langOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setLangOpen(false)}
+                />
+                <div
+                  className="absolute right-0 mt-2 z-50 rounded-xl overflow-hidden"
+                  style={{
+                    background: '#1a1a1a',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    boxShadow: '0 16px 40px rgba(0,0,0,0.6)',
+                    minWidth: 100,
+                  }}
+                >
+                  {/* Seulement FR et DE */}
+                  <button
+                    onClick={() => { changeLang('FR'); setLangOpen(false); }}
+                    className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-xs font-semibold transition-colors"
+                    style={{
+                      color: 'FR' === lang ? '#fff' : 'rgba(255,255,255,0.50)',
+                      background: 'FR' === lang ? purpleColor + '20' : 'transparent',
+                      borderLeft: 'FR' === lang ? `2px solid ${purpleColor}` : 'none',
+                    }}
+                    onMouseEnter={e => { if ('FR' !== lang) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                    onMouseLeave={e => { if ('FR' !== lang) e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <span>{LangFlag.FR}</span>
+                    <span>Français</span>
+                    {'FR' === lang && (
+                      <span className="ml-auto" style={{ color: purpleColor, fontSize: 10 }}>✓</span>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => { changeLang('DE'); setLangOpen(false); }}
+                    className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-xs font-semibold transition-colors"
+                    style={{
+                      color: 'DE' === lang ? '#fff' : 'rgba(255,255,255,0.50)',
+                      background: 'DE' === lang ? purpleColor + '20' : 'transparent',
+                      borderLeft: 'DE' === lang ? `2px solid ${purpleColor}` : 'none',
+                    }}
+                    onMouseEnter={e => { if ('DE' !== lang) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                    onMouseLeave={e => { if ('DE' !== lang) e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <span>{LangFlag.DE}</span>
+                    <span>Deutsch</span>
+                    {'DE' === lang && (
+                      <span className="ml-auto" style={{ color: purpleColor, fontSize: 10 }}>✓</span>
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Bouton thème */}
           <button
             onClick={toggle}
             className="w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors"
-            style={{ color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.06)' }}
+            style={{ 
+              color: isDark ? '#fbbf24' : purpleColor,
+              background: isDark ? 'rgba(255,255,255,0.06)' : purpleColor + '20',
+              border: isDark ? 'none' : `1px solid ${purpleColor}40`,
+            }}
             aria-label="Theme"
           >
-            {isDark ? '☀️' : '🌙'}
+            {isDark ? '🌙' : '☀️'}
           </button>
 
+          {/* Profil */}
           {user && (
             <button
               onClick={() => navigate('/profile')}
               className="hidden md:flex items-center justify-center w-7 h-7 rounded-full text-xs font-black transition-opacity hover:opacity-80"
-              style={{ background: '#fff', color: '#0d0d0d' }}
+              style={{ 
+                background: purpleColor, 
+                color: '#fff' 
+              }}
               title={user.name}
             >
               {user.isGuest ? '?' : (user.name?.[0] ?? '?').toUpperCase()}
             </button>
           )}
 
-          <Link
-            to="/levels"
-            className="hidden md:flex items-center gap-1.5 text-sm font-semibold px-4 py-1.5 rounded-lg transition-opacity hover:opacity-85"
-            style={{ background: '#fff', color: '#0d0d0d' }}
-          >
-            Commencer →
-          </Link>
-
+          {/* Menu mobile */}
           <button
             onClick={() => setIsOpen(o => !o)}
             className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors"
@@ -136,27 +232,67 @@ const Navbar = () => {
           className="md:hidden flex flex-col"
           style={{ background: '#111', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '10px 12px 16px' }}
         >
-          {navLinks.map(({ path, label, badge }) => (
+          {navLinks.map(({ path, label, badge, badgeStyle }) => (
             <Link
               key={path}
               to={path}
               className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
               style={{
                 color: isActive(path) ? '#fff' : 'rgba(255,255,255,0.5)',
-                background: isActive(path) ? 'rgba(255,255,255,0.08)' : 'transparent',
+                background: isActive(path) ? purpleColor + '20' : 'transparent',
+                borderLeft: isActive(path) ? `2px solid ${purpleColor}` : 'none',
               }}
             >
               {label}
-              {badge && (
-                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: '#16a34a', color: '#fff' }}>{badge}</span>
+              {badge && badgeStyle === 'flag' && (
+                <span style={{ fontSize: 13 }}>{badge}</span>
+              )}
+              {badge && badgeStyle !== 'flag' && (
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: purpleColor, color: '#fff' }}>{badge}</span>
               )}
             </Link>
           ))}
+
+          {/* Mobile language switcher (FR/DE seulement) */}
           <div className="h-px my-2" style={{ background: 'rgba(255,255,255,0.08)' }} />
+          <div className="flex items-center gap-1.5 px-3 py-1 mb-1">
+            <button
+              onClick={() => changeLang('FR')}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
+              style={{
+                background: 'FR' === lang ? purpleColor + '20' : 'rgba(255,255,255,0.04)',
+                color: 'FR' === lang ? '#fff' : 'rgba(255,255,255,0.40)',
+                border: `1px solid ${'FR' === lang ? purpleColor + '40' : 'rgba(255,255,255,0.08)'}`,
+              }}
+            >
+              {LangFlag.FR} FR
+            </button>
+            <button
+              onClick={() => changeLang('DE')}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
+              style={{
+                background: 'DE' === lang ? purpleColor + '20' : 'rgba(255,255,255,0.04)',
+                color: 'DE' === lang ? '#fff' : 'rgba(255,255,255,0.40)',
+                border: `1px solid ${'DE' === lang ? purpleColor + '40' : 'rgba(255,255,255,0.08)'}`,
+              }}
+            >
+              {LangFlag.DE} DE
+            </button>
+          </div>
+
+          <div className="h-px my-1" style={{ background: 'rgba(255,255,255,0.08)' }} />
           <div className="flex items-center justify-between px-3 py-1">
-            <Link to="/levels" className="text-sm font-semibold px-3 py-1.5 rounded-lg" style={{ background: '#fff', color: '#0d0d0d' }}>Commencer →</Link>
-            {user && (
-              <button onClick={logout} className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>Déconnecter</button>
+            <Link 
+              to="/levels" 
+              className="text-sm font-semibold px-3 py-1.5 rounded-lg" 
+              style={{ background: purpleColor, color: '#fff' }}
+            >
+              {t?.nav?.start || 'Commencer'}
+            </Link>
+            {user && !user.isGuest && (
+              <button onClick={logout} className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                {t?.nav?.logout || 'Déconnexion'}
+              </button>
             )}
           </div>
         </div>

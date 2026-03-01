@@ -317,7 +317,7 @@ export default function Profile() {
               </div>
             ) : (
               <div style={{ padding: 16, borderRadius: 18, background: 'rgba(251,191,36,0.04)', border: '1px solid rgba(251,191,36,0.25)' }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: 'rgba(32, 10, 156, 0.85)', marginBottom: 12 }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'rgba(76, 10, 156, 0.85)', marginBottom: 12 }}>
                   Cette action est irréversible. Continuer ?
                 </p>
                 <div style={{ display: 'flex', gap: 8 }}>

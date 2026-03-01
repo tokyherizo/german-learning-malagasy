@@ -182,7 +182,7 @@ const Vocabulary = () => {
 
       {/* ── Sticky level chip bar (matches Home) ── */}
       <div
-        className="sticky z-40 flex items-center gap-2 overflow-x-auto px-6 py-3 no-scrollbar"
+        className="sticky z-40 flex items-center justify-center gap-2 overflow-x-auto px-6 py-3 no-scrollbar"
         style={{ top: '52px', background: 'rgba(13,13,13,0.96)', borderBottom: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(10px)' }}
       >
         {LEVELS.map(l => (

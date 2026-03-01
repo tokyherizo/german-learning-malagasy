@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -9,6 +10,7 @@ import Lesson from './pages/Lesson';
 import Exercises from './pages/Exercises';
 import Vocabulary from './pages/Vocabulary';
 import Profile from './pages/Profile';
+import Opportunities from './pages/Opportunities';
 
 /* Protected wrapper */
 const ProtectedLayout = ({ children }) => {
@@ -36,7 +38,8 @@ function AppRoutes() {
       <Route path="/levels" element={<ProtectedLayout><Levels /></ProtectedLayout>} />
       <Route path="/lesson/:id" element={<ProtectedLayout><Lesson /></ProtectedLayout>} />
       <Route path="/exercises" element={<ProtectedLayout><Exercises /></ProtectedLayout>} />
-      <Route path="/vocabulary" element={<ProtectedLayout><Vocabulary /></ProtectedLayout>} />      <Route path="/profile"    element={<ProtectedLayout><Profile /></ProtectedLayout>} />      {/* Fallback */}
+      <Route path="/vocabulary" element={<ProtectedLayout><Vocabulary /></ProtectedLayout>} />
+      <Route path="/opportunities" element={<ProtectedLayout><Opportunities /></ProtectedLayout>} />      <Route path="/profile"    element={<ProtectedLayout><Profile /></ProtectedLayout>} />      {/* Fallback */}
       <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/login'} replace />} />
     </Routes>
   );
@@ -44,13 +47,15 @@ function AppRoutes() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }
 

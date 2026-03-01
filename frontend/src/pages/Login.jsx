@@ -1,5 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth }     from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+
+/* ─────────────────────────────────────────────────────────────── */
+/*  FloatTile  (same as Home hero)                                  */
+/* ─────────────────────────────────────────────────────────────── */
+const FloatTile = ({ bg, label, style, delay = 0, size = '1rem' }) => (
+  <div
+    className="absolute rounded-2xl flex items-center justify-center font-black select-none animate-float tracking-tight"
+    style={{
+      background: bg,
+      boxShadow: '0 12px 40px rgba(69,64,60,0.96)',
+      animationDelay: `${delay}ms`,
+      fontSize: size,
+      padding: '14px 20px',
+      lineHeight: 1,
+      color: 'rgba(255,255,255,0.92)',
+      ...style,
+    }}
+  >
+    {label}
+  </div>
+);
 
 /* ─────────────────────────────────────────────────────────────── */
 /*  Reusable atoms                                                  */
@@ -154,7 +176,7 @@ const StrengthBar = ({ password }) => {
 /* ─────────────────────────────────────────────────────────────── */
 /*  View: LOGIN                                                     */
 /* ─────────────────────────────────────────────────────────────── */
-const LoginView = ({ onForgot, onRegister }) => {
+const LoginView = ({ onForgot, onRegister, t }) => {
   const { login, loginWithGoogle, error, clearError } = useAuth();
   const [email,    setEmail]    = useState('');
   const [password, setPassword] = useState('');
@@ -178,8 +200,12 @@ const LoginView = ({ onForgot, onRegister }) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="mb-1">
-        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>Tonga soa 👋</h2>
-        <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>Hiditra amin&apos;ny kaontinao</p>
+        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>
+          {t?.login?.title || 'Connexion'} 👋
+        </h2>
+        <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
+          {t?.login?.subtitle || 'Connectez-vous pour continuer votre apprentissage.'}
+        </p>
       </div>
 
       <GoogleButton onClick={handleGoogle} loading={gLoad} />
@@ -187,23 +213,23 @@ const LoginView = ({ onForgot, onRegister }) => {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <ErrorBanner msg={error} />
-        <InputField label="Email" type="email" value={email} onChange={e => setEmail(e.target.value)}
-          placeholder="demo@deutschmg.mg" autoFocus />
+        <InputField label={t?.login?.emailLabel || 'Email'} type="email" value={email} onChange={e => setEmail(e.target.value)}
+          placeholder={t?.login?.emailPH || 'demo@deutschmg.mg'} autoFocus />
         <div className="flex flex-col gap-1">
-          <PasswordInput label="Tenimiafina • Passwort" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
+          <PasswordInput label={t?.login?.passLabel || 'Mot de passe'} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
           <button type="button" onClick={onForgot}
             className="self-end text-xs font-semibold mt-1 transition-opacity hover:opacity-70"
             style={{ color: 'var(--accent)' }}>
             Tenimiafina voafafa?
           </button>
         </div>
-        <SubmitBtn loading={loading} label="Hiditra" />
+        <SubmitBtn loading={loading} label={t?.login?.submitBtn || 'Se connecter'} loadingLabel={t?.login?.loadingBtn || 'Connexion...'} />
       </form>
 
       <p className="text-center text-xs" style={{ color: 'rgba(180,190,230,0.40)' }}>
-        Tsy manana kaonty?{' '}
+        {t?.login?.switchToReg?.split('?')[0] || 'Pas encore de compte ?'}&nbsp;
         <button onClick={onRegister} className="font-bold transition-opacity hover:opacity-70" style={{ color: 'var(--accent)' }}>
-          Mamorona kaonty
+          {t?.login?.switchToReg?.split('?').pop()?.trim() || "S'inscrire"}
         </button>
       </p>
 
@@ -219,7 +245,7 @@ const LoginView = ({ onForgot, onRegister }) => {
 /* ─────────────────────────────────────────────────────────────── */
 /*  View: REGISTER                                                  */
 /* ─────────────────────────────────────────────────────────────── */
-const RegisterView = ({ onLogin }) => {
+const RegisterView = ({ onLogin, t }) => {
   const { register, loginWithGoogle, error, clearError } = useAuth();
   const [name,     setName]     = useState('');
   const [email,    setEmail]    = useState('');
@@ -248,8 +274,12 @@ const RegisterView = ({ onLogin }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="mb-1">
-        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>Mamorona kaonty ✨</h2>
-        <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>Maimaim-poana • Aucune carte bancaire</p>
+        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>
+          {t?.login?.regTitle || 'Creer un compte'} ✨
+        </h2>
+        <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
+          {t?.login?.regSubtitle || 'Rejoignez DeutschMG — gratuit pour toujours.'}
+        </p>
       </div>
 
       <GoogleButton onClick={handleGoogle} loading={gLoad} />
@@ -258,18 +288,18 @@ const RegisterView = ({ onLogin }) => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
         <ErrorBanner msg={error || localErr} />
 
-        <InputField label="Ny Anaranao • Vollständiger Name" type="text" value={name}
-          onChange={e => setName(e.target.value)} placeholder="Ex: Rakoto Andry" autoFocus />
-        <InputField label="Email" type="email" value={email}
-          onChange={e => setEmail(e.target.value)} placeholder="anarana@mail.com" />
+        <InputField label={t?.login?.nameLabel || 'Nom complet'} type="text" value={name}
+          onChange={e => setName(e.target.value)} placeholder={t?.login?.namePH || 'Ex: Rakoto Andry'} autoFocus />
+        <InputField label={t?.login?.emailLabel || 'Email'} type="email" value={email}
+          onChange={e => setEmail(e.target.value)} placeholder={t?.login?.emailPH || 'votre@email.com'} />
 
         <div className="flex flex-col gap-1">
-          <PasswordInput label="Tenimiafina • Passwort" value={password}
+          <PasswordInput label={t?.login?.passLabel || 'Mot de passe'} value={password}
             onChange={e => setPassword(e.target.value)} placeholder="min. 6 karatra" />
           <StrengthBar password={password} />
         </div>
 
-        <PasswordInput label="Averina ny tenimiafina • Wiederholen" value={confirm}
+        <PasswordInput label={t?.login?.confirmLabel || 'Confirmer le mot de passe'} value={confirm}
           onChange={e => setConfirm(e.target.value)} placeholder="••••••••"
           error={confirm && confirm !== password} />
         {confirm && confirm !== password && (
@@ -278,13 +308,13 @@ const RegisterView = ({ onLogin }) => {
           </span>
         )}
 
-        <SubmitBtn loading={loading} label="Hamorona ny kaontiko" />
+        <SubmitBtn loading={loading} label={t?.login?.regBtn || 'Creer mon compte'} loadingLabel={t?.login?.regLoading || 'Creation...'} />
       </form>
 
       <p className="text-center text-xs" style={{ color: 'rgba(180,190,230,0.40)' }}>
-        Manana kaonty sahady?{' '}
+        {t?.login?.switchToLog?.split('?')[0] || 'Deja un compte ?'}&nbsp;
         <button onClick={onLogin} className="font-bold transition-opacity hover:opacity-70" style={{ color: 'var(--accent)' }}>
-          Hiditra
+          {t?.login?.switchToLog?.split('?').pop()?.trim() || 'Se connecter'}
         </button>
       </p>
     </div>
@@ -357,91 +387,75 @@ const ForgotView = ({ onBack }) => {
 /* ─────────────────────────────────────────────────────────────── */
 /*  Branding panel (left desktop)                                   */
 /* ─────────────────────────────────────────────────────────────── */
-const BrandPanel = ({ view }) => {
-  const copy = {
-    login:    { tag: 'Tonga soa indray',      headline: ['Mianara', 'Alemà', 'miaraka'],  sub: 'Hiditra amin\'ny kaontinao sy' },
-    register: { tag: 'Kaonty vaovao',          headline: ['Atombohy', 'ny', 'dianao'],     sub: 'Maimaim-poana — hatramin\'ny' },
-    forgot:   { tag: 'Fanarenana kaonty',      headline: ['Mahazo', 'miditra', 'indray'],  sub: 'Ianao dia hamerina' },
+/* ─────────────────────────────────────────────────────────────── */
+/*  Left decorative panel  (FloatTile style, like Home hero)       */
+/* ─────────────────────────────────────────────────────────────── */
+const BrandPanel = ({ view, t }) => {
+  const headlines = {
+    login:    ['Apprenez', "l'Allemand", 'en Malagasy.'],
+    register: ['Rejoignez', 'DeutschMG', 'gratuitement.'],
+    forgot:   ['Retrouvez', 'votre', 'acces.'],
   };
-  const { tag, headline, sub } = copy[view] || copy.login;
+  const [a, b, c] = headlines[view] || headlines.login;
 
   return (
-    <div className="hidden lg:flex flex-col justify-between w-[50%] p-12 xl:p-16 relative">
-      {/* Vertical separator */}
-      <div className="absolute right-0 top-1/5 bottom-1/5 w-px"
-        style={{ background: 'linear-gradient(to bottom, transparent, rgba(59,130,246,0.30), transparent)' }} />
+    <div
+      className="hidden lg:flex flex-col items-center justify-center w-[48%] relative overflow-hidden"
+      style={{ background: '#0d0d0d', borderRight: '1px solid rgba(255,255,255,0.07)', minHeight: '100vh' }}
+    >
+      {/* FloatTiles — left side */}
+      <FloatTile bg="#9e10ab" label="der/die/das" size="1.3rem" style={{ left: '6%',  top: '14%' }} delay={0}   />
+      <FloatTile bg="#da0909" label="A1"          size="2rem"   style={{ left: '10%', top: '44%' }} delay={400} />
+      <FloatTile bg="#0ab2af" label="Dativ"       size="1.4rem" style={{ left: '5%',  top: '72%' }} delay={200} />
+      <FloatTile bg="#23c77d" label="B1/B2"       size="0.9rem" style={{ left: '55%', top: '82%' }} delay={800} />
 
-      {/* Logo */}
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-base font-black text-white"
-          style={{ background: 'linear-gradient(135deg, #2563eb, #7c3aed)', boxShadow: '0 8px 32px rgba(37,99,235,0.40)' }}>
-          DE
-        </div>
-        <div>
-          <div className="text-xl font-extrabold text-grad">DeutschMG</div>
-          <div className="text-[10px] uppercase tracking-[3px] font-medium" style={{ color: 'rgba(140,155,210,0.50)' }}>
-            Alemà × Malagasy
-          </div>
-        </div>
-      </div>
+      {/* FloatTiles — right side */}
+      <FloatTile bg="#0d0dcb" label="Akkusativ"   size="1.5rem" style={{ right: '6%', top: '16%' }} delay={300} />
+      <FloatTile bg="#e9079a" label="A2"          size="2rem"   style={{ right: '9%', top: '44%' }} delay={600} />
+      <FloatTile bg="#aa6805" label="C1/C2"       size="1rem"   style={{ right: '5%', top: '63%' }} delay={100} />
+      <FloatTile bg="#fb7900" label="Genitiv"     size="1.4rem" style={{ right: '16%', top: '78%' }} delay={500} />
 
-      {/* Hero */}
-      <div className="relative">
-        {/* Floating pills */}
-        <div className="absolute -top-10 right-10 flex flex-col gap-2.5 animate-float" style={{ animationDelay: '0s' }}>
-          {[
-            { v: '500+', l: 'Teny',            c: '#60a5fa' },
-            { v: '11+',  l: 'Lesona',          c: '#a78bfa' },
-            { v: '100%', l: 'Maimaim-poana',   c: '#38bdf8' },
-          ].map(({ v, l, c }) => (
-            <div key={l} className="flex items-center gap-2.5 px-4 py-2 rounded-2xl"
-              style={{ background: 'rgba(8,12,30,0.82)', border: `1px solid ${c}28`, backdropFilter: 'blur(12px)' }}>
-              <span className="text-base font-black" style={{ color: c }}>{v}</span>
-              <span className="text-[11px] font-medium" style={{ color: 'rgba(180,190,230,0.55)' }}>{l}</span>
-            </div>
-          ))}
+      {/* Center content */}
+      <div className="relative z-10 flex flex-col items-center text-center px-10">
+
+        {/* Badge — white pill with green pulse, same as Home */}
+        <div
+          className="flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 text-xs font-semibold uppercase tracking-widest"
+          style={{
+            background: 'rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            color: 'rgba(255,255,255,0.6)',
+          }}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+          {t?.login?.pageDecor || 'DEUTSCH'}
         </div>
 
-        {/* Tag */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6"
-          style={{ background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.25)' }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-          <span className="text-[11px] font-bold uppercase tracking-[2px]" style={{ color: 'var(--accent)' }}>{tag}</span>
-        </div>
-
-        <h1 className="text-5xl xl:text-6xl font-black leading-[1.08] mb-6 transition-all duration-500">
-          <span className="text-grad">{headline[0]}</span>
-          <br />
-          <span style={{ color: 'rgba(235,240,255,0.93)' }}>{headline[1]}</span>
-          <br />
-          <span style={{ color: 'rgba(180,190,230,0.50)', fontSize: '0.72em' }}>{headline[2]}</span>
+        {/* Headline */}
+        <h1 className="text-4xl xl:text-5xl font-black leading-[1.1] mb-5" style={{ letterSpacing: '-0.03em' }}>
+          <span style={{ color: 'rgba(255,255,255,0.95)' }}>{a}</span><br />
+          <span className="text-grad">{b}</span><br />
+          <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.78em' }}>{c}</span>
         </h1>
 
-        <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'rgba(180,190,230,0.55)' }}>
-          {sub}
+        {/* Sub */}
+        <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.32)' }}>
+          {t?.home?.subtitle || "La plateforme gratuite pour Malgaches qui apprennent l'allemand."}
         </p>
 
-        {/* Feature list */}
-        <div className="flex flex-col gap-3 mt-8">
-          {[
-            { icon: '🧠', text: 'Lesona A1/A2 mifanaraka CEFR' },
-            { icon: '🃏', text: 'Vocabulaire 500+ miaraka ohatra' },
-            { icon: '✏️', text: 'Fanazaran-tsaina interactive' },
-            { icon: '🏆', text: 'Système XP & streaks' },
-          ].map(({ icon, text }) => (
-            <div key={text} className="flex items-center gap-3 animate-fade-up">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm shrink-0"
-                style={{ background: 'rgba(59,130,246,0.14)', border: '1px solid rgba(59,130,246,0.22)' }}>
-                {icon}
-              </div>
-              <span className="text-sm font-medium" style={{ color: 'rgba(220,225,255,0.72)' }}>{text}</span>
+        {/* Branding */}
+        <div className="flex items-center gap-3 mt-10">
+          <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-black text-white"
+            style={{ background: 'linear-gradient(135deg, #2563eb, #7c3aed)', boxShadow: '0 8px 24px rgba(37,99,235,0.40)' }}>
+            DE
+          </div>
+          <div className="text-left">
+            <div className="text-base font-extrabold text-grad">DeutschMG</div>
+            <div className="text-[10px] uppercase tracking-[3px] font-medium" style={{ color: 'rgba(140,155,210,0.45)' }}>
+              Alema x Malagasy
             </div>
-          ))}
+          </div>
         </div>
-      </div>
-
-      <div className="text-xs" style={{ color: 'rgba(140,155,210,0.35)' }}>
-        🇲🇬 Natao ho an&apos;ny Malagasy • 🇩🇪 Für Madagassen
       </div>
     </div>
   );
@@ -468,6 +482,7 @@ const ViewDots = ({ view, setView }) => (
 /*  Main component                                                  */
 /* ─────────────────────────────────────────────────────────────── */
 const Login = () => {
+  const { t } = useLanguage();
   const [view,   setView]   = useState('login');   // 'login' | 'register' | 'forgot'
   const [animIn, setAnimIn] = useState(false);
   const prevView = useRef(view);
@@ -492,7 +507,7 @@ const Login = () => {
             fontSize: 'clamp(6rem,18vw,16rem)',
             fontWeight: 900,
             letterSpacing: '-0.06em',
-            color: 'rgba(255,255,255,0.018)',
+            color: 'rgba(255,255,255,0.015)',
             lineHeight: 1,
           }}
         >
@@ -500,10 +515,10 @@ const Login = () => {
         </div>
       </div>
 
-      {/* ── Brand Panel ── */}
-      <BrandPanel view={view === 'forgot' ? 'forgot' : view} />
+      {/* Left brand panel — FloatTiles like Home */}
+      <BrandPanel view={view === 'forgot' ? 'forgot' : view} t={t} />
 
-      {/* ── Form Panel ── */}
+      {/* Right form panel */}
       <div className={`relative z-10 flex-1 flex items-center justify-center p-6 lg:p-12 transition-all duration-700 delay-100 ${
         animIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}>
@@ -531,8 +546,8 @@ const Login = () => {
 
             {/* View content with slide transition */}
             <div key={view} className="animate-fade-up">
-              {view === 'login'    && <LoginView    onForgot={() => switchView('forgot')}   onRegister={() => switchView('register')} />}
-              {view === 'register' && <RegisterView onLogin={() => switchView('login')} />}
+              {view === 'login'    && <LoginView    onForgot={() => switchView('forgot')}   onRegister={() => switchView('register')} t={t} />}
+              {view === 'register' && <RegisterView onLogin={() => switchView('login')} t={t} />}
               {view === 'forgot'   && <ForgotView   onBack={() => switchView('login')} />}
             </div>
 
@@ -542,7 +557,7 @@ const Login = () => {
 
           {/* Footer note */}
           <p className="text-center text-[11px] mt-5" style={{ color: 'rgba(255,255,255,0.22)' }}>
-            Sécurisé · Maimaim-poana 100% · Tsy misy publicité
+            Securise &middot; Maimaim-poana 100% &middot; Tsy misy publicite
           </p>
         </div>
       </div>
