@@ -151,7 +151,7 @@ const PasswordInput = ({ label, value, onChange, placeholder, autoFocus }) => {
 /*  Strength bar                                                    */
 /* ─────────────────────────────────────────────────────────────── */
 const strengthLabel = ['6 minimum', 'Faible', 'Moyen', 'Bon', 'Fort'];
-const strengthColor = ['#f59e0b', '#f59e0b', '#f59e0b', '#60a5fa', '#34d399'];
+const strengthColor = ['#3747dc', '#733aca', '#f59e0b', '#60a5fa', '#34d399'];
 const getStrength = (p) => {
   if (!p) return 0;
   let s = 0;
