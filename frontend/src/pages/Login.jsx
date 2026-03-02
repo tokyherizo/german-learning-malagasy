@@ -87,7 +87,7 @@ const GoogleButton = ({ onClick, loading }) => (
     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; }}
   >
     <GoogleSVG />
-    {loading ? 'Miandry...' : 'Hiditra amin\'ny Google'}
+    {loading ? 'Connexion...' : 'Continuer avec Google'}
   </button>
 );
 
