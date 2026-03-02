@@ -25,6 +25,7 @@ const Navbar = () => {
     { path: '/vocabulary', label: t?.nav?.vocabulary || 'Vocabulaire' },
     { path: '/exercises', label: t?.nav?.exercises || 'Exercices' },
     { path: '/opportunities', label: 'Opportunités', badge: '🇩🇪', badgeStyle: 'flag' },
+    { path: '/community',    label: 'Communauté', badge: 'NEW', badgeStyle: 'pill' },
   ];
 
   useEffect(() => {

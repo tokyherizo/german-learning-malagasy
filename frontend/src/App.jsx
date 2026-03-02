@@ -12,6 +12,7 @@ import Exercises from './pages/Exercises';
 import Vocabulary from './pages/Vocabulary';
 import Profile from './pages/Profile';
 import Opportunities from './pages/Opportunities';
+import Community from './pages/Community';
 
 /* Protected wrapper */
 const ProtectedLayout = ({ children }) => {
@@ -41,7 +42,9 @@ function AppRoutes() {
       <Route path="/lesson/:id" element={<ProtectedLayout><Lesson /></ProtectedLayout>} />
       <Route path="/exercises" element={<ProtectedLayout><Exercises /></ProtectedLayout>} />
       <Route path="/vocabulary" element={<ProtectedLayout><Vocabulary /></ProtectedLayout>} />
-      <Route path="/opportunities" element={<ProtectedLayout><Opportunities /></ProtectedLayout>} />      <Route path="/profile"    element={<ProtectedLayout><Profile /></ProtectedLayout>} />      {/* Fallback */}
+      <Route path="/opportunities" element={<ProtectedLayout><Opportunities /></ProtectedLayout>} />
+      <Route path="/community"    element={<ProtectedLayout><Community /></ProtectedLayout>} />
+      <Route path="/profile"       element={<ProtectedLayout><Profile /></ProtectedLayout>} />      {/* Fallback */}
       <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/login'} replace />} />
     </Routes>
   );
