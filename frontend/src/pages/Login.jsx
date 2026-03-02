@@ -624,10 +624,7 @@ const Login = () => {
             {view !== 'forgot' && <ViewDots view={view} setView={switchView} />}
           </div>
 
-          {/* Footer note */}
-          <p className="text-center text-[11px] mt-5" style={{ color: 'rgba(255,255,255,0.22)' }}>
-            Securise &middot; Maimaim-poana 100% &middot; Tsy misy publicite
-          </p>
+        
         </div>
       </div>
     </div>
