@@ -553,17 +553,12 @@ const BrandPanel = ({ view, t }) => {
         </p>
 
         {/* Branding */}
-        <div className="flex items-center gap-3 mt-10">
-          <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-black text-white"
-            style={{ background: 'linear-gradient(135deg, #2563eb, #7c3aed)', boxShadow: '0 8px 24px rgba(37,99,235,0.40)' }}>
+        <div className="flex items-center gap-2.5 mt-10">
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black"
+            style={{ background: '#fff', color: '#0d0d0d' }}>
             DE
           </div>
-          <div className="text-left">
-            <div className="text-base font-extrabold text-grad">DeutschMG</div>
-            <div className="text-[10px] uppercase tracking-[3px] font-medium" style={{ color: 'rgba(140,155,210,0.45)' }}>
-              Alema x Malagasy
-            </div>
-          </div>
+          <span className="text-sm font-bold text-white">DeutschMG</span>
         </div>
       </div>
     </div>
