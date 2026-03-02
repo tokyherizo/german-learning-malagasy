@@ -150,8 +150,8 @@ const PasswordInput = ({ label, value, onChange, placeholder, autoFocus }) => {
 /* ─────────────────────────────────────────────────────────────── */
 /*  Strength bar                                                    */
 /* ─────────────────────────────────────────────────────────────── */
-const strengthLabel = ['', 'Kely loatra', 'Averina', 'Tsara', 'Matanjaka'];
-const strengthColor = ['', '#f59e0b', '#f59e0b', '#60a5fa', '#34d399'];
+const strengthLabel = ['6 minimum', 'Faible', 'Moyen', 'Bon', 'Fort'];
+const strengthColor = ['#f59e0b', '#f59e0b', '#f59e0b', '#60a5fa', '#34d399'];
 const getStrength = (p) => {
   if (!p) return 0;
   let s = 0;
@@ -213,7 +213,7 @@ const LoginView = ({ onForgot, onRegister, t }) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="mb-1">
+      <div className="mb-1 text-center">
         <h2 className="text-2xl font-black mb-1" style={{ color: 'rgb(255, 255, 255)' }}>
           {t?.login?.title || 'Connexion'} 
         </h2>
@@ -268,7 +268,7 @@ const RegisterView = ({ onLogin, t }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirm) { setLocalErr('Ny tenimiafina roa tsy mitovy'); return; }
+    if (password !== confirm) { setLocalErr('Les mots de passe ne correspondent pas'); return; }
     setLocalErr('');
     setLoading(true);
     const ok = await register({ name, email, password });
@@ -315,9 +315,9 @@ const RegisterView = ({ onLogin, t }) => {
         </div>
       )}
       {!success && (
-      <div className="mb-1">
+      <div className="mb-1 text-center">
         <h2 className="text-2xl font-black mb-1" style={{ color: 'rgb(255, 255, 255)' }}>
-          {t?.login?.regTitle || 'Creer un compte'} 
+          {t?.login?.regTitle || 'Créer un compte'} 
         </h2>
         <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
           {t?.login?.regSubtitle || 'Rejoignez DeutschMG — gratuit pour toujours.'}
@@ -339,7 +339,7 @@ const RegisterView = ({ onLogin, t }) => {
 
         <div className="flex flex-col gap-1">
           <PasswordInput label={t?.login?.passLabel || 'Mot de passe'} value={password}
-            onChange={e => setPassword(e.target.value)} placeholder="min. 6 karatra" />
+            onChange={e => setPassword(e.target.value)} placeholder="6 minimum" />
           <StrengthBar password={password} />
         </div>
 
@@ -348,7 +348,7 @@ const RegisterView = ({ onLogin, t }) => {
           error={confirm && confirm !== password} />
         {confirm && confirm !== password && (
           <span className="text-[11px] font-semibold" style={{ color: '#f59e0b' }}>
-            ⚠ Tsy mitovy ilay tenimiafina
+            ⚠ Les mots de passe ne correspondent pas
           </span>
         )}
 
