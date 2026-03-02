@@ -33,7 +33,7 @@ function AppRoutes() {
       {/* Public */}
       <Route
         path="/login"
-        element={isAuthenticated ? <Navigate to="/profile" replace /> : <Login />}
+        element={isAuthenticated ? <Navigate to="/" replace /> : <Login />}
       />
       {/* Protected */}
       <Route path="/" element={<ProtectedLayout><Home /></ProtectedLayout>} />
