@@ -4,14 +4,27 @@ import { useAuth } from '../context/AuthContext';
 import { progressService } from '../services/progress';
 import { useTheme } from '../context/ThemeContext';
 
+/* ── SVG Icons ── */
+const IcoZap    = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+const IcoFlame  = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 3z"/></svg>;
+const IcoBook   = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>;
+const IcoPencil = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>;
+const IcoType   = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>;
+const IcoTarget = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>;
+const IcoFlag   = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>;
+const IcoStack  = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+const IcoClock  = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+const IcoTrophy = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg>;
+const IcoStar   = ({ s = 20, c = 'currentColor' }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
+
 /* ── Achievement data ── */
 const ALL_ACHIEVEMENTS = [
-  { id: 'first_lesson',  badge: '1',    icon: '🎯', title: 'Première leçon',   desc: '1 leçon terminée' },
-  { id: 'five_lessons',  badge: '5',    icon: '📚', title: 'Cinq leçons',       desc: '5 leçons terminées' },
-  { id: 'first_words',   badge: '10w',  icon: '🔤', title: 'Maître des mots',   desc: '10 mots appris' },
-  { id: 'hundred_xp',   badge: '100',  icon: '⚡', title: 'Centaine XP',       desc: '100 XP gagnés' },
-  { id: 'streak_3',     badge: '3j',   icon: '🔥', title: 'Série de 3 jours',  desc: '3 jours consécutifs' },
-  { id: 'perfect_score',badge: '100%', icon: '🏆', title: 'Perfection',        desc: '100% bonnes réponses' },
+  { id: 'first_lesson',  Icon: IcoFlag,   title: 'Première leçon',  desc: '1 leçon terminée',       accent: '#6366f1' },
+  { id: 'five_lessons',  Icon: IcoStack,  title: 'Cinq leçons',      desc: '5 leçons terminées',     accent: '#8b5cf6' },
+  { id: 'first_words',   Icon: IcoType,   title: 'Maître des mots',  desc: '10 mots appris',         accent: '#06b6d4' },
+  { id: 'hundred_xp',   Icon: IcoZap,   title: 'Centaine XP',      desc: '100 XP gagnés',          accent: '#f59e0b' },
+  { id: 'streak_3',     Icon: IcoClock,  title: 'Série de 3 jours', desc: '3 jours consécutifs',    accent: '#ef4444' },
+  { id: 'perfect_score',Icon: IcoTrophy, title: 'Perfection',       desc: '100% bonnes réponses',   accent: '#10b981' },
 ];
 
 const LEVEL_COLORS = { A1: '#6366f1', A2: '#8b5cf6', B1: '#06b6d4', B2: '#10b981' };
@@ -42,7 +55,7 @@ const Section = ({ label, title, children }) => {
 };
 
 /* ── Stat card (theme-aware) ── */
-const StatCard = ({ icon, value, label, accent }) => {
+const StatCard = ({ icon: Icon, value, label, accent }) => {
   const { theme } = useTheme();
   const il = theme === 'light';
   return (
@@ -55,7 +68,9 @@ const StatCard = ({ icon, value, label, accent }) => {
     }}>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, borderRadius: '20px 20px 0 0',
         background: accent || '#6366f1', opacity: 0.65 }} />
-      <span style={{ fontSize: 24, lineHeight: 1 }}>{icon}</span>
+      <span style={{ color: accent || '#6366f1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Icon s={26} c={accent || '#6366f1'} />
+      </span>
       <span style={{ fontSize: 24, fontWeight: 900, color: il ? '#0d0d0d' : '#fff', lineHeight: 1 }}>{value}</span>
       <span style={{ fontSize: 10, fontWeight: 800, color: il ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.40)', textTransform: 'uppercase', letterSpacing: '0.10em' }}>{label}</span>
     </div>
@@ -113,7 +128,6 @@ export default function Profile() {
   const btnSecHv = il ? 'rgba(0,0,0,0.09)'    : 'rgba(255,255,255,0.09)';
   const lblClr   = il ? 'rgba(0,0,0,0.38)'    : 'rgba(255,255,255,0.35)';
   const achEBg   = il ? 'rgba(0,0,0,0.04)'    : 'rgba(255,255,255,0.05)';
-  const achEBd   = il ? 'rgba(0,0,0,0.10)'    : 'rgba(255,255,255,0.15)';
   const achUBg   = il ? 'rgba(0,0,0,0.02)'    : 'rgba(255,255,255,0.02)';
   const achUBd   = il ? 'rgba(0,0,0,0.04)'    : 'rgba(255,255,255,0.05)';
   const avBg     = il ? '#0d0d0d'             : '#fff';
@@ -217,12 +231,12 @@ export default function Profile() {
         {/* Stats */}
         <Section label="Stats" title="Statistiques">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <StatCard icon="⚡" value={progress.xp}                            label="XP Total"  accent="#f59e0b" />
-            <StatCard icon="🔥" value={progress.streak ?? 0}                    label="Streak"    accent="#ef4444" />
-            <StatCard icon="📖" value={progress.stats?.lessonsCompleted ?? 0}   label="Leçons"    accent="#6366f1" />
-            <StatCard icon="✏️" value={progress.stats?.exercisesCompleted ?? 0} label="Exercices" accent="#8b5cf6" />
-            <StatCard icon="🔤" value={progress.stats?.wordsLearned ?? 0}       label="Mots"      accent="#06b6d4" />
-            <StatCard icon="🎯" value={`${accuracy}%`}                          label="Précision" accent="#10b981" />
+            <StatCard icon={IcoZap}    value={progress.xp}                            label="XP Total"  accent="#f59e0b" />
+            <StatCard icon={IcoFlame}  value={progress.streak ?? 0}                    label="Streak"    accent="#ef4444" />
+            <StatCard icon={IcoBook}   value={progress.stats?.lessonsCompleted ?? 0}   label="Leçons"    accent="#6366f1" />
+            <StatCard icon={IcoPencil} value={progress.stats?.exercisesCompleted ?? 0} label="Exercices" accent="#8b5cf6" />
+            <StatCard icon={IcoType}   value={progress.stats?.wordsLearned ?? 0}       label="Mots"      accent="#06b6d4" />
+            <StatCard icon={IcoTarget} value={`${accuracy}%`}                          label="Précision" accent="#10b981" />
           </div>
         </Section>
 
@@ -232,16 +246,17 @@ export default function Profile() {
             {ALL_ACHIEVEMENTS.map(ach => {
               const earned = earnedIds.has(ach.id);
               const earnedData = earnedMap[ach.id];
+              const iconColor = earned ? (ach.accent || '#6366f1') : (il ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.25)');
               return (
                 <div key={ach.id} style={{ display: 'flex', alignItems: 'center', gap: 14, borderRadius: 18, padding: '14px 16px',
                   background: earned ? achEBg : achUBg,
-                  border: `1px solid ${earned ? achEBd : achUBd}`,
+                  border: `1px solid ${earned ? (ach.accent + '33') : achUBd}`,
                   opacity: earned ? 1 : 0.45, transition: 'opacity 0.2s' }}>
                   <div style={{ width: 46, height: 46, borderRadius: 14, flexShrink: 0,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
-                    background: earned ? (il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.07)') : (il ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)'),
-                    border: `1px solid ${earned ? achEBd : achUBd}` }}>
-                    {earned ? ach.icon : '—'}
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: earned ? (ach.accent + '18') : (il ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)'),
+                    border: `1px solid ${earned ? (ach.accent + '30') : achUBd}` }}>
+                    <ach.Icon s={20} c={iconColor} />
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
                     <span style={{ fontWeight: 900, fontSize: 13, color: earned ? txtMain : txtSub }}>{ach.title}</span>
@@ -249,7 +264,7 @@ export default function Profile() {
                       {earned ? `Obtenu le ${new Date(earnedData.earnedAt).toLocaleDateString('fr-FR')}` : ach.desc}
                     </span>
                   </div>
-                  {earned && <span style={{ fontSize: 14, marginLeft: 'auto', flexShrink: 0 }}>⭐</span>}
+                  {earned && <IcoStar s={14} c={ach.accent || '#f59e0b'} />}
                 </div>
               );
             })}
