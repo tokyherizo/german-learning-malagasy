@@ -112,20 +112,18 @@ const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, ope
 /* ================================================================ */
 /* Card visual metadata (fixed — only layout/accent info)           */
 const CARD_META = [
-  { bigWord: 'A1',    bigWordColor: 'rgba(99,102,241,0.18)',  accent: '#818cf8', cat: 'A1',          to: '/levels'     },
-  { bigWord: '500+',  bigWordColor: 'rgba(139,92,246,0.15)',  accent: '#a78bfa', cat: 'Vocabulaire', to: '/vocabulary' },
-  { bigWord: 'Quiz',  bigWordColor: 'rgba(234,179,8,0.12)',   accent: '#fbbf24', cat: 'Exercices',   to: '/exercises'  },
-  { bigWord: 'A2',    bigWordColor: 'rgba(168,85,247,0.18)',  accent: '#c084fc', cat: 'A2',          to: '/levels'     },
-  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#38bdf8', cat: 'Grammaire',   to: '/levels'     },
-  { bigWord: 'Wort',  bigWordColor: 'rgba(52,211,153,0.12)',  accent: '#34d399', cat: 'Listes',      to: '/vocabulary' },
-  { bigWord: 'XP',    bigWordColor: 'rgba(251,146,60,0.12)',  accent: '#fb923c', cat: 'Tout',        to: '/levels'     },
-  { bigWord: 'Hallo', bigWordColor: 'rgba(244,63,94,0.12)',   accent: '#fb7185', cat: 'A1',          to: '/levels'     },
+  { bigWord: 'A1',    bigWordColor: 'rgba(99,102,241,0.18)',  accent: '#c249ff', cat: 'A1',          to: '/levels'     },
+  { bigWord: '500+',  bigWordColor: 'rgba(139,92,246,0.15)',  accent: '#c249ff', cat: 'Vocabulaire', to: '/vocabulary' },
+  { bigWord: 'Quiz',  bigWordColor: 'rgba(234,179,8,0.12)',   accent: '#c249ff', cat: 'Exercices',   to: '/exercises'  },
+  { bigWord: 'A2',    bigWordColor: 'rgba(168,85,247,0.18)',  accent: '#c249ff', cat: 'A2',          to: '/levels'     },
+  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#c249ff', cat: 'Grammaire',   to: '/levels'     },
+  { bigWord: 'Wort',  bigWordColor: 'rgba(52,211,153,0.12)',  accent: '#c249ff', cat: 'Listes',      to: '/vocabulary' },
+  { bigWord: 'XP',    bigWordColor: 'rgba(251,146,60,0.12)',  accent: '#c249ff', cat: 'Tout',        to: '/levels'     },
+  { bigWord: 'Hallo', bigWordColor: 'rgba(244,63,94,0.12)',   accent: '#c249ff', cat: 'conversations',          to: '/levels'     },
 ];
 
 /* Internal category keys (FR-indexed) used for filtering */
 const CAT_INTERNAL = ['Tout', 'A1', 'A2', 'Grammaire', 'Vocabulaire', 'Exercices', 'Listes'];
-
-const FOOTER_PATHS = ['/levels', '/vocabulary', '/exercises', '/profile'];
 
 const Home = () => {
   const [progress] = useState(() => progressService.getProgress());
@@ -222,7 +220,7 @@ const Home = () => {
             <Link
               to="/levels"
               className="flex items-center gap-2 text-sm font-semibold px-6 py-2.5 rounded-lg transition-opacity hover:opacity-85"
-              style={{ background: '#7124e5', color: '#ffffff' }}
+              style={{ background:' #c249ff', color: '#ffffff' }}
             >
               {t?.home?.cta1 || 'Commencer maintenant'}
             </Link>
@@ -280,26 +278,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Footer strip */}
-        <div
-          className="max-w-6xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4"
-          style={{ borderTop: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)' }}
-        >
-          <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black" style={{ background: il ? '#0f172a' : '#fff', color: il ? '#fff' : '#0d0d0d' }}>DE</div>
-            <span className="text-sm font-semibold" style={{ color: il ? '#0f172a' : '#fff' }}>DeutschMG</span>
-            <span className="text-xs" style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.3)' }}>— Malagasy × Alemà 🇲🇬 🇩🇪</span>
-          </div>
-          <div className="flex items-center gap-4 text-xs" style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.3)' }}>
-            {t?.home?.footerLinks?.map((lbl, i) => (
-              <Link key={i} to={FOOTER_PATHS[i]} className="hover:text-white transition-colors">{lbl}</Link>
-            )) || FOOTER_PATHS.map((path, i) => (
-              <Link key={i} to={path} className="hover:text-white transition-colors">
-                {['Leçons', 'Vocabulaire', 'Exercices', 'Profil'][i]}
-              </Link>
-            ))}
-          </div>
-        </div>
+
       </section>
     </div>
   );

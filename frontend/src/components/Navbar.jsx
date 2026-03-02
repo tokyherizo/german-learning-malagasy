@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { progressService } from '../services/progress';
+
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -17,8 +17,7 @@ const Navbar = () => {
   const isDark = theme === 'dark';
   const il = theme === 'light';
 
-  const progress = progressService.getProgress();
-  const xp = progress?.xp ?? 0;
+  
 
   const navLinks = [
     { path: '/', label: t?.nav?.home || 'Accueil' },

@@ -3,6 +3,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Levels from './pages/Levels';
@@ -20,6 +21,7 @@ const ProtectedLayout = ({ children }) => {
     <div style={{ background: 'var(--bg-base)', color: 'var(--text-primary)', minHeight: '100vh' }}>
       <Navbar />
       <main>{children}</main>
+      <Footer />
     </div>
   );
 };
