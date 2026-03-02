@@ -11,8 +11,8 @@ const NAV_LINKS = [
 const LEVELS = [
   { lvl: 'A1', label: 'Débutant' },
   { lvl: 'A2', label: 'Élémentaire' },
-  { lvl: 'B1', label: 'Intermédiaire' },
-  { lvl: 'B2', label: 'Avancé' },
+  { lvl: 'B1/B2', label: 'Intermédiaire' },
+  { lvl: 'C1/C2', label: 'Avancé' },
 ];
 
 const lnk = {

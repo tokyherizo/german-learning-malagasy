@@ -112,14 +112,14 @@ const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, ope
 /* ================================================================ */
 /* Card visual metadata (fixed — only layout/accent info)           */
 const CARD_META = [
-  { bigWord: 'A1',    bigWordColor: 'rgba(99,102,241,0.18)',  accent: '#c249ff', cat: 'A1',          to: '/levels'     },
-  { bigWord: '500+',  bigWordColor: 'rgba(139,92,246,0.15)',  accent: '#c249ff', cat: 'Vocabulaire', to: '/vocabulary' },
-  { bigWord: 'Quiz',  bigWordColor: 'rgba(234,179,8,0.12)',   accent: '#c249ff', cat: 'Exercices',   to: '/exercises'  },
-  { bigWord: 'A2',    bigWordColor: 'rgba(168,85,247,0.18)',  accent: '#c249ff', cat: 'A2',          to: '/levels'     },
-  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#c249ff', cat: 'Grammaire',   to: '/levels'     },
-  { bigWord: 'Wort',  bigWordColor: 'rgba(52,211,153,0.12)',  accent: '#c249ff', cat: 'Listes',      to: '/vocabulary' },
-  { bigWord: 'XP',    bigWordColor: 'rgba(251,146,60,0.12)',  accent: '#c249ff', cat: 'Tout',        to: '/levels'     },
-  { bigWord: 'Hallo', bigWordColor: 'rgba(244,63,94,0.12)',   accent: '#c249ff', cat: 'conversations',          to: '/levels'     },
+  { bigWord: 'A1',    bigWordColor: 'rgba(99,102,241,0.18)',  accent: '#7124e5', cat: 'A1',          to: '/levels'     },
+  { bigWord: '500+',  bigWordColor: 'rgba(139,92,246,0.15)',  accent: '#7124e5', cat: 'Vocabulaire', to: '/vocabulary' },
+  { bigWord: 'Quiz',  bigWordColor: 'rgba(234,179,8,0.12)',   accent: '#7124e5', cat: 'Exercices',   to: '/exercises'  },
+  { bigWord: 'A2',    bigWordColor: 'rgba(168,85,247,0.18)',  accent: '#7124e5', cat: 'A2',          to: '/levels'     },
+  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#7124e5', cat: 'Grammaire',   to: '/levels'     },
+  { bigWord: 'Wort',  bigWordColor: 'rgba(52,211,153,0.12)',  accent: '#7124e5', cat: 'Listes',      to: '/vocabulary' },
+  { bigWord: 'XP',    bigWordColor: 'rgba(251,146,60,0.12)',  accent: '#7124e5', cat: 'Tout',        to: '/levels'     },
+  { bigWord: 'Hallo', bigWordColor: 'rgba(244,63,94,0.12)',   accent: '#7124e5', cat: 'conversations',          to: '/levels'     },
 ];
 
 /* Internal category keys (FR-indexed) used for filtering */
@@ -220,7 +220,7 @@ const Home = () => {
             <Link
               to="/levels"
               className="flex items-center gap-2 text-sm font-semibold px-6 py-2.5 rounded-lg transition-opacity hover:opacity-85"
-              style={{ background:' #c249ff', color: '#ffffff' }}
+              style={{ background: '#7124e5', color: '#ffffff' }}
             >
               {t?.home?.cta1 || 'Commencer maintenant'}
             </Link>

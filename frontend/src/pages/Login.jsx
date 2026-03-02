@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth }     from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -61,6 +62,16 @@ const InputField = ({ label, type = 'text', value, onChange, placeholder, autoFo
   </div>
 );
 
+const GoogleSVG = () => (
+  <svg width="18" height="18" viewBox="0 0 48 48">
+    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+    <path fill="none" d="M0 0h48v48H0z"/>
+  </svg>
+);
+
 const GoogleButton = ({ onClick, loading }) => (
   <button
     type="button"
@@ -75,14 +86,7 @@ const GoogleButton = ({ onClick, loading }) => (
     onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'; }}
     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; }}
   >
-    {/* Google logo SVG */}
-    <svg width="18" height="18" viewBox="0 0 48 48">
-      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-      <path fill="none" d="M0 0h48v48H0z"/>
-    </svg>
+    <GoogleSVG />
     {loading ? 'Miandry...' : 'Hiditra amin\'ny Google'}
   </button>
 );
@@ -188,14 +192,24 @@ const LoginView = ({ onForgot, onRegister, t }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    login({ email, password });
+    await login({ email, password });
     setLoading(false);
   };
 
-  const handleGoogle = () => {
-    setGLoad(true);
-    setTimeout(() => { loginWithGoogle(); setGLoad(false); }, 900);
-  };
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setGLoad(true);
+      try {
+        const info = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        }).then(r => r.json());
+        await loginWithGoogle({ name: info.name, email: info.email, googleId: info.sub, picture: info.picture });
+      } finally { setGLoad(false); }
+    },
+    onError: () => { clearError(); setGLoad(false); },
+  });
+
+  const handleGoogle = () => { setGLoad(true); googleLogin(); };
 
   return (
     <div className="flex flex-col gap-5">
@@ -232,12 +246,6 @@ const LoginView = ({ onForgot, onRegister, t }) => {
           {t?.login?.switchToReg?.split('?').pop()?.trim() || "S'inscrire"}
         </button>
       </p>
-
-      <div className="rounded-2xl p-3.5 text-xs leading-relaxed"
-        style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.16)' }}>
-        <span className="font-bold" style={{ color: 'var(--accent)' }}>💡 Demo:</span>{' '}
-        <span style={{ color: 'rgba(180,190,230,0.60)' }}>demo@deutschmg.mg / deutsch123</span>
-      </div>
     </div>
   );
 };
@@ -254,25 +262,59 @@ const RegisterView = ({ onLogin, t }) => {
   const [loading,  setLoading]  = useState(false);
   const [gLoad,    setGLoad]    = useState(false);
   const [localErr, setLocalErr] = useState('');
+  const [success,  setSuccess]  = useState(false);
 
   useEffect(() => { clearError(); setLocalErr(''); }, []); // eslint-disable-line
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirm) { setLocalErr('Ny tenimiafina roa tsy mitovy'); return; }
     setLocalErr('');
     setLoading(true);
-    register({ name, email, password });
+    const ok = await register({ name, email, password });
     setLoading(false);
+    if (ok) {
+      setSuccess(true);
+      // After 2s, redirect to login view
+      setTimeout(() => onLogin(), 2000);
+    }
   };
 
-  const handleGoogle = () => {
-    setGLoad(true);
-    setTimeout(() => { loginWithGoogle(); setGLoad(false); }, 900);
-  };
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setGLoad(true);
+      try {
+        const info = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        }).then(r => r.json());
+        await loginWithGoogle({ name: info.name, email: info.email, googleId: info.sub, picture: info.picture });
+      } finally { setGLoad(false); }
+    },
+    onError: () => { clearError(); setGLoad(false); },
+  });
+
+  const handleGoogle = () => { setGLoad(true); googleLogin(); };
 
   return (
     <div className="flex flex-col gap-4">
+      {success && (
+        <div className="flex flex-col items-center gap-4 py-6 text-center animate-fade-up">
+          <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl"
+            style={{ background: 'rgba(52,211,153,0.15)', border: '2px solid rgba(52,211,153,0.35)' }}>
+            ✅
+          </div>
+          <div>
+            <h3 className="text-lg font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>
+              Compte créé avec succès !
+            </h3>
+            <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
+              Redirection vers la connexion...
+            </p>
+          </div>
+          <span className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white animate-spin inline-block" />
+        </div>
+      )}
+      {!success && (
       <div className="mb-1">
         <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>
           {t?.login?.regTitle || 'Creer un compte'} ✨
@@ -281,7 +323,9 @@ const RegisterView = ({ onLogin, t }) => {
           {t?.login?.regSubtitle || 'Rejoignez DeutschMG — gratuit pour toujours.'}
         </p>
       </div>
+      )}
 
+      {!success && (<>
       <GoogleButton onClick={handleGoogle} loading={gLoad} />
       <Divider />
 
@@ -317,6 +361,7 @@ const RegisterView = ({ onLogin, t }) => {
           {t?.login?.switchToLog?.split('?').pop()?.trim() || 'Se connecter'}
         </button>
       </p>
+      </>)}
     </div>
   );
 };
