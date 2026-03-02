@@ -118,11 +118,44 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /* ── Forgot password ─────────────────────────────────────────── */
-  const forgotPassword = useCallback((email) => {
+  /* ── Forgot password (real API) ─────────────────────────────── */
+  const forgotPassword = useCallback(async (email) => {
     setError('');
-    if (!(email || '').toLowerCase().trim()) { setError('Ampidiro ny email-anao'); return false; }
-    return true;
+    const trimmed = (email || '').toLowerCase().trim();
+    if (!trimmed) { setError('Veuillez saisir votre adresse email'); return false; }
+    try {
+      const res  = await fetch(`${API}/auth/forgot-password`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email: trimmed }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || 'Erreur lors de l\'envoi'); return false; }
+      return data.message || true;
+    } catch {
+      setError('Serveur inaccessible. Vérifiez que le backend tourne.');
+      return false;
+    }
+  }, []);
+
+  /* ── Reset password (from email token) ──────────────────────── */
+  const resetPassword = useCallback(async ({ token, password }) => {
+    setError('');
+    if (!token || !password) { setError('Champs requis'); return false; }
+    if (password.length < 6) { setError('Mot de passe trop court (min. 6 caractères)'); return false; }
+    try {
+      const res  = await fetch(`${API}/auth/reset-password`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ token, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || 'Erreur'); return false; }
+      return true;
+    } catch {
+      setError('Serveur inaccessible.');
+      return false;
+    }
   }, []);
 
   /* ── Logout ─────────────────────────────────────────────────── */
@@ -137,7 +170,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{
-      user, login, register, loginWithGoogle, forgotPassword,
+      user, login, register, loginWithGoogle, forgotPassword, resetPassword,
       updateProfile, changePassword,
       logout, error, clearError, isAuthenticated: !!user, getToken,
     }}>

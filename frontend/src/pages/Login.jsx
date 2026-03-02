@@ -234,7 +234,7 @@ const LoginView = ({ onForgot, onRegister, t }) => {
           <button type="button" onClick={onForgot}
             className="self-end text-xs font-semibold mt-1 transition-opacity hover:opacity-70"
             style={{ color: 'var(--accent)' }}>
-            Tenimiafina voafafa?
+            Mot de passe oublié ?
           </button>
         </div>
         <SubmitBtn loading={loading} label={t?.login?.submitBtn || 'Se connecter'} loadingLabel={t?.login?.loadingBtn || 'Connexion...'} />
@@ -374,34 +374,38 @@ const ForgotView = ({ onBack }) => {
   const [email,   setEmail]   = useState('');
   const [loading, setLoading] = useState(false);
   const [sent,    setSent]    = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => { clearError(); }, []); // eslint-disable-line
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const ok = forgotPassword(email);
+    const result = await forgotPassword(email);
     setLoading(false);
-    if (ok) setSent(true);
+    if (result) {
+      setMessage(typeof result === 'string' ? result : 'Email envoyé ! Vérifiez votre boîte mail.');
+      setSent(true);
+    }
   };
 
   if (sent) return (
     <div className="flex flex-col items-center gap-6 py-4 text-center">
-      <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl animate-bounce-in"
+      <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl"
         style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.20), rgba(124,58,237,0.20))', border: '2px solid rgba(96,165,250,0.30)' }}>
         📬
       </div>
       <div>
-        <h2 className="text-2xl font-black mb-2" style={{ color: 'rgba(235,240,255,0.96)' }}>Email nalefa! ✅</h2>
-        <p className="text-sm leading-relaxed" style={{ color: 'rgba(180,190,230,0.60)' }}>
-          Raha misy kaonty mifandray amin&apos;ny <strong style={{ color: 'var(--accent)' }}>{email}</strong>, ho mahazo link fanarenana ianao.
+        <h2 className="text-2xl font-black mb-2" style={{ color: 'rgba(235,240,255,0.96)' }}>Email envoyé ✅</h2>
+        <p className="text-sm leading-relaxed" style={{ color: 'rgba(180,190,230,0.65)' }}>
+          {message}
         </p>
-        <p className="text-xs mt-2" style={{ color: 'rgba(180,190,230,0.38)' }}>
-          Jereo ny spam raha tsy hita.
+        <p className="text-xs mt-3" style={{ color: 'rgba(180,190,230,0.38)' }}>
+          Vérifiez aussi vos spams si vous ne le trouvez pas.
         </p>
       </div>
       <button onClick={onBack} className="btn-grad px-8 py-3 rounded-2xl text-sm font-black text-white">
-        ← Hiverina
+        ← Retour à la connexion
       </button>
     </div>
   );
@@ -411,19 +415,87 @@ const ForgotView = ({ onBack }) => {
       <div>
         <button onClick={onBack} className="flex items-center gap-1.5 text-xs font-semibold mb-5 transition-opacity hover:opacity-70"
           style={{ color: 'var(--accent)' }}>
-          ← Hiverina
+          ← Retour
         </button>
-        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>Tenimiafina voafafa 🔐</h2>
+        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>Mot de passe oublié 🔐</h2>
         <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
-          Ampidiro ny emailnao — handefa link fanarenana izahay
+          Entrez votre email — nous vous enverrons un lien de réinitialisation.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <ErrorBanner msg={error} />
-        <InputField label="Email" type="email" value={email} onChange={e => setEmail(e.target.value)}
-          placeholder="email-anao@mail.com" autoFocus />
-        <SubmitBtn loading={loading} label="Alefa ny reset link" loadingLabel="Miandry..." />
+        <InputField label="Adresse email" type="email" value={email} onChange={e => setEmail(e.target.value)}
+          placeholder="votre@email.com" autoFocus />
+        <SubmitBtn loading={loading} label="Envoyer le lien" loadingLabel="Envoi en cours..." />
+      </form>
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────────────────────── */
+/*  View: RESET PASSWORD (from email link ?token=xxx)              */
+/* ─────────────────────────────────────────────────────────────── */
+const ResetPasswordView = ({ token, onBack }) => {
+  const { resetPassword, error, clearError } = useAuth();
+  const [password,  setPassword]  = useState('');
+  const [password2, setPassword2] = useState('');
+  const [loading,   setLoading]   = useState(false);
+  const [done,      setDone]      = useState(false);
+  const [showPw,    setShowPw]    = useState(false);
+
+  useEffect(() => { clearError(); }, []); // eslint-disable-line
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (password !== password2) return;
+    setLoading(true);
+    const ok = await resetPassword({ token, password });
+    setLoading(false);
+    if (ok) setDone(true);
+  };
+
+  if (done) return (
+    <div className="flex flex-col items-center gap-6 py-4 text-center">
+      <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl"
+        style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.20), rgba(16,185,129,0.20))', border: '2px solid rgba(34,197,94,0.30)' }}>
+        ✅
+      </div>
+      <div>
+        <h2 className="text-2xl font-black mb-2" style={{ color: 'rgba(235,240,255,0.96)' }}>Mot de passe modifié !</h2>
+        <p className="text-sm" style={{ color: 'rgba(180,190,230,0.60)' }}>Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.</p>
+      </div>
+      <button onClick={onBack} className="btn-grad px-8 py-3 rounded-2xl text-sm font-black text-white">
+        ← Se connecter
+      </button>
+    </div>
+  );
+
+  const noMatch = password2.length > 0 && password !== password2;
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div>
+        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>Nouveau mot de passe 🔑</h2>
+        <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>Choisissez un nouveau mot de passe pour votre compte.</p>
+      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <ErrorBanner msg={error} />
+        <PasswordInput label="Nouveau mot de passe" value={password}
+          onChange={e => setPassword(e.target.value)} placeholder="••••••••" autoFocus />
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[11px] font-bold uppercase tracking-[2px]" style={{ color: 'rgba(255,255,255,0.40)' }}>Confirmer le mot de passe</label>
+          <input type={showPw ? 'text' : 'password'} value={password2} onChange={e => setPassword2(e.target.value)}
+            placeholder="••••••••"
+            className="w-full rounded-2xl px-4 py-3.5 text-sm outline-none transition-all duration-200"
+            style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: `1.5px solid ${noMatch ? 'rgba(251,100,100,0.55)' : 'rgba(255,255,255,0.10)'}`,
+              color: 'rgba(255,255,255,0.90)',
+            }} />
+          {noMatch && <p className="text-xs" style={{ color: 'rgba(251,100,100,0.80)' }}>Les mots de passe ne correspondent pas</p>}
+        </div>
+        <SubmitBtn loading={loading} label="Enregistrer le mot de passe" loadingLabel="Enregistrement..." />
       </form>
     </div>
   );
@@ -528,11 +600,23 @@ const ViewDots = ({ view, setView }) => (
 /* ─────────────────────────────────────────────────────────────── */
 const Login = () => {
   const { t } = useLanguage();
-  const [view,   setView]   = useState('login');   // 'login' | 'register' | 'forgot'
+  const [view,   setView]   = useState('login');   // 'login' | 'register' | 'forgot' | 'reset'
+  const [resetToken, setResetToken] = useState('');
   const [animIn, setAnimIn] = useState(false);
   const prevView = useRef(view);
 
-  useEffect(() => { setTimeout(() => setAnimIn(true), 80); }, []);
+  useEffect(() => {
+    // Detect ?token=xxx in URL → show reset password view
+    const params = new URLSearchParams(window.location.search);
+    const token  = params.get('token');
+    if (token) {
+      setResetToken(token);
+      setView('reset');
+      // Clean the URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    setTimeout(() => setAnimIn(true), 80);
+  }, []);
 
   const switchView = (v) => {
     prevView.current = view;
@@ -556,12 +640,12 @@ const Login = () => {
             lineHeight: 1,
           }}
         >
-          {view === 'register' ? 'KONTO' : view === 'forgot' ? 'PASSWORT' : 'LOGIN'}
+          {view === 'register' ? 'KONTO' : (view === 'forgot' || view === 'reset') ? 'PASSWORT' : 'LOGIN'}
         </div>
       </div>
 
       {/* Left brand panel — FloatTiles like Home */}
-      <BrandPanel view={view === 'forgot' ? 'forgot' : view} t={t} />
+      <BrandPanel view={(view === 'forgot' || view === 'reset') ? 'forgot' : view} t={t} />
 
       {/* Right form panel */}
       <div className={`relative z-10 flex-1 flex items-center justify-center p-6 lg:p-12 transition-all duration-700 delay-100 ${
@@ -615,13 +699,14 @@ const Login = () => {
 
             {/* View content with slide transition */}
             <div key={view} className="animate-fade-up">
-              {view === 'login'    && <LoginView    onForgot={() => switchView('forgot')}   onRegister={() => switchView('register')} t={t} />}
-              {view === 'register' && <RegisterView onLogin={() => switchView('login')} t={t} />}
-              {view === 'forgot'   && <ForgotView   onBack={() => switchView('login')} />}
+              {view === 'login'    && <LoginView       onForgot={() => switchView('forgot')}  onRegister={() => switchView('register')} t={t} />}
+              {view === 'register' && <RegisterView    onLogin={() => switchView('login')} t={t} />}
+              {view === 'forgot'   && <ForgotView      onBack={() => switchView('login')} />}
+              {view === 'reset'    && <ResetPasswordView token={resetToken} onBack={() => switchView('login')} />}
             </div>
 
             {/* View dots */}
-            {view !== 'forgot' && <ViewDots view={view} setView={switchView} />}
+            {(view === 'login' || view === 'register') && <ViewDots view={view} setView={switchView} />}
           </div>
 
         

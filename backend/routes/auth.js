@@ -1,8 +1,9 @@
-const router  = require('express').Router();
-const bcrypt  = require('bcryptjs');
-const jwt     = require('jsonwebtoken');
-const mongoose = require('mongoose');
-const User    = require('../models/User');
+const router     = require('express').Router();
+const bcrypt     = require('bcryptjs');
+const jwt        = require('jsonwebtoken');
+const mongoose   = require('mongoose');
+const nodemailer = require('nodemailer');
+const User       = require('../models/User');
 
 const JWT_SECRET  = process.env.JWT_SECRET  || 'deutschmg-secret-change-in-prod';
 const JWT_EXPIRES = process.env.JWT_EXPIRES || '30d';
@@ -14,7 +15,16 @@ const dbCheck = (_req, res, next) => {
 };
 
 // Apply DB check to all auth routes that need the database
-router.use(['/register', '/login', '/google', '/change-password'], dbCheck);
+router.use(['/register', '/login', '/google', '/change-password', '/forgot-password', '/reset-password'], dbCheck);
+
+/* ── Email transporter ──────────────────────────────────────── */
+const createTransporter = () => nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 const initials = (n) =>
   (n || '').trim().split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -113,6 +123,84 @@ router.post('/google', async (req, res) => {
     }
 
     res.json({ token: sign(user), user: userPayload(user) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ── POST /api/auth/forgot-password ─────────────────────────── */
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email requis' });
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    // Always respond with success to avoid user enumeration
+    if (!user) return res.json({ message: 'Si ce compte existe, un email a été envoyé.' });
+
+    if (user.provider === 'google' && !user.password)
+      return res.json({ message: 'Ce compte utilise Google. Connectez-vous avec Google.' });
+
+    const resetToken = jwt.sign(
+      { id: user._id, email: user.email, type: 'password-reset' },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+    const resetUrl   = `${CLIENT_URL}/login?token=${resetToken}`;
+
+    const transporter = createTransporter();
+    await transporter.sendMail({
+      from: `"DeutschMG 🇩🇪" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: 'Réinitialisation de votre mot de passe — DeutschMG',
+      html: `
+        <div style="font-family:sans-serif;max-width:500px;margin:auto;background:#0d0d0d;color:#fff;padding:36px;border-radius:16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
+            <div style="width:36px;height:36px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0d0d0d;font-size:13px;">DE</div>
+            <span style="font-size:20px;font-weight:900;">DeutschMG</span>
+          </div>
+          <h2 style="margin:0 0 8px;font-size:22px;">Réinitialisation du mot de passe 🔐</h2>
+          <p style="color:rgba(255,255,255,0.55);margin-bottom:20px;">Bonjour <strong style="color:#fff;">${user.name}</strong>,</p>
+          <p style="color:rgba(255,255,255,0.75);line-height:1.6;">Vous avez demandé à réinitialiser votre mot de passe sur DeutschMG. Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe :</p>
+          <a href="${resetUrl}" style="display:inline-block;margin:28px 0;padding:14px 32px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;text-decoration:none;border-radius:12px;font-weight:700;font-size:15px;">Réinitialiser mon mot de passe</a>
+          <p style="color:rgba(255,255,255,0.35);font-size:13px;">⏱ Ce lien expire dans <strong>1 heure</strong>.</p>
+          <p style="color:rgba(255,255,255,0.25);font-size:12px;">Si vous n'avez pas fait cette demande, ignorez cet email — votre mot de passe ne sera pas modifié.</p>
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:24px 0;" />
+          <p style="color:rgba(255,255,255,0.20);font-size:11px;">Lien direct : ${resetUrl}</p>
+        </div>
+      `,
+    });
+
+    res.json({ message: 'Email envoyé ! Vérifiez votre boîte mail (et les spams).' });
+  } catch (err) {
+    console.error('Forgot-password error:', err.message);
+    res.status(500).json({ error: 'Impossible d\'envoyer l\'email. Vérifiez la configuration EMAIL_USER / EMAIL_PASS dans le serveur.' });
+  }
+});
+
+/* ── POST /api/auth/reset-password ──────────────────────────── */
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    if (!token || !password) return res.status(400).json({ error: 'Token et mot de passe requis' });
+    if (password.length < 6)  return res.status(400).json({ error: 'Mot de passe trop court (min. 6 caractères)' });
+
+    let decoded;
+    try { decoded = jwt.verify(token, JWT_SECRET); }
+    catch { return res.status(401).json({ error: 'Lien invalide ou expiré. Recommencez la procédure.' }); }
+
+    if (decoded.type !== 'password-reset')
+      return res.status(401).json({ error: 'Token invalide.' });
+
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(404).json({ error: 'Utilisateur introuvable' });
+
+    user.password = await bcrypt.hash(password, 12);
+    await user.save();
+
+    res.json({ message: 'Mot de passe mis à jour avec succès !' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
