@@ -214,8 +214,8 @@ const LoginView = ({ onForgot, onRegister, t }) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="mb-1">
-        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>
-          {t?.login?.title || 'Connexion'} 👋
+        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgb(255, 255, 255)' }}>
+          {t?.login?.title || 'Connexion'} 
         </h2>
         <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
           {t?.login?.subtitle || 'Connectez-vous pour continuer votre apprentissage.'}
@@ -316,8 +316,8 @@ const RegisterView = ({ onLogin, t }) => {
       )}
       {!success && (
       <div className="mb-1">
-        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>
-          {t?.login?.regTitle || 'Creer un compte'} ✨
+        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgb(255, 255, 255)' }}>
+          {t?.login?.regTitle || 'Creer un compte'} 
         </h2>
         <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
           {t?.login?.regSubtitle || 'Rejoignez DeutschMG — gratuit pour toujours.'}
