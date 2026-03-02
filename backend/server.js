@@ -72,6 +72,14 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
 
+// ── Keep-alive : prevent Render free tier from sleeping ─────────────────────
+const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+setInterval(() => {
+  fetch(`${SELF_URL}/api/health`)
+    .then(() => console.log('🔁 Keep-alive ping sent'))
+    .catch(() => {});
+}, 14 * 60 * 1000); // every 14 minutes
+
 // Then connect to MongoDB
 mongoose
   .connect(MONGO_URI)
