@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth }     from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -442,7 +442,6 @@ const ResetPasswordView = ({ token, onBack }) => {
   const [password2, setPassword2] = useState('');
   const [loading,   setLoading]   = useState(false);
   const [done,      setDone]      = useState(false);
-  const [showPw,    setShowPw]    = useState(false);
 
   useEffect(() => { clearError(); }, []); // eslint-disable-line
 
@@ -483,17 +482,10 @@ const ResetPasswordView = ({ token, onBack }) => {
         <ErrorBanner msg={error} />
         <PasswordInput label="Nouveau mot de passe" value={password}
           onChange={e => setPassword(e.target.value)} placeholder="••••••••" autoFocus />
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold uppercase tracking-[2px]" style={{ color: 'rgba(255,255,255,0.40)' }}>Confirmer le mot de passe</label>
-          <input type={showPw ? 'text' : 'password'} value={password2} onChange={e => setPassword2(e.target.value)}
-            placeholder="••••••••"
-            className="w-full rounded-2xl px-4 py-3.5 text-sm outline-none transition-all duration-200"
-            style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: `1.5px solid ${noMatch ? 'rgba(251,100,100,0.55)' : 'rgba(255,255,255,0.10)'}`,
-              color: 'rgba(255,255,255,0.90)',
-            }} />
-          {noMatch && <p className="text-xs" style={{ color: 'rgba(251,100,100,0.80)' }}>Les mots de passe ne correspondent pas</p>}
+        <div className="flex flex-col gap-1">
+          <PasswordInput label="Confirmer le mot de passe" value={password2}
+            onChange={e => setPassword2(e.target.value)} placeholder="••••••••" />
+          {noMatch && <p className="text-xs mt-1" style={{ color: 'rgba(251,100,100,0.80)' }}>Les mots de passe ne correspondent pas</p>}
         </div>
         <SubmitBtn loading={loading} label="Enregistrer le mot de passe" loadingLabel="Enregistrement..." />
       </form>
@@ -600,28 +592,28 @@ const ViewDots = ({ view, setView }) => (
 /* ─────────────────────────────────────────────────────────────── */
 const Login = () => {
   const { t } = useLanguage();
-  const [view,   setView]   = useState('login');   // 'login' | 'register' | 'forgot' | 'reset'
-  const [resetToken, setResetToken] = useState('');
+
+  // Compute initial values from URL before first render — avoids setState in useEffect
+  const [view, setView] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('token') ? 'reset' : 'login';
+  });
+  const [resetToken] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('token') || '';
+  });
   const [animIn, setAnimIn] = useState(false);
-  const prevView = useRef(view);
 
   useEffect(() => {
-    // Detect ?token=xxx in URL → show reset password view
-    const params = new URLSearchParams(window.location.search);
-    const token  = params.get('token');
-    if (token) {
-      setResetToken(token);
-      setView('reset');
-      // Clean the URL
+    // Clean the token from the URL without triggering a re-render
+    if (window.location.search.includes('token=')) {
       window.history.replaceState({}, '', window.location.pathname);
     }
-    setTimeout(() => setAnimIn(true), 80);
+    const timer = setTimeout(() => setAnimIn(true), 80);
+    return () => clearTimeout(timer);
   }, []);
 
-  const switchView = (v) => {
-    prevView.current = view;
-    setView(v);
-  };
+  const switchView = (v) => setView(v);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex" style={{ background: '#0d0d0d' }}>
