@@ -4,7 +4,15 @@ const AuthContext = createContext(null);
 const TOKEN_KEY   = 'deutschmg_token';
 const USER_KEY    = 'deutschmg_user';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API = import.meta.env.VITE_API_URL || 'https://german-learning-malagasy.onrender.com/api';
+
+// Fetch with timeout to avoid hanging requests on mobile
+const fetchWithTimeout = (url, options = {}, timeout = 15000) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(id));
+};
 
 const initials = (n) =>
   (n || '').trim().split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -29,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   const login = useCallback(async ({ email, password }) => {
     setError('');
     try {
-      const res = await fetch(`${API}/auth/login`, {
+      const res = await fetchWithTimeout(`${API}/auth/login`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ email, password }),
@@ -39,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       persist(data.user, data.token);
       return true;
     } catch {
-      setError('Serveur inaccessible. Lancez le backend : node server.js');
+      setError('Connexion impossible. Vérifiez votre connexion internet et réessayez.');
       return false;
     }
   }, []);
@@ -53,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     if (!trimEmail)           { setError('Ampidiro ny email-anao');         return false; }
     if (password.length < 6)  { setError('Mot de passe trop court (min. 6)'); return false; }
     try {
-      const res = await fetch(`${API}/auth/register`, {
+      const res = await fetchWithTimeout(`${API}/auth/register`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ name: trimName, email: trimEmail, password }),
@@ -63,7 +71,7 @@ export const AuthProvider = ({ children }) => {
       // Do NOT auto-login — user must sign in manually after registration
       return true;
     } catch {
-      setError('Serveur inaccessible. Vérifiez que le backend tourne.');
+      setError('Connexion impossible. Vérifiez votre connexion internet et réessayez.');
       return false;
     }
   }, []);
@@ -74,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     setError('');
     if (!email) { setError('Email Google manquant'); return false; }
     try {
-      const res = await fetch(`${API}/auth/google`, {
+      const res = await fetchWithTimeout(`${API}/auth/google`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ name, email, googleId, avatar: picture }),
@@ -105,7 +113,7 @@ export const AuthProvider = ({ children }) => {
   const changePassword = useCallback(async ({ current, newPass }) => {
     setError('');
     try {
-      const res = await fetch(`${API}/auth/change-password`, {
+      const res = await fetchWithTimeout(`${API}/auth/change-password`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body:    JSON.stringify({ current, newPass }),
@@ -113,7 +121,7 @@ export const AuthProvider = ({ children }) => {
       if (!res.ok) { const d = await res.json(); setError(d.error || 'Erreur'); return false; }
       return true;
     } catch {
-      setError('Serveur inaccessible');
+      setError('Connexion impossible. Vérifiez votre connexion internet.');
       return false;
     }
   }, []);
@@ -124,7 +132,7 @@ export const AuthProvider = ({ children }) => {
     const trimmed = (email || '').toLowerCase().trim();
     if (!trimmed) { setError('Veuillez saisir votre adresse email'); return false; }
     try {
-      const res  = await fetch(`${API}/auth/forgot-password`, {
+      const res  = await fetchWithTimeout(`${API}/auth/forgot-password`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ email: trimmed }),
@@ -133,7 +141,7 @@ export const AuthProvider = ({ children }) => {
       if (!res.ok) { setError(data.error || 'Erreur lors de l\'envoi'); return false; }
       return data.message || true;
     } catch {
-      setError('Serveur inaccessible. Vérifiez que le backend tourne.');
+      setError('Connexion impossible. Vérifiez votre connexion internet et réessayez.');
       return false;
     }
   }, []);
@@ -144,7 +152,7 @@ export const AuthProvider = ({ children }) => {
     if (!token || !password) { setError('Champs requis'); return false; }
     if (password.length < 6) { setError('Mot de passe trop court (min. 6 caractères)'); return false; }
     try {
-      const res  = await fetch(`${API}/auth/reset-password`, {
+      const res  = await fetchWithTimeout(`${API}/auth/reset-password`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ token, password }),
@@ -153,7 +161,7 @@ export const AuthProvider = ({ children }) => {
       if (!res.ok) { setError(data.error || 'Erreur'); return false; }
       return true;
     } catch {
-      setError('Serveur inaccessible.');
+      setError('Connexion impossible. Vérifiez votre connexion internet.');
       return false;
     }
   }, []);
