@@ -679,9 +679,9 @@ const Login = () => {
               style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)' }} />
 
             {/* Mobile logo */}
-            <div className="flex md:hidden items-center gap-3 mb-7">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black" style={{ background: '#fff', color: '#0d0d0d' }}>DE</div>
-              <div className="text-lg font-black text-white">DeutschMG</div>
+            <div className="flex md:hidden items-center gap-2.5 mb-7">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black" style={{ background: '#fff', color: '#0d0d0d' }}>DE</div>
+              <span className="text-sm font-bold text-white">DeutschMG</span>
             </div>
 
             {/* View content with slide transition */}
