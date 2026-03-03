@@ -152,31 +152,31 @@ router.post('/forgot-password', async (req, res) => {
 
     const transporter = createTransporter();
     await transporter.sendMail({
-      from: `"DeutschMG 🇩🇪" <${process.env.EMAIL_USER}>`,
+      from: `"DeutschLearn 🗩️" <${process.env.EMAIL_USER}>`,
       to: user.email,
-      subject: 'Réinitialisation de votre mot de passe — DeutschMG',
+      subject: 'Password reset — DeutschLearn',
       html: `
         <div style="font-family:sans-serif;max-width:500px;margin:auto;background:#0d0d0d;color:#fff;padding:36px;border-radius:16px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
             <div style="width:36px;height:36px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0d0d0d;font-size:13px;">DE</div>
-            <span style="font-size:20px;font-weight:900;">DeutschMG</span>
+            <span style="font-size:20px;font-weight:900;">DeutschLearn</span>
           </div>
-          <h2 style="margin:0 0 8px;font-size:22px;">Réinitialisation du mot de passe 🔐</h2>
-          <p style="color:rgba(255,255,255,0.55);margin-bottom:20px;">Bonjour <strong style="color:#fff;">${user.name}</strong>,</p>
-          <p style="color:rgba(255,255,255,0.75);line-height:1.6;">Vous avez demandé à réinitialiser votre mot de passe sur DeutschMG. Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe :</p>
-          <a href="${resetUrl}" style="display:inline-block;margin:28px 0;padding:14px 32px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;text-decoration:none;border-radius:12px;font-weight:700;font-size:15px;">Réinitialiser mon mot de passe</a>
-          <p style="color:rgba(255,255,255,0.35);font-size:13px;">⏱ Ce lien expire dans <strong>1 heure</strong>.</p>
-          <p style="color:rgba(255,255,255,0.25);font-size:12px;">Si vous n'avez pas fait cette demande, ignorez cet email — votre mot de passe ne sera pas modifié.</p>
+          <h2 style="margin:0 0 8px;font-size:22px;">Password Reset 🔐</h2>
+          <p style="color:rgba(255,255,255,0.55);margin-bottom:20px;">Hello <strong style="color:#fff;">${user.name}</strong>,</p>
+          <p style="color:rgba(255,255,255,0.75);line-height:1.6;">You requested a password reset on DeutschLearn. Click the button below to choose a new password:</p>
+          <a href="${resetUrl}" style="display:inline-block;margin:28px 0;padding:14px 32px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;text-decoration:none;border-radius:12px;font-weight:700;font-size:15px;">Reset my password</a>
+          <p style="color:rgba(255,255,255,0.35);font-size:13px;">⏱ This link expires in <strong>1 hour</strong>.</p>
+          <p style="color:rgba(255,255,255,0.25);font-size:12px;">If you did not request this, please ignore this email — your password will not be changed.</p>
           <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:24px 0;" />
-          <p style="color:rgba(255,255,255,0.20);font-size:11px;">Lien direct : ${resetUrl}</p>
+          <p style="color:rgba(255,255,255,0.20);font-size:11px;">Direct link: ${resetUrl}</p>
         </div>
       `,
     });
 
-    res.json({ message: 'Email envoyé ! Vérifiez votre boîte mail (et les spams).' });
+    res.json({ message: 'Email sent! Check your inbox (and spam folder).' });
   } catch (err) {
     console.error('Forgot-password error:', err.message);
-    res.status(500).json({ error: 'Impossible d\'envoyer l\'email. Vérifiez la configuration EMAIL_USER / EMAIL_PASS dans le serveur.' });
+    res.status(500).json({ error: 'Unable to send email. Check EMAIL_USER / EMAIL_PASS configuration on the server.' });
   }
 });
 

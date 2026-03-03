@@ -20,13 +20,12 @@ const Navbar = () => {
   
 
   const navLinks = [
-    { path: '/', label: t?.nav?.home || 'Accueil' },
-    { path: '/levels', label: t?.nav?.lessons || 'Leçons' },
-    { path: '/grammar', label: 'Grammaire' },
-    { path: '/vocabulary', label: t?.nav?.vocabulary || 'Vocabulaire' },
-    { path: '/exercises', label: t?.nav?.exercises || 'Exercices' },
-    { path: '/opportunities', label: 'Opportunités', badge: '🇩🇪', badgeStyle: 'flag' },
-    { path: '/community',    label: 'Communauté', badge: 'NEW', badgeStyle: 'pill' },
+    { path: '/',             label: t?.nav?.home          || 'Home'          },
+    { path: '/levels',       label: t?.nav?.levels        || 'Levels'        },
+    { path: '/vocabulary',   label: t?.nav?.vocabulary    || 'Vocabulary'    },
+    { path: '/exercises',    label: t?.nav?.exercises     || 'Exercises'     },
+    { path: '/opportunities',label: t?.nav?.opportunities || 'Opportunities', badge: '🇩🇪', badgeStyle: 'flag' },
+    { path: '/community',    label: t?.nav?.community     || 'Community',     badge: 'NEW', badgeStyle: 'pill' },
   ];
 
   useEffect(() => {

@@ -158,6 +158,68 @@ const NumberTableSection = ({ section }) => (
   </SectionCard>
 );
 
+const StorySection = ({ section }) => {
+  const [openIdx, setOpenIdx] = useState(null);
+  const toggle = (i) => setOpenIdx(prev => prev === i ? null : i);
+  return (
+    <SectionCard title={section.title || 'Reading / Lecture'} accent="#34d399" label="Lecture">
+      {section.level && (
+        <span
+          className="inline-block text-[9px] font-extrabold tracking-widest px-2 py-0.5 rounded mb-4"
+          style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399', border: '1px solid rgba(52,211,153,0.25)' }}
+        >{section.level} — Lesen</span>
+      )}
+
+      {/* Story paragraphs */}
+      <div className="space-y-4 mb-6">
+        {section.paragraphs?.map((para, i) => (
+          <div key={i} className="rounded-2xl overflow-hidden border" style={{ borderColor: 'rgba(52,211,153,0.14)' }}>
+            <div className="px-5 py-4" style={{ background: 'rgba(52,211,153,0.05)' }}>
+              <p className="text-sm leading-relaxed text-white/90">{para.text}</p>
+            </div>
+            {para.translation && (
+              <div>
+                <button
+                  onClick={() => toggle(i)}
+                  className="w-full text-left px-5 py-2 text-[10px] font-bold tracking-widest transition-colors"
+                  style={{ color: openIdx === i ? '#34d399' : 'rgba(52,211,153,0.45)', background: 'transparent', border: 'none' }}
+                >
+                  {openIdx === i ? '▲ HIDE TRANSLATION' : '▼ SHOW TRANSLATION'}
+                </button>
+                {openIdx === i && (
+                  <div className="px-5 pb-4 text-xs italic" style={{ color: 'rgba(52,211,153,0.70)' }}>
+                    {para.translation}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Vocabulary from story */}
+      {section.vocabulary?.length > 0 && (
+        <div>
+          <div className="text-[10px] font-extrabold tracking-widest uppercase mb-3" style={{ color: '#34d399' }}>Key Vocabulary</div>
+          <div className="grid sm:grid-cols-2 gap-2">
+            {section.vocabulary.map((w, i) => (
+              <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3" style={{ background: 'rgba(52,211,153,0.05)', border: '1px solid rgba(52,211,153,0.12)' }}>
+                <div className="shrink-0 mt-0.5">
+                  <div className="text-xs font-bold text-white/85">{w.german}</div>
+                  <div className="text-[11px] text-white/45">{w.english}</div>
+                </div>
+                {w.example && (
+                  <div className="text-[11px] italic text-white/30 mt-0.5">{w.example}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </SectionCard>
+  );
+};
+
 const TipSection = ({ section }) => (
   <div
     className="relative overflow-hidden rounded-3xl flex gap-4 p-5"
@@ -187,6 +249,7 @@ const renderSection = (section, i) => {
     vocabulary:   <VocabSection key={i} section={section} />,
     number_table: <NumberTableSection key={i} section={section} />,
     tip:          <TipSection key={i} section={section} />,
+    story_text:   <StorySection key={i} section={section} />,
   };
   return map[section.type] || null;
 };
@@ -291,8 +354,8 @@ const Lesson = () => {
         >
           404
         </div>
-        <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.50)' }}>Lesona tsy hita</p>
-        <Link to="/levels" style={{ color: 'var(--accent)' }} className="hover:underline text-sm">← Hiverina</Link>
+        <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.50)' }}>Lesson not found</p>
+        <Link to="/levels" style={{ color: 'var(--accent)' }} className="hover:underline text-sm">← Back to levels</Link>
       </div>
     </div>
   );
@@ -327,7 +390,7 @@ const Lesson = () => {
             className="inline-flex items-center gap-1.5 text-sm hover:opacity-80 mb-4 transition-opacity"
             style={{ color: 'rgba(255,255,255,0.40)' }}
           >
-            ← Hiverina / Zurück
+            ← Back / Zurück
           </Link>
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -347,7 +410,7 @@ const Lesson = () => {
               </div>
               <div>
                 <div className="text-xs uppercase tracking-widest mb-0.5" style={{ color: 'rgba(255,255,255,0.30)' }}>
-                  {lesson.level} • Lesona {lesson.number}
+                  {lesson.level} • Lesson {lesson.number}
                 </div>
                 <h1 className="text-xl md:text-2xl font-black text-white leading-tight">{lesson.title}</h1>
                 <p className="text-sm mt-0.5" style={{ color: 'rgba(255,255,255,0.40)' }}>{lesson.subtitle}</p>
@@ -358,7 +421,7 @@ const Lesson = () => {
                 +{lesson.xp} XP
               </div>
               <div className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.30)' }}>{lesson.duration}</div>
-              {isAlreadyDone && <div className="text-xs text-green-400 mt-1">Vita ✓</div>}
+              {isAlreadyDone && <div className="text-xs text-green-400 mt-1">Done ✓</div>}
             </div>
           </div>
         </div>
@@ -371,8 +434,8 @@ const Lesson = () => {
             className="mb-6 rounded-2xl p-5 text-center"
             style={{ background: 'rgba(129,140,248,0.08)', border: '1px solid rgba(129,140,248,0.22)' }}
           >
-            <div className="text-xl font-black mb-1" style={{ color: '#818cf8' }}>+{xpGained} XP Nahazo!</div>
-            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>Vita tsara ny lesona!</p>
+            <div className="text-xl font-black mb-1" style={{ color: '#818cf8' }}>+{xpGained} XP Earned!</div>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>Lesson complete!</p>
           </div>
         )}
 
@@ -382,7 +445,7 @@ const Lesson = () => {
           style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
         >
           {[
-            { key: 'lesson', label: 'Lesona',  count: null },
+            { key: 'lesson', label: 'Lesson',  count: null },
             { key: 'quiz',   label: 'Quiz',    count: exercises.length },
           ].map(t => (
             <button
@@ -416,7 +479,7 @@ const Lesson = () => {
             {!isAlreadyDone && !completed && (
               <button onClick={handleComplete}
                 className="btn-grad w-full py-4 rounded-2xl text-base mt-4">
-                Vita Lesona — Hahazo {lesson.xp} XP
+                Complete Lesson — Earn {lesson.xp} XP
               </button>
             )}
 
@@ -428,7 +491,7 @@ const Lesson = () => {
                 onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.10)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
               >
-                Quiz ({exercises.length} fanontaniana)
+                Quiz ({exercises.length} questions)
               </button>
             )}
           </div>
@@ -451,7 +514,7 @@ const Lesson = () => {
                   >
                     Quiz
                   </div>
-                  <p style={{ color: 'rgba(255,255,255,0.40)' }}>Tsy misy fanazaran-tsaina amin&apos;ity lesona ity</p>
+                  <p style={{ color: 'rgba(255,255,255,0.40)' }}>No exercises for this lesson yet.</p>
                 </div>
               )
             }

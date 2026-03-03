@@ -6,13 +6,15 @@ import { createContext, useContext, useState } from 'react';
 const T = {
   EN: {
     nav: {
-      home:       'Home',
-      lessons:    'Lessons',
-      vocabulary: 'Vocabulary',
-      exercises:  'Exercises',
-      start:      'Get Started →',
-      profile:    'Profile',
-      logout:     'Log out',
+      home:          'Home',
+      levels:        'Levels',
+      vocabulary:    'Vocabulary',
+      exercises:     'Exercises',
+      opportunities: 'Opportunities',
+      community:     'Community',
+      start:         'Get Started →',
+      profile:       'Profile',
+      logout:        'Log out',
     },
     home: {
       badge:       'Learn German — free for everyone',
@@ -146,13 +148,15 @@ const T = {
   /* ────────────────────────────── DEUTSCH ───────────────────────── */
   DE: {
     nav: {
-      home:       'Startseite',
-      lessons:    'Lektionen',
-      vocabulary: 'Wortschatz',
-      exercises:  'Übungen',
-      start:      'Starten →',
-      profile:    'Profil',
-      logout:     'Abmelden',
+      home:          'Startseite',
+      levels:        'Niveaus',
+      vocabulary:    'Wortschatz',
+      exercises:     'Übungen',
+      opportunities: 'Möglichkeiten',
+      community:     'Community',
+      start:         'Starten →',
+      profile:       'Profil',
+      logout:        'Abmelden',
     },
     home: {
       badge:       'The German learning platform for everyone',

@@ -343,6 +343,252 @@ export const lessons = {
           textDe: "Tipp: Deutsche schreiben Daten als TT.MM.JJJJ — also: 03.05.2025 = 3. Mai 2025. Der Monat kommt an zweiter Stelle!"
         }
       ]
+    },
+
+    /* ── A1 GRAMMAR ── */
+    {
+      id: "a1-g1",
+      level: "A1",
+      type: "grammar",
+      number: "G1",
+      title: "Articles & Genders — der, die, das",
+      subtitle: "Master German noun genders",
+      duration: "20 min",
+      xp: 60,
+      color: "#818cf8",
+      sections: [
+        {
+          type: "intro",
+          title: "Why does German have 3 genders?",
+          content: "Every German noun has a grammatical gender: masculine (der), feminine (die), or neuter (das). The article changes with the case. Memorising the article WITH the noun is the best strategy — don't learn just 'Hund', learn 'der Hund'.",
+          contentDe: "Jedes deutsche Substantiv hat ein grammatisches Geschlecht: maskulin (der), feminin (die) oder neutral (das). Der Artikel verändert sich je nach Fall. Lerne immer den Artikel zusammen mit dem Nomen!"
+        },
+        {
+          type: "grammar",
+          title: "Definite Articles — bestimmte Artikel",
+          items: [
+            { pronoun: "Masculine", verb: "der Mann, der Hund, der Tisch", meaning: "the man, the dog, the table" },
+            { pronoun: "Feminine", verb: "die Frau, die Katze, die Schule", meaning: "the woman, the cat, the school" },
+            { pronoun: "Neuter", verb: "das Kind, das Buch, das Haus", meaning: "the child, the book, the house" },
+            { pronoun: "Plural (all genders)", verb: "die Männer, die Frauen, die Kinder", meaning: "the men, the women, the children" },
+          ]
+        },
+        {
+          type: "grammar",
+          title: "Indefinite Articles — unbestimmte Artikel",
+          items: [
+            { pronoun: "Masculine", verb: "ein Mann, ein Hund", meaning: "a man, a dog" },
+            { pronoun: "Feminine", verb: "eine Frau, eine Katze", meaning: "a woman, a cat" },
+            { pronoun: "Neuter", verb: "ein Kind, ein Buch", meaning: "a child, a book" },
+            { pronoun: "Negative", verb: "kein Mann, keine Frau, kein Kind", meaning: "no man, no woman, no child" },
+          ]
+        },
+        {
+          type: "grammar",
+          title: "Nominativ vs. Akkusativ — the 2 main cases",
+          items: [
+            { pronoun: "Nominativ (subject)", verb: "Der Mann kauft Brot.", meaning: "The man (subject) buys bread." },
+            { pronoun: "Akkusativ (direct object)", verb: "Er kauft den Hund.", meaning: "He buys the dog (object). der → den!" },
+            { pronoun: "Masculin change only!", verb: "der → den (Akk.)", meaning: "Only masculine changes: der→den, ein→einen." },
+            { pronoun: "Example", verb: "Ich sehe einen Mann.", meaning: "I see a man. (ein→einen, masculine Akk.)" },
+          ]
+        },
+        {
+          type: "vocabulary",
+          title: "Noun Gender Hints — Tipps zum Artikel",
+          words: [
+            { german: "-ung → die", english: "always feminine", example: "die Meinung, die Wohnung" },
+            { german: "-heit / -keit → die", english: "always feminine", example: "die Freiheit, die Möglichkeit" },
+            { german: "-tion → die", english: "always feminine", example: "die Nation, die Situation" },
+            { german: "-chen / -lein → das", english: "always neuter (diminutives)", example: "das Mädchen, das Fräulein" },
+            { german: "-er (person/agent) → der", english: "usually masculine", example: "der Lehrer, der Fahrer" },
+            { german: "Infinitives as nouns → das", english: "verbal nouns are neuter", example: "das Lernen, das Essen" },
+          ]
+        },
+        {
+          type: "tip",
+          text: "Best tip: Always learn nouns WITH their article as one unit. Create flashcards with colour coding: BLUE for der, RED for die, GREEN for das. After a few weeks this becomes automatic!",
+          textDe: "Bester Tipp: Lerne Nomen immer mit dem Artikel. Nutze Farbcodes: BLAU für der, ROT für die, GRÜN für das. Nach einigen Wochen wird das automatisch!"
+        }
+      ]
+    },
+    {
+      id: "a1-g2",
+      level: "A1",
+      type: "grammar",
+      number: "G2",
+      title: "Verb Conjugation — Verbkonjugation",
+      subtitle: "Regular verbs, sein, haben and Modal verbs",
+      duration: "25 min",
+      xp: 70,
+      color: "#a78bfa",
+      sections: [
+        {
+          type: "intro",
+          title: "How German verbs work",
+          content: "German verbs change their ending to match the subject (I, you, he/she, we, you all, they). Regular verbs follow a predictable pattern. Two key irregular verbs — sein (to be) and haben (to have) — must be memorised. Modal verbs (can, must, want) add a second meaning to the sentence.",
+          contentDe: "Deutsche Verben verändern ihre Endungen je nach Subjekt. Regelmäßige Verben folgen einem vorhersehbaren Muster. Zwei wichtige unregelmäßige Verben — sein und haben — müssen auswendig gelernt werden."
+        },
+        {
+          type: "grammar",
+          title: "Regular Verbs — e.g. lernen (to learn)",
+          items: [
+            { pronoun: "ich (I)", verb: "lerne", meaning: "I learn / I am learning" },
+            { pronoun: "du (you informal)", verb: "lernst", meaning: "you learn" },
+            { pronoun: "er / sie / es (he/she/it)", verb: "lernt", meaning: "he/she/it learns" },
+            { pronoun: "wir (we)", verb: "lernen", meaning: "we learn" },
+            { pronoun: "ihr (you all)", verb: "lernt", meaning: "you all learn" },
+            { pronoun: "sie / Sie (they / formal you)", verb: "lernen", meaning: "they learn / You (formal) learn" },
+          ]
+        },
+        {
+          type: "grammar",
+          title: "Irregular: sein (to be)",
+          items: [
+            { pronoun: "ich", verb: "bin", meaning: "I am" },
+            { pronoun: "du", verb: "bist", meaning: "you are" },
+            { pronoun: "er / sie / es", verb: "ist", meaning: "he/she/it is" },
+            { pronoun: "wir", verb: "sind", meaning: "we are" },
+            { pronoun: "ihr", verb: "seid", meaning: "you all are" },
+            { pronoun: "sie / Sie", verb: "sind", meaning: "they are / You are (formal)" },
+          ]
+        },
+        {
+          type: "grammar",
+          title: "Irregular: haben (to have)",
+          items: [
+            { pronoun: "ich", verb: "habe", meaning: "I have" },
+            { pronoun: "du", verb: "hast", meaning: "you have" },
+            { pronoun: "er / sie / es", verb: "hat", meaning: "he/she/it has" },
+            { pronoun: "wir", verb: "haben", meaning: "we have" },
+            { pronoun: "ihr", verb: "habt", meaning: "you all have" },
+            { pronoun: "sie / Sie", verb: "haben", meaning: "they have / You have (formal)" },
+          ]
+        },
+        {
+          type: "grammar",
+          title: "Modal verbs — used with infinitive at end",
+          items: [
+            { pronoun: "können (can)", verb: "Ich kann Deutsch sprechen.", meaning: "I can speak German." },
+            { pronoun: "müssen (must)", verb: "Du musst lernen.", meaning: "You must learn." },
+            { pronoun: "wollen (want to)", verb: "Er will nach Berlin fahren.", meaning: "He wants to go to Berlin." },
+            { pronoun: "möchten (would like)", verb: "Ich möchte Kaffee trinken.", meaning: "I would like to drink coffee." },
+            { pronoun: "dürfen (may / allowed to)", verb: "Hier darf man nicht rauchen.", meaning: "Smoking is not allowed here." },
+            { pronoun: "sollen (should / supposed to)", verb: "Du sollst früh aufstehen.", meaning: "You should get up early." },
+          ]
+        },
+        {
+          type: "tip",
+          text: "Remember: with modal verbs the main verb goes to the END in infinitive form. 'Ich will Deutsch LERNEN' (not 'Ich will lernen Deutsch'). This is the V2 rule + infinitive at end.",
+          textDe: "Merke: Bei Modalverben steht das Hauptverb als Infinitiv am SATZENDE. 'Ich will Deutsch LERNEN.' Das Modalverb ist an Position 2, der Infinitiv am Ende."
+        }
+      ]
+    },
+
+    /* ── A1 STORIES ── */
+    {
+      id: "a1-s1",
+      level: "A1",
+      type: "story",
+      number: "S1",
+      title: "Ein Tag in München",
+      subtitle: "A simple story — read and understand German",
+      duration: "15 min",
+      xp: 50,
+      color: "#34d399",
+      sections: [
+        {
+          type: "story_text",
+          title: "Ein Tag in München",
+          level: "A1",
+          paragraphs: [
+            {
+              text: "Es ist Montag. Maria steht um 7 Uhr auf. Sie geht ins Badezimmer und putzt die Zähne. Dann macht sie Frühstück: Brot mit Butter und einen Kaffee.",
+              translation: "It is Monday. Maria gets up at 7 o'clock. She goes to the bathroom and brushes her teeth. Then she makes breakfast: bread with butter and a coffee."
+            },
+            {
+              text: "Um 8 Uhr geht Maria aus dem Haus. Das Wetter ist schön. Die Sonne scheint. Sie fährt mit dem Bus in die Stadt.",
+              translation: "At 8 o'clock Maria leaves the house. The weather is nice. The sun is shining. She takes the bus to the city."
+            },
+            {
+              text: "In der Stadt kauft Maria ein neues Buch. Das Buch kostet sieben Euro. 'Das ist nicht teuer', denkt sie.",
+              translation: "In the city, Maria buys a new book. The book costs seven euros. 'That is not expensive', she thinks."
+            },
+            {
+              text: "Um 12 Uhr isst Maria in einem Café. Sie bestellt ein Sandwich und einen Tee. Das Sandwich ist sehr lecker.",
+              translation: "At 12 o'clock Maria eats in a café. She orders a sandwich and a tea. The sandwich is very tasty."
+            },
+            {
+              text: "Am Abend kommt Maria nach Hause. Sie liest ihr neues Buch und schläft um 22 Uhr ein. Das war ein guter Tag!",
+              translation: "In the evening Maria comes home. She reads her new book and falls asleep at 10 pm. That was a good day!"
+            }
+          ],
+          vocabulary: [
+            { german: "aufstehen", english: "to get up", example: "Ich stehe um 7 auf." },
+            { german: "die Zähne putzen", english: "to brush teeth", example: "Ich putze die Zähne." },
+            { german: "das Frühstück", english: "breakfast", example: "Ich esse Frühstück." },
+            { german: "die Sonne scheint", english: "the sun is shining", example: "Heute scheint die Sonne." },
+            { german: "teuer / billig", english: "expensive / cheap", example: "Das Buch ist nicht teuer." },
+            { german: "lecker", english: "tasty / delicious", example: "Das Essen ist lecker!" },
+            { german: "einschlafen", english: "to fall asleep", example: "Ich schlafe um 22 Uhr ein." },
+          ]
+        },
+        {
+          type: "tip",
+          text: "Reading strategy: Read slowly, once without translating. Notice familiar words. Then read again with the translation. Finally, try to retell the story in 3 simple sentences.",
+          textDe: "Lesestrategie: Lies zuerst ohne Übersetzen. Erkenne bekannte Wörter. Dann lies mit der Übersetzung. Versuche danach, die Geschichte in 3 Sätzen nachzuerzählen."
+        }
+      ]
+    },
+    {
+      id: "a1-s2",
+      level: "A1",
+      type: "story",
+      number: "S2",
+      title: "Im Supermarkt",
+      subtitle: "Shopping dialogue — everyday A1 German",
+      duration: "15 min",
+      xp: 50,
+      color: "#38bdf8",
+      sections: [
+        {
+          type: "story_text",
+          title: "Im Supermarkt",
+          level: "A1",
+          paragraphs: [
+            {
+              text: "Tom geht in den Supermarkt. Er braucht Milch, Brot und Äpfel. Er nimmt einen Einkaufswagen.",
+              translation: "Tom goes to the supermarket. He needs milk, bread and apples. He takes a shopping trolley."
+            },
+            {
+              text: "Tom findet die Milch im Kühlschrank. Das Brot ist in der Bäckereiabteilung. Aber wo sind die Äpfel? Er fragt die Verkäuferin: 'Entschuldigung, wo finde ich Äpfel?' Sie antwortet: 'Im Obst- und Gemüsebereich, Gang 3.'",
+              translation: "Tom finds the milk in the fridge. The bread is in the bakery section. But where are the apples? He asks the shop assistant: 'Excuse me, where do I find apples?' She answers: 'In the fruit and vegetables area, aisle 3.'"
+            },
+            {
+              text: "Tom geht zur Kasse. Er legt seine Sachen auf das Band. Die Kassiererin sagt: 'Das macht 8 Euro 50.' Tom bezahlt mit Karte.",
+              translation: "Tom goes to the checkout. He puts his items on the belt. The cashier says: 'That is 8 euros 50.' Tom pays by card."
+            },
+            {
+              text: "Tom ist fertig. Er packt seine Sachen in eine Tasche und geht nach Hause. Heute kocht er Nudelsuppe mit Gemüse.",
+              translation: "Tom is done. He packs his things into a bag and goes home. Today he is cooking noodle soup with vegetables."
+            }
+          ],
+          vocabulary: [
+            { german: "der Supermarkt", english: "supermarket", example: "Ich gehe in den Supermarkt." },
+            { german: "der Einkaufswagen", english: "shopping trolley / cart", example: "Ich nehme einen Einkaufswagen." },
+            { german: "die Kasse", english: "checkout / till", example: "Ich gehe zur Kasse." },
+            { german: "das Band", english: "conveyor belt", example: "Leg die Sachen auf das Band." },
+            { german: "bezahlen", english: "to pay", example: "Ich bezahle mit Karte." },
+            { german: "die Tüte / die Tasche", english: "bag", example: "Ich packe alles in eine Tasche." },
+            { german: "der Gang", english: "aisle", example: "Die Äpfel sind in Gang 3." },
+          ]
+        },
+        {
+          type: "tip",
+          text: "In German supermarkets it is common to bring your own bag (Einkaufstasche) — plastic bags often cost extra. Self-checkout (Selbst-Scan) is also common in larger chains.",
+          textDe: "In deutschen Supermärkten ist es üblich, eine eigene Einkaufstasche mitzubringen. Plastiktüten kosten oft extra."
+        }
+      ]
     }
   ],
   A2: [
@@ -660,6 +906,243 @@ export const lessons = {
           type: "tip",
           text: "Tip: In Germany, healthcare is very good and widely accessible. In an emergency dial 112 (ambulance) or 110 (police). At a pharmacy (Apotheke) you can buy many medicines without a prescription.",
           textDe: "Tipp: In Deutschland ist die Gesundheitsversorgung sehr gut. Im Notfall: 112 (Rettungsdienst) oder 110 (Polizei)."
+        }
+      ]
+    },
+
+    /* ── A2 GRAMMAR ── */
+    {
+      id: "a2-g1",
+      level: "A2",
+      type: "grammar",
+      number: "G1",
+      title: "The Dativ Case — Der Dativ",
+      subtitle: "Indirect objects and dative prepositions",
+      duration: "25 min",
+      xp: 80,
+      color: "#a78bfa",
+      sections: [
+        {
+          type: "intro",
+          title: "Why the Dativ?",
+          content: "The Dativ (dative case) is used for the INDIRECT object — the person who receives or benefits from an action. It is also required after certain prepositions (mit, bei, von, zu, aus, nach, seit, gegenüber).",
+          contentDe: "Der Dativ wird für das indirekte Objekt verwendet — die Person, der etwas gegeben oder zugutegetan wird. Er steht auch nach bestimmten Präpositionen."
+        },
+        {
+          type: "grammar",
+          title: "Dative Articles — Dativartikel",
+          items: [
+            { pronoun: "Masculine (der → dem)", verb: "Ich gebe dem Mann das Buch.", meaning: "I give the man the book." },
+            { pronoun: "Feminine (die → der)", verb: "Ich helfe der Frau.", meaning: "I help the woman." },
+            { pronoun: "Neuter (das → dem)", verb: "Ich sage dem Kind die Wahrheit.", meaning: "I tell the child the truth." },
+            { pronoun: "Plural (die → den)", verb: "Ich helfe den Kindern.", meaning: "I help the children." },
+            { pronoun: "ein → einem (m/n)", verb: "Ich gebe einem Freund das Buch.", meaning: "I give a friend the book." },
+            { pronoun: "eine → einer (f)", verb: "Ich helfe einer Frau.", meaning: "I help a woman." },
+          ]
+        },
+        {
+          type: "grammar",
+          title: "Dative Prepositions — Dativpräpositionen",
+          items: [
+            { pronoun: "mit", verb: "Ich fahre mit dem Bus.", meaning: "I travel by bus." },
+            { pronoun: "bei", verb: "Ich bin bei meiner Mutter.", meaning: "I am at my mother's." },
+            { pronoun: "von", verb: "Das Geschenk ist von meinem Freund.", meaning: "The gift is from my friend." },
+            { pronoun: "zu", verb: "Ich gehe zum Arzt. (zu + dem)", meaning: "I go to the doctor." },
+            { pronoun: "aus", verb: "Ich komme aus Deutschland.", meaning: "I come from Germany." },
+            { pronoun: "nach", verb: "Ich fahre nach Berlin.", meaning: "I travel to Berlin." },
+            { pronoun: "seit", verb: "Ich lerne seit zwei Jahren Deutsch.", meaning: "I have been learning German for two years." },
+            { pronoun: "gegenüber", verb: "Das Café ist gegenüber dem Rathaus.", meaning: "The café is opposite the town hall." },
+          ]
+        },
+        {
+          type: "vocabulary",
+          title: "Dative Verbs — common verbs that take dative",
+          words: [
+            { german: "helfen + Dat.", english: "to help", example: "Ich helfe dem Lehrer." },
+            { german: "geben + Dat.", english: "to give (to)", example: "Sie gibt der Frau das Buch." },
+            { german: "sagen + Dat.", english: "to say (to)", example: "Er sagt dem Kind die Wahrheit." },
+            { german: "gehören + Dat.", english: "to belong to", example: "Das Buch gehört dem Schüler." },
+            { german: "gefallen + Dat.", english: "to please / to like", example: "Das Lied gefällt mir. (I like the song)" },
+            { german: "danken + Dat.", english: "to thank", example: "Ich danke dir sehr." },
+          ]
+        },
+        {
+          type: "tip",
+          text: "Memory trick for 'gefallen': instead of 'I like X', think 'X is pleasing TO me' — Das gefällt MIR (mir = me, dative of ich). Similarly: Wie gefällt dir Berlin? — How do you like Berlin?",
+          textDe: "Merkhilfe: 'Das gefällt mir' = Das ist mir angenehm. Frage: Wie gefällt dir Berlin? Antwort: Berlin gefällt mir sehr gut!"
+        }
+      ]
+    },
+    {
+      id: "a2-g2",
+      level: "A2",
+      type: "grammar",
+      number: "G2",
+      title: "Word Order & Subordinate Clauses",
+      subtitle: "Satzstruktur und Nebensätze",
+      duration: "25 min",
+      xp: 85,
+      color: "#818cf8",
+      sections: [
+        {
+          type: "intro",
+          title: "German Word Order / Deutsche Satzstellung",
+          content: "German word order follows clear rules. The most important: the VERB is always in position 2 in a main clause. In subordinate clauses introduced by conjunctions, the verb moves to the END.",
+          contentDe: "Die deutsche Satzstellung folgt klaren Regeln: In Hauptsätzen steht das Verb immer an zweiter Stelle. In Nebensätzen (nach Konjunktionen) steht das Verb am Ende."
+        },
+        {
+          type: "grammar",
+          title: "V2 Rule — Verb Second",
+          items: [
+            { pronoun: "Normal order", verb: "Ich lerne heute Deutsch.", meaning: "Subject → Verb → Rest" },
+            { pronoun: "Fronted element", verb: "Heute lerne ich Deutsch.", meaning: "Adverb → Verb → Subject" },
+            { pronoun: "Fronted object", verb: "Deutsch lerne ich heute.", meaning: "Object → Verb → Subject" },
+            { pronoun: "Modal verb", verb: "Ich will Deutsch lernen.", meaning: "Modal (pos.2) + Infinitive (end)" },
+            { pronoun: "Separable verb", verb: "Ich stehe um 7 auf.", meaning: "Prefix goes to the END" },
+          ]
+        },
+        {
+          type: "grammar",
+          title: "Subordinating Conjunctions — Verb goes to END",
+          items: [
+            { pronoun: "weil (because)", verb: "Ich lerne Deutsch, weil es schön ist.", meaning: "I learn German because it is beautiful." },
+            { pronoun: "dass (that)", verb: "Ich glaube, dass er kommt.", meaning: "I believe that he is coming." },
+            { pronoun: "wenn (when / if)", verb: "Wenn es regnet, bleibe ich zu Hause.", meaning: "When it rains I stay home." },
+            { pronoun: "obwohl (although)", verb: "Obwohl es kalt ist, gehe ich raus.", meaning: "Although it is cold, I go out." },
+            { pronoun: "weil + modal", verb: "..., weil ich Deutsch lernen will.", meaning: "Modal verb ALSO goes to end (after infinitive)" },
+          ]
+        },
+        {
+          type: "vocabulary",
+          title: "Coordinating Conjunctions — no change to word order",
+          words: [
+            { german: "und", english: "and", example: "Ich lerne Deutsch und Englisch." },
+            { german: "aber", english: "but", example: "Es ist kalt, aber schön." },
+            { german: "oder", english: "or", example: "Kaffee oder Tee?" },
+            { german: "denn", english: "because (causal)", example: "Ich lerne, denn ich will eine gute Note." },
+            { german: "sondern", english: "but rather (after negation)", example: "Nicht Kaffee, sondern Tee." },
+          ]
+        },
+        {
+          type: "tip",
+          text: "Key rule: 'weil' sends the verb to the end, 'denn' does NOT. Both mean 'because', but 'denn' is a coordinating conjunction (no change), while 'weil' is subordinating (verb at end). Compare: Ich komme nicht, denn ich bin krank. vs. Ich komme nicht, weil ich krank bin.",
+          textDe: "Merkhilfe: 'denn' = koordinierend (keine Änderung), 'weil' = subordinierend (Verb ans Ende). Ich komme nicht, denn ich bin krank. / Ich komme nicht, weil ich krank bin."
+        }
+      ]
+    },
+
+    /* ── A2 STORIES ── */
+    {
+      id: "a2-s1",
+      level: "A2",
+      type: "story",
+      number: "S1",
+      title: "Mein erster Tag in Deutschland",
+      subtitle: "A short story — read and understand German",
+      duration: "20 min",
+      xp: 70,
+      color: "#34d399",
+      sections: [
+        {
+          type: "story_text",
+          title: "Mein erster Tag in Deutschland",
+          level: "A2",
+          paragraphs: [
+            {
+              text: "Es ist Montag, der 3. März. Carlos kommt aus Spanien und fliegt zum ersten Mal nach Deutschland. Er landet um 8 Uhr morgens am Flughafen München.",
+              translation: "It is Monday, 3rd March. Carlos comes from Spain and flies to Germany for the first time. He lands at 8 o'clock in the morning at Munich Airport."
+            },
+            {
+              text: "Am Flughafen ist alles auf Deutsch. Carlos sieht viele Schilder. Er liest: 'Ausgang', 'Gepäck', 'Taxi'. Er kennt diese Wörter aus seinem Deutschkurs.",
+              translation: "At the airport everything is in German. Carlos sees many signs. He reads: 'Exit', 'Luggage', 'Taxi'. He knows these words from his German course."
+            },
+            {
+              text: "Er nimmt ein Taxi zum Hotel. Der Taxifahrer fragt: 'Wohin fahren Sie?' Carlos antwortet: 'Ins Zentrum, bitte. Zum Hotel Adler.' Der Taxifahrer lächelt und sagt: 'Ihr Deutsch ist sehr gut!'",
+              translation: "He takes a taxi to the hotel. The taxi driver asks: 'Where are you going?' Carlos answers: 'To the centre, please. To the Hotel Adler.' The driver smiles and says: 'Your German is very good!'"
+            },
+            {
+              text: "Im Hotel macht Carlos das Fenster auf. Er sieht die Stadt: alte Kirchen, grüne Parks und viele Cafés. Er denkt: 'Ich bin glücklich. Ich bin endlich in Deutschland!'",
+              translation: "In the hotel, Carlos opens the window. He sees the city: old churches, green parks and many cafés. He thinks: 'I am happy. I am finally in Germany!'"
+            },
+            {
+              text: "Am Abend geht er in ein Restaurant. Er bestellt auf Deutsch: 'Ich möchte bitte ein Schnitzel mit Pommes und ein Bier.' Die Kellnerin antwortet auf Deutsch. Carlos versteht fast alles. Er ist sehr stolz.",
+              translation: "In the evening he goes to a restaurant. He orders in German: 'I would like a schnitzel with chips and a beer, please.' The waitress answers in German. Carlos understands almost everything. He is very proud."
+            }
+          ],
+          vocabulary: [
+            { german: "fliegen / landen", english: "to fly / to land", example: "Er fliegt nach Deutschland." },
+            { german: "das Schild", english: "sign", example: "Das Schild sagt 'Ausgang'." },
+            { german: "der Ausgang", english: "exit", example: "Der Ausgang ist rechts." },
+            { german: "das Gepäck", english: "luggage", example: "Mein Gepäck ist schwer." },
+            { german: "lächeln", english: "to smile", example: "Er lächelt freundlich." },
+            { german: "glücklich / stolz", english: "happy / proud", example: "Ich bin glücklich und stolz." },
+            { german: "bestellen", english: "to order (in restaurant)", example: "Ich möchte ein Schnitzel bestellen." },
+            { german: "der Kellner / die Kellnerin", english: "waiter / waitress", example: "Die Kellnerin ist sehr nett." },
+            { german: "endlich", english: "finally / at last", example: "Ich bin endlich zu Hause!" },
+            { german: "fast alles", english: "almost everything", example: "Ich verstehe fast alles." },
+          ]
+        },
+        {
+          type: "tip",
+          text: "Reading tip: Don't look up every word. Read the full paragraph first, then the translation below. Try to identify: Who? (Wer) — What? (Was) — Where? (Wo) — When? (Wann). This builds real reading comprehension.",
+          textDe: "Lesetipp: Versuche, zuerst den ganzen Absatz zu lesen, bevor du die Übersetzung schaust. Identifiziere: Wer? Was? Wo? Wann?"
+        }
+      ]
+    },
+    {
+      id: "a2-s2",
+      level: "A2",
+      type: "story",
+      number: "S2",
+      title: "Das Vorstellungsgespräch",
+      subtitle: "A job interview — real-world German",
+      duration: "20 min",
+      xp: 75,
+      color: "#60a5fa",
+      sections: [
+        {
+          type: "story_text",
+          title: "Das Vorstellungsgespräch",
+          level: "A2",
+          paragraphs: [
+            {
+              text: "Sophie ist 24 Jahre alt und sucht einen Job. Sie hat eine E-Mail bekommen: 'Wir laden Sie zu einem Vorstellungsgespräch ein. Termin: Mittwoch, 10 Uhr.'",
+              translation: "Sophie is 24 years old and is looking for a job. She has received an email: 'We invite you to a job interview. Appointment: Wednesday, 10 o'clock.'"
+            },
+            {
+              text: "Am Mittwoch zieht sie sich elegant an und fährt mit der U-Bahn in die Firma. Sie ist zehn Minuten früher da. 'Pünktlichkeit ist sehr wichtig in Deutschland', denkt sie.",
+              translation: "On Wednesday she dresses elegantly and takes the metro to the company. She arrives ten minutes early. 'Punctuality is very important in Germany', she thinks."
+            },
+            {
+              text: "Der Chef heißt Herr Wagner. Er fragt: 'Warum möchten Sie bei uns arbeiten?' Sophie antwortet: 'Weil Ihre Firma sehr innovativ ist und ich gerne im Team arbeite.'",
+              translation: "The manager is called Mr Wagner. He asks: 'Why would you like to work with us?' Sophie answers: 'Because your company is very innovative and I like working in a team.'"
+            },
+            {
+              text: "Dann fragt er: 'Was sind Ihre Stärken?' Sophie sagt: 'Ich bin zuverlässig, lerne schnell und kann gut mit Menschen kommunizieren.' Herr Wagner nickt und lächelt.",
+              translation: "Then he asks: 'What are your strengths?' Sophie says: 'I am reliable, learn quickly and can communicate well with people.' Mr Wagner nods and smiles."
+            },
+            {
+              text: "Nach dem Gespräch sagt Herr Wagner: 'Wir melden uns bis Freitag.' Sophie fährt nach Hause und wartet. Am Donnerstag klingelt ihr Telefon. Die Firma ruft an: 'Herzlichen Glückwunsch! Sie haben den Job!'",
+              translation: "After the interview Mr Wagner says: 'We will get back to you by Friday.' Sophie goes home and waits. On Thursday her phone rings. The company calls: 'Congratulations! You have got the job!'"
+            }
+          ],
+          vocabulary: [
+            { german: "das Vorstellungsgespräch", english: "job interview", example: "Ich habe ein Vorstellungsgespräch morgen." },
+            { german: "einladen", english: "to invite", example: "Sie lädt mich zum Gespräch ein." },
+            { german: "pünktlich", english: "punctual / on time", example: "Sei bitte pünktlich!" },
+            { german: "die Stärke", english: "strength", example: "Meine Stärke ist Kommunikation." },
+            { german: "zuverlässig", english: "reliable", example: "Er ist sehr zuverlässig." },
+            { german: "sich melden", english: "to get in touch / to call back", example: "Wir melden uns bald." },
+            { german: "nicken", english: "to nod", example: "Er nickt, wenn er zustimmt." },
+            { german: "herzlichen Glückwunsch", english: "congratulations", example: "Herzlichen Glückwunsch zum Geburtstag!" },
+            { german: "die U-Bahn", english: "metro / underground", example: "Ich fahre mit der U-Bahn." },
+            { german: "innovativ", english: "innovative", example: "Die Firma ist sehr innovativ." },
+          ]
+        },
+        {
+          type: "tip",
+          text: "Culture tip: In Germany, punctuality (Pünktlichkeit) is extremely important, especially in a professional context. Arriving 5–10 minutes early to a job interview is standard. Being late without notice is considered very impolite.",
+          textDe: "Kulturtipp: In Deutschland ist Pünktlichkeit sehr wichtig, besonders im Beruf. 5–10 Minuten zu früh kommen beim Vorstellungsgespräch ist Standard."
         }
       ]
     }

@@ -238,11 +238,11 @@ const Exercises = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <h1 className="text-3xl md:text-5xl font-black mb-2" style={{ letterSpacing: '-0.03em' }}>
-                <span className="text-white">Fanazaran-tsaina /</span>{' '}
+                <span className="text-white">Exercises /</span>{' '}
                 <span className="text-grad">Übungen</span>
               </h1>
               <p className="text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>
-                Valiana ny fanontaniana — manavao ny fahatakaranao
+                Answer the questions — test your German knowledge
               </p>
             </div>
 
@@ -253,9 +253,9 @@ const Exercises = () => {
                 style={{ background: '#111', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 {[
-                  { label: 'Valiana',      value: sessionStats.total,   color: '#818cf8' },
-                  { label: 'Marina',       value: sessionStats.correct, color: '#4ade80' },
-                  { label: 'Fahamarinana', value: `${accuracy}%`,       color: accuracy >= 70 ? '#4ade80' : accuracy >= 50 ? '#a78bfa' : '#38bdf8' },
+                  { label: 'Answered',  value: sessionStats.total,   color: '#818cf8' },
+                  { label: 'Correct',   value: sessionStats.correct, color: '#4ade80' },
+                  { label: 'Accuracy',  value: `${accuracy}%`,       color: accuracy >= 70 ? '#4ade80' : accuracy >= 50 ? '#a78bfa' : '#38bdf8' },
                 ].reduce((acc, stat, i) => [
                   ...acc,
                   ...(i > 0 ? [<div key={`d${i}`} className="w-px h-8" style={{ background: 'rgba(255,255,255,0.10)' }} />] : []),
@@ -329,10 +329,10 @@ const Exercises = () => {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: 'XP Total',  value: progress?.stats?.totalXP ?? 0,                         color: '#818cf8' },
-                { label: 'Fanazaran', value: progress?.stats?.exercisesCompleted ?? 0,               color: '#a78bfa' },
-                { label: 'Marina',    value: `${progressService.getAccuracyRate()}%`,                 color: '#4ade80' },
-                { label: 'Streak',    value: `${progress?.streak ?? 0}j`,                            color: '#fb923c' },
+                { label: 'XP Total',    value: progress?.stats?.totalXP ?? 0,              color: '#818cf8' },
+                { label: 'Exercises',   value: progress?.stats?.exercisesCompleted ?? 0,   color: '#a78bfa' },
+                { label: 'Correct',     value: `${progressService.getAccuracyRate()}%`,     color: '#4ade80' },
+                { label: 'Streak',      value: `${progress?.streak ?? 0}d`,                color: '#fb923c' },
               ].map(({ label, value, color }) => (
                 <div key={label} className="text-center rounded-xl p-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
                   <div className="text-xl font-black" style={{ color }}>{value}</div>
@@ -400,7 +400,7 @@ const Exercises = () => {
             <ProgressBar
               value={answeredCount}
               max={exercises.length}
-              label={`${answeredCount}/${exercises.length} Vita`}
+              label={`${answeredCount}/${exercises.length} Done`}
               color="purple"
               size="medium"
             />
