@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { vocabulary, getAllTopics } from '../data/vocabulary';
 import { progressService } from '../services/progress';
+import AudioWord from '../components/AudioWord';
 
 const LEVELS = ['A1', 'A2'];
 
@@ -47,7 +48,10 @@ const WordCard = ({ word, isLearned, onLearn, showExample }) => {
             {isLearned && <span className="text-green-400 text-xs">✓</span>}
           </div>
           <div className="text-center">
-            <div className="text-xl font-black text-white leading-tight">{word.german}</div>
+            <div className="text-xl font-black text-white leading-tight mb-2">{word.german}</div>
+            <div className="flex justify-center" onClick={e => e.stopPropagation()}>
+              <AudioWord word={word.german} size="md" />
+            </div>
           </div>
           <div className="text-[10px] text-white/25 text-center">Click / Tippen</div>
         </div>
@@ -85,6 +89,9 @@ const WordList = ({ word, isLearned, onLearn }) => (
       <span className="font-bold text-white text-sm">{word.german}</span>
       <span className="mx-2 text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>→</span>
       <span className="text-sm font-medium" style={{ color: '#a78bfa' }}>{word.english}</span>
+    </div>
+    <div onClick={e => e.stopPropagation()}>
+      <AudioWord word={word.german} />
     </div>
     {word.example && (
       <div className="hidden md:block text-xs italic truncate max-w-[200px]" style={{ color: 'rgba(255,255,255,0.25)' }}>

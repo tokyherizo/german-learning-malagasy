@@ -4,6 +4,7 @@ import { getLessonById } from '../data/lessons';
 import { getExercisesByLesson } from '../data/exercises';
 import { progressService } from '../services/progress';
 import ProgressBar from '../components/ProgressBar';
+import AudioWord from '../components/AudioWord';
 
 /* ── Section type label badge (replaces emoji icon) ── */
 const SectionBadge = ({ accent = '#f1e063', label }) => (
@@ -122,9 +123,10 @@ const VocabSection = ({ section }) => (
           onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.14)'; }}
         >
           <div className="absolute top-0 right-0 w-16 h-16 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.15), transparent 70%)', transform: 'translate(30%, -30%)' }} />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="font-black text-white text-sm">{word.german}</span>
             <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(96,165,250,0.15)', color: '#60a5fa' }}>DE</span>
+            <AudioWord word={word.german} />
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-3 h-px" style={{ background: 'rgba(167,139,250,0.55)' }} />

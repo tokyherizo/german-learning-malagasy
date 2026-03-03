@@ -51,8 +51,8 @@
   --text-subtle:     rgba(15,23,42,0.52);
 
   /* Darker indigo/violet for better contrast on light bg */
-  --accent:          #3730a3;
-  --accent-vivid:    #312e81;
+  --accent:          #3d31e7;
+  --accent-vivid:    #9c2de7;
   --accent-sky:      #0369a1;
   --accent-violet:   #5b21b6;
   --accent-soft:     rgba(55,48,163,0.10);
