@@ -150,7 +150,7 @@ const PasswordInput = ({ label, value, onChange, placeholder, autoFocus }) => {
 /* ─────────────────────────────────────────────────────────────── */
 /*  Strength bar                                                    */
 /* ─────────────────────────────────────────────────────────────── */
-const strengthLabel = ['6 minimum', 'Faible', 'Moyen', 'Bon', 'Fort'];
+const strengthLabel = ['6 min', 'Weak', 'Medium', 'Good', 'Strong'];
 const strengthColor = ['#3747dc', '#733aca', '#f59e0b', '#60a5fa', '#34d399'];
 const getStrength = (p) => {
   if (!p) return 0;
@@ -228,7 +228,7 @@ const LoginView = ({ onForgot, onRegister, t }) => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <ErrorBanner msg={error} />
         <InputField label={t?.login?.emailLabel || 'Email'} type="email" value={email} onChange={e => setEmail(e.target.value)}
-          placeholder={t?.login?.emailPH || 'demo@deutschmg.mg'} autoFocus />
+          placeholder={t?.login?.emailPH || 'demo@deutschlearn.com'} autoFocus />
         <div className="flex flex-col gap-1">
           <PasswordInput label={t?.login?.passLabel || 'Mot de passe'} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
           <button type="button" onClick={onForgot}
@@ -268,7 +268,7 @@ const RegisterView = ({ onLogin, t }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirm) { setLocalErr('Les mots de passe ne correspondent pas'); return; }
+    if (password !== confirm) { setLocalErr('Passwords do not match'); return; }
     setLocalErr('');
     setLoading(true);
     const ok = await register({ name, email, password });
@@ -320,7 +320,7 @@ const RegisterView = ({ onLogin, t }) => {
           {t?.login?.regTitle || 'Créer un compte'} 
         </h2>
         <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
-          {t?.login?.regSubtitle || 'Rejoignez DeutschMG — gratuit pour toujours.'}
+          {t?.login?.regSubtitle || 'Join DeutschLearn — free forever.'}
         </p>
       </div>
       )}
@@ -348,9 +348,8 @@ const RegisterView = ({ onLogin, t }) => {
           error={confirm && confirm !== password} />
         {confirm && confirm !== password && (
           <span className="text-[11px] font-semibold" style={{ color: '#f59e0b' }}>
-            ⚠ Les mots de passe ne correspondent pas
-          </span>
-        )}
+            ⚠ Passwords do not match
+          </span>)}
 
         <SubmitBtn loading={loading} label={t?.login?.regBtn || 'Creer mon compte'} loadingLabel={t?.login?.regLoading || 'Creation...'} />
       </form>
@@ -396,16 +395,16 @@ const ForgotView = ({ onBack }) => {
         📬
       </div>
       <div>
-        <h2 className="text-2xl font-black mb-2" style={{ color: 'rgba(235,240,255,0.96)' }}>Email envoyé ✅</h2>
+        <h2 className="text-2xl font-black mb-2" style={{ color: 'rgba(235,240,255,0.96)' }}>Password changed! ✅</h2>
         <p className="text-sm leading-relaxed" style={{ color: 'rgba(180,190,230,0.65)' }}>
           {message}
         </p>
         <p className="text-xs mt-3" style={{ color: 'rgba(180,190,230,0.38)' }}>
-          Vérifiez aussi vos spams si vous ne le trouvez pas.
+          Check your spam folder if you cannot find it.
         </p>
       </div>
       <button onClick={onBack} className="btn-grad px-8 py-3 rounded-2xl text-sm font-black text-white">
-        ← Retour à la connexion
+        ← Back to login
       </button>
     </div>
   );
@@ -415,19 +414,19 @@ const ForgotView = ({ onBack }) => {
       <div>
         <button onClick={onBack} className="flex items-center gap-1.5 text-xs font-semibold mb-5 transition-opacity hover:opacity-70"
           style={{ color: 'var(--accent)' }}>
-          ← Retour
+          ← Back
         </button>
-        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>Mot de passe oublié 🔐</h2>
+        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>Forgot password 🔐</h2>
         <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
-          Entrez votre email — nous vous enverrons un lien de réinitialisation.
+          Enter your email — we will send you a reset link.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <ErrorBanner msg={error} />
-        <InputField label="Adresse email" type="email" value={email} onChange={e => setEmail(e.target.value)}
-          placeholder="votre@email.com" autoFocus />
-        <SubmitBtn loading={loading} label="Envoyer le lien" loadingLabel="Envoi en cours..." />
+        <InputField label="Email address" type="email" value={email} onChange={e => setEmail(e.target.value)}
+          placeholder="your@email.com" autoFocus />
+        <SubmitBtn loading={loading} label="Send reset link" loadingLabel="Sending..." />
       </form>
     </div>
   );
@@ -475,19 +474,19 @@ const ResetPasswordView = ({ token, onBack }) => {
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>Nouveau mot de passe 🔑</h2>
-        <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>Choisissez un nouveau mot de passe pour votre compte.</p>
+        <h2 className="text-2xl font-black mb-1" style={{ color: 'rgba(235,240,255,0.96)' }}>New password 🔑</h2>
+        <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>Choose a new password for your account.</p>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <ErrorBanner msg={error} />
-        <PasswordInput label="Nouveau mot de passe" value={password}
+        <PasswordInput label="New password" value={password}
           onChange={e => setPassword(e.target.value)} placeholder="••••••••" autoFocus />
         <div className="flex flex-col gap-1">
-          <PasswordInput label="Confirmer le mot de passe" value={password2}
+          <PasswordInput label="Confirm password" value={password2}
             onChange={e => setPassword2(e.target.value)} placeholder="••••••••" />
-          {noMatch && <p className="text-xs mt-1" style={{ color: 'rgba(251,100,100,0.80)' }}>Les mots de passe ne correspondent pas</p>}
+          {noMatch && <p className="text-xs mt-1" style={{ color: 'rgba(251,100,100,0.80)' }}>Passwords do not match</p>}
         </div>
-        <SubmitBtn loading={loading} label="Enregistrer le mot de passe" loadingLabel="Enregistrement..." />
+        <SubmitBtn loading={loading} label="Save password" loadingLabel="Saving..." />
       </form>
     </div>
   );
@@ -501,9 +500,9 @@ const ResetPasswordView = ({ token, onBack }) => {
 /* ─────────────────────────────────────────────────────────────── */
 const BrandPanel = ({ view, t }) => {
   const headlines = {
-    login:    ['Apprenez', "l'Allemand", 'en Malagasy.'],
-    register: ['Rejoignez', 'DeutschMG', 'gratuitement.'],
-    forgot:   ['Retrouvez', 'votre', 'acces.'],
+    login:    ['Learn', 'German', 'for everyone.'],
+    register: ['Join', 'DeutschLearn', 'for free.'],
+    forgot:   ['Recover', 'your', 'access.'],
   };
   const [a, b, c] = headlines[view] || headlines.login;
 
@@ -549,7 +548,7 @@ const BrandPanel = ({ view, t }) => {
 
         {/* Sub */}
         <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.32)' }}>
-          {t?.home?.subtitle || "La plateforme gratuite pour Malgaches qui apprennent l'allemand."}
+          {t?.home?.subtitle || "The free platform to learn German — lessons, vocabulary and exercises for all."}
         </p>
 
         {/* Branding */}
@@ -558,7 +557,7 @@ const BrandPanel = ({ view, t }) => {
             style={{ background: '#fff', color: '#0d0d0d' }}>
             DE
           </div>
-          <span className="text-sm font-bold text-white">DeutschMG</span>
+          <span className="text-sm font-bold text-white">DeutschLearn</span>
         </div>
       </div>
     </div>
@@ -656,11 +655,11 @@ const Login = () => {
             </div>
             {/* Headline */}
             <h1 className="text-2xl font-black leading-tight mb-2" style={{ letterSpacing: '-0.03em' }}>
-              <span className="text-white">Apprenez </span>
-              <span className="text-grad">l&apos;Allemand</span>
+              <span className="text-white">Learn </span>
+              <span className="text-grad">German</span>
             </h1>
             <p className="text-xs max-w-[260px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
-              {t?.home?.subtitle || "La plateforme gratuite pour Malgaches qui apprennent l'allemand."}
+              {t?.home?.subtitle || "The free platform to learn German for everyone."}
             </p>
           </div>
 
@@ -681,7 +680,7 @@ const Login = () => {
             {/* Mobile logo */}
             <div className="flex md:hidden items-center gap-2.5 mb-7">
               <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black" style={{ background: '#fff', color: '#0d0d0d' }}>DE</div>
-              <span className="text-sm font-bold text-white">DeutschMG</span>
+              <span className="text-sm font-bold text-white">DeutschLearn</span>
             </div>
 
             {/* View content with slide transition */}

@@ -93,7 +93,7 @@ export const progressService = {
     return progress;
   },
 
-  // Mampisy teny vao nianarana
+  // Ajouter un mot appris
   learnWord: (wordId) => {
     const progress = progressService.getProgress();
     if (!progress.vocabularyLearned.includes(wordId)) {

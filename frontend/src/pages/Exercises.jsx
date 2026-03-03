@@ -3,44 +3,44 @@ import { getAllExercises, getExercisesByLevel } from '../data/exercises';
 import { progressService } from '../services/progress';
 import ProgressBar from '../components/ProgressBar';
 
-const LEVELS = ['Rehetra', 'A1', 'A2'];
+const LEVELS = ['All', 'A1', 'A2'];
 
 const TYPE_META = {
   multiple_choice: {
-    label: 'Choix multiple',
-    sub: 'Safidio ny valiny marina',
+    label: 'Multiple choice',
+    sub: 'Choose the correct answer',
     symbol: '◉',
     color: '#818cf8',
     bg: 'rgba(129,140,248,0.10)',
     border: 'rgba(129,140,248,0.22)',
   },
   translation: {
-    label: 'Traduction',
-    sub: 'Adika amin\'ny teny malagasy',
+    label: 'Translation',
+    sub: 'Translate to English',
     symbol: '⇌',
     color: '#f472b6',
     bg: 'rgba(244,114,182,0.10)',
     border: 'rgba(244,114,182,0.22)',
   },
   fill_blank: {
-    label: 'Compléter la phrase',
-    sub: 'Fenoy ny teny tsy hita',
+    label: 'Fill in the blank',
+    sub: 'Complete the missing word',
     symbol: '▭',
     color: '#34d399',
     bg: 'rgba(52,211,153,0.10)',
     border: 'rgba(52,211,153,0.22)',
   },
   matching: {
-    label: 'Associer mot & image',
-    sub: 'Ampifandraiso teny sy sary',
+    label: 'Match words',
+    sub: 'Match German to English',
     symbol: '⟷',
     color: '#fb923c',
     bg: 'rgba(251,146,60,0.10)',
     border: 'rgba(251,146,60,0.22)',
   },
   quick_quiz: {
-    label: 'Quiz rapide',
-    sub: 'Valiana haingana!',
+    label: 'Quick quiz',
+    sub: 'Answer fast!',
     symbol: '⚡',
     color: '#fbbf24',
     bg: 'rgba(251,191,36,0.10)',
@@ -148,7 +148,7 @@ const ExerciseCard = ({ exercise, onAnswer, answered }) => {
               >
                 <span className="font-bold" style={{ color: '#fb923c' }}>{pair.german}</span>
                 <span style={{ color: 'rgba(255,255,255,0.28)' }}>⟷</span>
-                <span style={{ color: 'rgba(255,255,255,0.70)' }}>{pair.malagasy}</span>
+                <span style={{ color: 'rgba(255,255,255,0.70)' }}>{pair.english}</span>
               </div>
             ))}
           </div>
@@ -158,7 +158,7 @@ const ExerciseCard = ({ exercise, onAnswer, answered }) => {
               className="w-full py-2.5 rounded-xl text-sm font-semibold transition-opacity hover:opacity-80"
               style={{ background: 'rgba(251,146,60,0.12)', border: '1px solid rgba(251,146,60,0.30)', color: '#fb923c' }}
             >
-              Vita ny fampifandraisana ✓
+              Valider les associations ✓
             </button>
           )}
           {selected !== null && (
@@ -166,7 +166,7 @@ const ExerciseCard = ({ exercise, onAnswer, answered }) => {
               className="mt-2 px-4 py-3 rounded-xl text-sm"
               style={{ background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.20)', color: 'rgba(134,239,172,0.90)' }}
             >
-              <span className="font-bold mr-2">Marina!</span>Tsara kokoa ny fahatakaranao ny teny!
+              <span className="font-bold mr-2">Bravo !</span>Votre compréhension du vocabulaire s’améliore !
             </div>
           )}
         </div>
@@ -182,7 +182,7 @@ const ExerciseCard = ({ exercise, onAnswer, answered }) => {
             color: isCorrect ? 'rgba(134,239,172,0.90)' : 'rgba(125,211,252,0.90)',
           }}
         >
-          <span className="font-bold mr-2">{isCorrect ? 'Marina!' : 'Diso!'}</span>
+          <span className="font-bold mr-2">{isCorrect ? 'Bravo !' : 'Incorrect !'}</span>
           {exercise.explanation}
         </div>
       )}
@@ -191,13 +191,13 @@ const ExerciseCard = ({ exercise, onAnswer, answered }) => {
 };
 
 const Exercises = () => {
-  const [level, setLevel] = useState('Rehetra');
+  const [level, setLevel] = useState('Tout');
   const [typeFilter, setTypeFilter] = useState(null);
   const [answered, setAnswered] = useState({});
   const [sessionStats, setSessionStats] = useState({ correct: 0, total: 0 });
   const [progress, setProgress] = useState(() => progressService.getProgress());
 
-  const baseExercises = level === 'Rehetra' ? getAllExercises() : getExercisesByLevel(level);
+  const baseExercises = level === 'All' ? getAllExercises() : getExercisesByLevel(level);
   const exercises = typeFilter
     ? baseExercises.filter(ex => ex.type === typeFilter)
     : baseExercises;
@@ -278,7 +278,7 @@ const Exercises = () => {
         {/* Level chips */}
         <div className="flex items-center justify-center gap-2 overflow-x-auto no-scrollbar mb-2">
           {LEVELS.map(l => {
-            const count = l === 'Rehetra' ? getAllExercises().length : getExercisesByLevel(l).length;
+            const count = l === 'Tout' ? getAllExercises().length : getExercisesByLevel(l).length;
             return (
               <Chip
                 key={l}
@@ -346,7 +346,7 @@ const Exercises = () => {
         {/* ── Types d'exercices showcase ── */}
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-black text-white" style={{ letterSpacing: '-0.02em' }}>Types d&apos;exercices</h2>
+            <h2 className="text-lg font-black text-white" style={{ letterSpacing: '-0.02em' }}>Exercise types</h2>
             <span className="text-xs" style={{ color: 'rgba(255,255,255,0.30)' }}>{Object.keys(TYPE_META).length} types</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -437,17 +437,17 @@ const Exercises = () => {
               {accuracy === 100 ? 'TOP!' : accuracy >= 70 ? 'GUT!' : 'OK!'}
             </div>
             <div className="text-2xl font-black text-white mb-2">
-              {accuracy === 100 ? 'Tonga Lafatra!' : accuracy >= 70 ? 'Tsara Tokoa!' : 'Miezaha Indray!'}
+              {accuracy === 100 ? 'Perfect!' : accuracy >= 70 ? 'Well done!' : 'Keep going!'}
             </div>
             <p className="text-sm mb-8" style={{ color: 'rgba(255,255,255,0.50)' }}>
-              Nahazo {sessionStats.correct}/{sessionStats.total} ({accuracy}%) ianao an&apos;ity fampiharana ity!
+              You got {sessionStats.correct}/{sessionStats.total} ({accuracy}%) in this session!
             </p>
             <button
               onClick={() => { setAnswered({}); setSessionStats({ correct: 0, total: 0 }); }}
               className="px-8 py-3 rounded-xl text-sm font-semibold transition-opacity hover:opacity-80"
               style={{ background: '#fff', color: '#0d0d0d' }}
             >
-              Manao Indray
+              Try again
             </button>
           </div>
         )}

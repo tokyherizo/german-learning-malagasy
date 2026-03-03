@@ -49,20 +49,20 @@ const WordCard = ({ word, isLearned, onLearn, showExample }) => {
           <div className="text-center">
             <div className="text-xl font-black text-white leading-tight">{word.german}</div>
           </div>
-          <div className="text-[10px] text-white/25 text-center">Tsindrio / Tippen</div>
+          <div className="text-[10px] text-white/25 text-center">Click / Tippen</div>
         </div>
 
         {/* Back */}
         <div className="absolute inset-0 rounded-2xl border bg-violet-500/10 border-violet-400/22 p-4 flex flex-col justify-between"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
-          <span className="text-[10px] font-semibold text-violet-400/60 uppercase tracking-widest">Malagasy</span>
+          <span className="text-[10px] font-semibold text-violet-400/60 uppercase tracking-widest">English</span>
           <div className="text-center">
-            <div className="text-lg font-black text-violet-300 leading-tight">{word.malagasy}</div>
+            <div className="text-lg font-black text-violet-300 leading-tight">{word.english}</div>
             {showExample && word.example && (
               <div className="text-[11px] text-white/35 italic mt-2 leading-snug">„{word.example}"</div>
             )}
           </div>
-          <div className="text-[10px] text-violet-400/45 text-center">Tsindrio indray</div>
+          <div className="text-[10px] text-violet-400/45 text-center">Click again</div>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@ const WordList = ({ word, isLearned, onLearn }) => (
     <div className="flex-1 min-w-0">
       <span className="font-bold text-white text-sm">{word.german}</span>
       <span className="mx-2 text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>→</span>
-      <span className="text-sm font-medium" style={{ color: '#a78bfa' }}>{word.malagasy}</span>
+      <span className="text-sm font-medium" style={{ color: '#a78bfa' }}>{word.english}</span>
     </div>
     {word.example && (
       <div className="hidden md:block text-xs italic truncate max-w-[200px]" style={{ color: 'rgba(255,255,255,0.25)' }}>
@@ -116,7 +116,7 @@ const Vocabulary = () => {
   const filtered = search
     ? allWords.filter(w =>
         w.german.toLowerCase().includes(search.toLowerCase()) ||
-        w.malagasy.toLowerCase().includes(search.toLowerCase())
+        w.english.toLowerCase().includes(search.toLowerCase())
       )
     : allWords;
 
@@ -159,7 +159,7 @@ const Vocabulary = () => {
                 <span className="text-grad">Vokabeln</span>
               </h1>
               <p className="text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>
-                Fianarana teny amin&apos;ny lohahevitra maro — Alemà ↔ Malagasy
+                Learn vocabulary by topic — German ↔ English
               </p>
             </div>
             <div
@@ -168,7 +168,7 @@ const Vocabulary = () => {
             >
               <div className="text-center">
                 <div className="text-2xl font-black" style={{ color: '#818cf8' }}>{totalLearned}</div>
-                <div className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Nianarana</div>
+                <div className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Appris</div>
               </div>
               <div className="w-px h-8" style={{ background: 'rgba(255,255,255,0.10)' }} />
               <div className="text-center">
@@ -253,7 +253,7 @@ const Vocabulary = () => {
               <div>
                 <h2 className="text-lg font-black text-white">{currentTopic.title}</h2>
                 <div className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                  {learnedInTopic}/{allWords.length} nianarana
+                  {learnedInTopic}/{allWords.length} appris
                 </div>
               </div>
 
@@ -383,8 +383,8 @@ const Vocabulary = () => {
               >
                 VITA!
               </div>
-              <div className="text-lg font-black text-green-400 mb-1">Vita ny Lohahevitra!</div>
-              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>Nianaranao ny teny {allWords.length} rehetra!</p>
+              <div className="text-lg font-black text-green-400 mb-1">Thème terminé !</div>
+              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>Vous avez appris les {allWords.length} mots !</p>
             </div>
           )}
         </div>

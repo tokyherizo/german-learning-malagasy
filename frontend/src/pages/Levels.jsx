@@ -8,9 +8,9 @@ const levels = [
   {
     id: 'A1',
     label: 'A1',
-    name: 'Fanombohana',
+    name: 'Beginner',
     nameDe: 'Anfänger',
-    desc: "Atombohy ny fianarana ny teny Alemà — miarahaba, isa, fianakaviana...",
+    desc: "Start learning German — greetings, numbers, family...",
     descDe: 'Beginnen Sie mit den Grundlagen der deutschen Sprache.',
     color: 'indigo',
     accent: '#818cf8',
@@ -20,9 +20,9 @@ const levels = [
   {
     id: 'A2',
     label: 'A2',
-    name: 'Mioha',
+    name: 'Intermediate',
     nameDe: 'Grundkenntnisse',
-    desc: "Havaozina ny A1 — asa, tanàna, toetr'andro, fahasalamana...",
+    desc: "Build on A1 — work, city, weather, health...",
     descDe: 'Aufbauend auf A1 — Alltag, Arbeit, Gesundheit...',
     color: 'violet',
     accent: '#a78bfa',
@@ -97,11 +97,11 @@ const Levels = () => {
           </div>
           <div className="relative" style={{ zIndex: 1 }}>
             <h1 className="text-3xl md:text-5xl font-black mb-3">
-              <span className="text-white">Ambaratonga /</span>{' '}
+              <span className="text-white">Levels /</span>{' '}
               <span className="text-grad">Niveaus</span>
             </h1>
             <p className="text-white/45 text-sm max-w-lg mx-auto">
-              Safidio ny ambaratonga tianao — atombohy amin&apos;ny A1 ary mandroso
+              Choose your level — start with A1 and progress
             </p>
           </div>
         </div>

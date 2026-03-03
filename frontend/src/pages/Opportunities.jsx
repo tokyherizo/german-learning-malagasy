@@ -499,8 +499,8 @@ const Opportunities = () => {
         >
           <span className="text-base shrink-0">💡</span>
           <span>
-            <strong className="text-white">Conseil :</strong> Chaque programme indique le niveau d&apos;allemand requis.
-            Continue à apprendre avec <strong className="text-white">DeutschMG</strong> pour atteindre le niveau souhaité avant de postuler.
+            <strong className="text-white">Tip:</strong> Each programme indicates the required German level.
+            Keep learning with <strong className="text-white">DeutschLearn</strong> to reach the desired level before applying.
           </span>
         </div>
 

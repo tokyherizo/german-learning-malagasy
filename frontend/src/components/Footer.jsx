@@ -2,18 +2,18 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
 const NAV_LINKS = [
-  { label: 'Accueil',     to: '/' },
-  { label: 'Niveaux',     to: '/levels' },
-  { label: 'Exercices',   to: '/exercises' },
-  { label: 'Vocabulaire', to: '/vocabulary' },
-  { label: 'Profil',      to: '/profile' },
+  { label: 'Home',       to: '/' },
+  { label: 'Levels',     to: '/levels' },
+  { label: 'Exercises',  to: '/exercises' },
+  { label: 'Vocabulary', to: '/vocabulary' },
+  { label: 'Profile',    to: '/profile' },
 ];
 
 const LEVELS = [
-  { lvl: 'A1', label: 'Débutant' },
-  { lvl: 'A2', label: 'Élémentaire' },
-  { lvl: 'B1/B2', label: 'Intermédiaire' },
-  { lvl: 'C1/C2', label: 'Avancé' },
+  { lvl: 'A1', label: 'Beginner' },
+  { lvl: 'A2', label: 'Elementary' },
+  { lvl: 'B1/B2', label: 'Intermediate' },
+  { lvl: 'C1/C2', label: 'Advanced' },
 ];
 
 const col = { display: 'flex', flexDirection: 'column', gap: 4 };
@@ -67,10 +67,10 @@ const Footer = () => {
           <div style={{ ...col, gap: 12 }}>
             <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
               <span style={{ fontSize: 11, fontWeight: 900, padding: '4px 8px', borderRadius: 6, background: badgeDEbg, color: badgeDEclr, letterSpacing: '0.06em' }}>DE</span>
-              <span style={{ fontSize: 16, fontWeight: 900, color: brandName, letterSpacing: '-0.02em' }}>DeutschMG</span>
+              <span style={{ fontSize: 16, fontWeight: 900, color: brandName, letterSpacing: '-0.02em' }}>DeutschLearn</span>
             </Link>
             <p style={{ fontSize: 12, lineHeight: 1.7, color: descClr, margin: 0, maxWidth: 220 }}>
-              Plateforme gratuite d&apos;allemand pour les Malgaches — de A1 à B2.
+              Free German learning platform for everyone — from A1 to B2.
             </p>
             <span style={{ fontSize: 12, color: flagClr }}>Madagascar 🇲🇬</span>
           </div>
@@ -89,7 +89,7 @@ const Footer = () => {
 
           {/* Niveaux */}
           <div style={col}>
-            <span style={colTitle}>Niveaux</span>
+            <span style={colTitle}>Levels</span>
             {LEVELS.map(({ lvl, label }) => (
               <Link key={lvl} to={`/lessons/${lvl}`} style={{ ...lnk, display: 'inline-flex', alignItems: 'center', gap: 8 }}
                 onMouseEnter={e => { e.currentTarget.style.color = lnkHover; }}
@@ -127,7 +127,7 @@ const Footer = () => {
           justifyContent: 'space-between', alignItems: 'center',
         }}>
           <span style={{ fontSize: 11, color: copyClr }}>
-            © {y} DeutschMG — Natao ho an&apos;ny Malagasy
+            © {y} DeutschLearn — For everyone
           </span>
           <a href={`mailto:${EMAIL}`} style={{
             fontSize: 11, color: mailBotClr, textDecoration: 'none', transition: 'color 0.15s',

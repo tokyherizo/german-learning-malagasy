@@ -7,6 +7,7 @@
 :root, [data-theme="dark"] {
   --bg-base:         #0d0d0d;
   --bg-surface:      #111111;
+  --bg-surface-deep: #1a1a2e;
   --bg-card:         rgba(255,255,255,0.04);
   --bg-nav:          rgba(13,13,13,0.97);
 
@@ -36,17 +37,18 @@
 
 [data-theme="light"] {
   --bg-base:         #f0f2f5;
-  --bg-surface:      #e8eaed;
+  --bg-surface:      #ffffff;
+  --bg-surface-deep: #f1f5f9;
   --bg-card:         rgba(0,0,0,0.04);
   --bg-nav:          rgba(240,242,245,0.97);
 
-  --border-card:     rgba(0,0,0,0.09);
-  --border-nav:      rgba(0,0,0,0.10);
-  --border-strong:   rgba(0,0,0,0.20);
+  --border-card:     rgba(0,0,0,0.18);
+  --border-nav:      rgba(0,0,0,0.14);
+  --border-strong:   rgba(0,0,0,0.35);
 
   --text-primary:    #0f172a;
-  --text-muted:      rgba(15,23,42,0.55);
-  --text-subtle:     rgba(15,23,42,0.32);
+  --text-muted:      rgba(15,23,42,0.70);
+  --text-subtle:     rgba(15,23,42,0.52);
 
   /* Darker indigo/violet for better contrast on light bg */
   --accent:          #3730a3;
@@ -65,6 +67,31 @@
   --scrollbar-thumb: rgba(0,0,0,0.18);
 
   color-scheme: light;
+
+  /* ── Tailwind v4 color variable overrides ──────────────────────
+     Tailwind generates: .text-white { color: var(--color-white) }
+     Overriding these variables remaps ALL Tailwind color utilities
+     automatically without needing per-class selectors.
+  ────────────────────────────────────────────────────────────── */
+  --color-white:     #0f172a;
+  --color-black:     #0f172a;
+
+  --color-slate-50:  #1e293b;
+  --color-slate-100: #1e293b;
+  --color-slate-200: #334155;
+  --color-slate-300: #475569;
+  --color-slate-400: #64748b;
+
+  --color-gray-50:   #e8eaed;
+  --color-gray-100:  #d1d5db;
+  --color-gray-200:  #9ca3af;
+  --color-gray-300:  #6b7280;
+  --color-gray-400:  #4b5563;
+  --color-gray-500:  #374151;
+  --color-gray-600:  #1f2937;
+  --color-gray-700:  #111827;
+  --color-gray-800:  #0f172a;
+  --color-gray-900:  #0f172a;
 }
 
 /* ── Light mode: force dark text on white/light bg ───────────── */
@@ -75,6 +102,11 @@
 /* Page wrappers that use hardcoded dark backgrounds */
 [data-theme="light"] #root > div,
 [data-theme="light"] main > div {
+  background: #f0f2f5 !important;
+}
+/* Each page's outermost div has style="... min-height: 100vh ..." */
+[data-theme="light"] [style*="min-height: 100vh"],
+[data-theme="light"] [style*="minHeight: '100vh'"] {
   background: #f0f2f5 !important;
 }
 
@@ -93,11 +125,21 @@
 [data-theme="light"] .text-white\/22       { color: rgba(15,23,42,0.22) !important; }
 [data-theme="light"] .text-white\/20       { color: rgba(15,23,42,0.20) !important; }
 
+/* Ensure body text-color cascades down to all children by default */
+[data-theme="light"] body,
+[data-theme="light"] #root {
+  color: #0f172a !important;
+}
+
+/* Buttons inside gradient panels keep white text */
+[data-theme="light"] .btn-grad,
+[data-theme="light"] button.btn-grad { color: #fff !important; }
+
 /* Cards / surfaces → light */
 [data-theme="light"] .glass-card,
 [data-theme="light"] .grad-card {
   background: #fff !important;
-  border-color: rgba(0,0,0,0.09) !important;
+  border-color: rgba(0,0,0,0.16) !important;
 }
 
 /* Navbar */
@@ -124,76 +166,96 @@
 ──────────────────────────────────────────────────────────── */
 
 /* ── Page-level dark backgrounds ── */
+/* hex selectors (React keeps hex in style attr on some renderers) */
 [data-theme="light"] [style*="#0d0d0d"],
-[data-theme="light"] [style*="13,13,13"] {
-  background: #f0f2f5 !important;
-}
+[data-theme="light"] [style*="13,13,13"] { background: #f0f2f5 !important; }
+/* rgb() equivalents (browsers normalise hex → rgb in DOM) */
+[data-theme="light"] [style*="rgb(13, 13, 13)"],
+[data-theme="light"] [style*="rgb(13,13,13)"] { background: #f0f2f5 !important; }
 
 /* ── Card / surface dark backgrounds ── */
 [data-theme="light"] [style*="background: #111;"],
 [data-theme="light"] [style*="background: #111 "],
 [data-theme="light"] [style*="background: #111111"],
-[data-theme="light"] [style*="background:#111"] {
-  background: #ffffff !important;
-}
+[data-theme="light"] [style*="background:#111"] { background: #ffffff !important; }
+/* rgb equivalents for #111 / #111111 */
+[data-theme="light"] [style*="rgb(17, 17, 17)"],
+[data-theme="light"] [style*="rgb(17,17,17)"] { background: #ffffff !important; }
+
 [data-theme="light"] [style*="#1a1a1a"],
 [data-theme="light"] [style*="#1a1a2e"],
-[data-theme="light"] [style*="#0a0a0a"] {
-  background: #f1f5f9 !important;
-}
+[data-theme="light"] [style*="#0a0a0a"] { background: #f1f5f9 !important; }
+/* rgb equivalents */
+[data-theme="light"] [style*="rgb(26, 26, 26)"],
+[data-theme="light"] [style*="rgb(26,26,26)"],
+[data-theme="light"] [style*="rgb(26, 26, 46)"],
+[data-theme="light"] [style*="rgb(26,26,46)"],
+[data-theme="light"] [style*="rgb(10, 10, 10)"],
+[data-theme="light"] [style*="rgb(10,10,10)"] { background: #f1f5f9 !important; }
 
 /* ── Dark rgba sticky / filter bars ── */
-[data-theme="light"] [style*="rgba(13,13,13"] {
-  background: rgba(240,242,245,0.97) !important;
-}
+[data-theme="light"] [style*="rgba(13,13,13"],
+[data-theme="light"] [style*="rgba(13, 13, 13"] { background: rgba(240,242,245,0.97) !important; }
 
 /* ── Semi-transparent white bg (glass tiles) → light neutral ── */
+/* React CSSOM normalises to spaces: rgba(255, 255, 255, X) */
 [data-theme="light"] [style*="background: rgba(255,255,255,0.0"],
-[data-theme="light"] [style*="background: rgba(255,255,255,0.1"] {
-  background: rgba(0,0,0,0.04) !important;
-}
+[data-theme="light"] [style*="background: rgba(255, 255, 255, 0.0"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.1"],
+[data-theme="light"] [style*="background: rgba(255, 255, 255, 0.1"] { background: rgba(0,0,0,0.04) !important; }
 [data-theme="light"] [style*="background: rgba(255,255,255,0.2"],
-[data-theme="light"] [style*="background: rgba(255,255,255,0.3"] {
-  background: rgba(0,0,0,0.07) !important;
+[data-theme="light"] [style*="background: rgba(255, 255, 255, 0.2"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.3"],
+[data-theme="light"] [style*="background: rgba(255, 255, 255, 0.3"] { background: rgba(0,0,0,0.07) !important; }
+
+/* ── Page sections with dark gradient backgrounds ── */
+[data-theme="light"] section[style*="background"],
+[data-theme="light"] main[style*="background"] {
+  background: #f0f2f5 !important;
 }
 
-/* ── White inline text colors → dark slate (preserving opacity hierarchy) ── */
-[data-theme="light"] [style*="color: #fff"],
-[data-theme="light"] [style*="color: white"],
-[data-theme="light"] [style*="color: #ffffff"],
-[data-theme="light"] [style*="color: rgba(255,255,255,1)"],
-[data-theme="light"] [style*="color: rgba(255,255,255,0.9"] {
-  color: #0f172a !important;
-}
-[data-theme="light"] [style*="color: rgba(255,255,255,0.8"],
-[data-theme="light"] [style*="color: rgba(255,255,255,0.7"],
-[data-theme="light"] [style*="color: rgba(255,255,255,0.6"] {
-  color: rgba(15,23,42,0.72) !important;
-}
-[data-theme="light"] [style*="color: rgba(255,255,255,0.5"] {
-  color: rgba(15,23,42,0.58) !important;
-}
-[data-theme="light"] [style*="color: rgba(255,255,255,0.4"] {
-  color: rgba(15,23,42,0.48) !important;
-}
-[data-theme="light"] [style*="color: rgba(255,255,255,0.3"] {
-  color: rgba(15,23,42,0.38) !important;
-}
-[data-theme="light"] [style*="color: rgba(255,255,255,0.2"] {
-  color: rgba(15,23,42,0.28) !important;
-}
+/* ── White inline text colors → NOW HANDLED BY UNIVERSAL RULE BELOW ──
+   (kept for specificity fallback on older browsers)
+   NOTE: React CSSOM normalises hex to rgb and adds spaces in rgba.
+   Correct form: rgb(255, 255, 255) and rgba(255, 255, 255, X) */
+[data-theme="light"] [style*="color: rgb(255, 255, 255)"] { color: #0f172a !important; }
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.9"],
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 1)"]  { color: #0f172a !important; }
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.8"],
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.7"],
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.6"] { color: rgba(15,23,42,0.82) !important; }
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.5"] { color: rgba(15,23,42,0.72) !important; }
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.4"] { color: rgba(15,23,42,0.62) !important; }
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.3"] { color: rgba(15,23,42,0.55) !important; }
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.2"] { color: rgba(15,23,42,0.45) !important; }
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.1"] { color: rgba(15,23,42,0.38) !important; }
+[data-theme="light"] [style*="color: rgba(255, 255, 255, 0.0"] { color: rgba(0,0,0,0.05) !important; }
 
 /* ── White rgba border colors → dark borders ── */
 [data-theme="light"] [style*="border: 1px solid rgba(255,255,255"],
+[data-theme="light"] [style*="border: 1px solid rgba(255, 255, 255"],
 [data-theme="light"] [style*="border-top: 1px solid rgba(255,255,255"],
-[data-theme="light"] [style*="border-bottom: 1px solid rgba(255,255,255"] {
-  border-color: rgba(0,0,0,0.10) !important;
+[data-theme="light"] [style*="border-top: 1px solid rgba(255, 255, 255"],
+[data-theme="light"] [style*="border-bottom: 1px solid rgba(255,255,255"],
+[data-theme="light"] [style*="border-bottom: 1px solid rgba(255, 255, 255"] {
+  border-color: rgba(0,0,0,0.20) !important;
+}
+/* HR / divider lines */
+[data-theme="light"] hr {
+  border-color: rgba(0,0,0,0.15) !important;
+}
+[data-theme="light"] [style*="border-top:1px solid"],
+[data-theme="light"] [style*="border-bottom:1px solid"] {
+  border-color: rgba(0,0,0,0.18) !important;
 }
 
 /* ── Decorative background watermark text (DEUTSCHLAND etc.) ── */
 [data-theme="light"] [style*="color: rgba(255,255,255,0.02"],
-[data-theme="light"] [style*="color: rgba(255,255,255,0.03"] {
-  color: rgba(0,0,0,0.04) !important;
+[data-theme="light"] [style*="color: rgba(255,255,255,0.03"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.04"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.05"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.06"] {
+  color: rgba(0,0,0,0.05) !important;
 }
 
 /* ── Override strong/em/span that inherit forced color ── */
@@ -202,15 +264,96 @@
   color: #0f172a !important;
 }
 
-/* ── Tip banners with rgba(255,255,255,X) background ── */
-[data-theme="light"] [style*="background: rgba(129,140,248,0.07)"] {
+/* ── Inputs, textareas, selects ── */
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  background: #fff !important;
+  color: #0f172a !important;
+  border-color: rgba(0,0,0,0.15) !important;
+}
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: rgba(15,23,42,0.40) !important;
+}
+[data-theme="light"] input[style*="background"],
+[data-theme="light"] textarea[style*="background"] {
+  background: #fff !important;
+  color: #0f172a !important;
+}
+
+/* ── Cards / inner surfaces with hard dark bg ── */
+[data-theme="light"] .glass-card {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.09) !important;
+}
+[data-theme="light"] .grad-card {
+  background: #f1f5f9 !important;
+  border-color: rgba(0,0,0,0.09) !important;
+}
+
+/* ── All page-level containers deep (catch any nested wrapper) ── */
+[data-theme="light"] div[style*="minHeight: '100vh'"],
+[data-theme="light"] div[style*="min-height: 100vh"] {
+  background: #f0f2f5 !important;
+}
+
+/* ── Profile / Community / Lesson / Vocabulary page panels ── */
+[data-theme="light"] [style*="background: #0d0d0d"],
+[data-theme="light"] [style*="background: rgb(13, 13, 13)"],
+[data-theme="light"] [style*="background: rgb(13,13,13)"] {
+  background: #f0f2f5 !important;
+}
+[data-theme="light"] [style*="background: #111"],
+[data-theme="light"] [style*="background: rgb(17, 17, 17)"],
+[data-theme="light"] [style*="background: rgb(17,17,17)"] {
+  background: #ffffff !important;
+}
+[data-theme="light"] [style*="background: #1a1a"],
+[data-theme="light"] [style*="background: rgb(26, 26"],
+[data-theme="light"] [style*="background: rgb(26,26"] {
+  background: #f1f5f9 !important;
+}
+
+/* ── Tip banners ── */
+[data-theme="light"] [style*="background: rgba(129,140,248,0.07)"],
+[data-theme="light"] [style*="background: rgba(129, 140, 248, 0.07)"] {
   background: rgba(55,48,163,0.06) !important;
   border-color: rgba(55,48,163,0.20) !important;
 }
 
 /* ── Hero section border ── */
-[data-theme="light"] section[style*="border-bottom: 1px solid rgba(255,255,255,0.07)"] {
+[data-theme="light"] section[style*="border-bottom: 1px solid rgba(255,255,255"],
+[data-theme="light"] section[style*="border-bottom: 1px solid rgba(255, 255, 255"] {
   border-bottom-color: rgba(0,0,0,0.09) !important;
+}
+
+/* ── Focus rings on inputs ── */
+[data-theme="light"] input:focus,
+[data-theme="light"] textarea:focus,
+[data-theme="light"] select:focus {
+  outline-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-soft) !important;
+}
+
+/* ── Scrollable chip/filter bars ── */
+[data-theme="light"] [style*="background: rgba(255,255,255,0.05)"],
+[data-theme="light"] [style*="background: rgba(255, 255, 255, 0.05)"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.06)"],
+[data-theme="light"] [style*="background: rgba(255, 255, 255, 0.06)"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.07)"],
+[data-theme="light"] [style*="background: rgba(255, 255, 255, 0.07)"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.08)"],
+[data-theme="light"] [style*="background: rgba(255, 255, 255, 0.08)"] {
+  background: rgba(0,0,0,0.05) !important;
+}
+
+/* ── Active/selected filter chip ── */
+[data-theme="light"] [style*="background: #fff"][style*="color: #0d0d0d"],
+[data-theme="light"] [style*="background: #fff"][style*="color: rgb(13"] {
+  background: #0f172a !important;
+  color: #fff !important;
 }
 
 /* ── SVG presentation attributes (stroke/fill with white) ──
@@ -281,15 +424,15 @@
 
   /* ─ Glass card ──────────────────────────── */
   .glass-card {
-    background: #111;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-card);
     border-radius: 1.25rem;
   }
 
   /* ─ Gradient card (featured) ────────── */
   .grad-card {
-    background: #1a1a2e;
-    border: 1px solid rgba(255,255,255,0.10);
+    background: var(--bg-surface-deep);
+    border: 1px solid var(--border-card);
     border-radius: 1.25rem;
   }
 
@@ -385,3 +528,99 @@
    Selection
 ============================================ */
 ::selection { background: rgba(129,140,248,0.28); color: #fff; }
+
+/* ============================================
+   LIGHT MODE — UNIVERSAL TEXT OVERRIDE
+   Placed last so it wins the cascade.
+   !important beats inline styles and Tailwind.
+============================================ */
+
+/* Force ALL text to dark in light mode */
+[data-theme="light"] body * {
+  color: #0f172a !important;
+  -webkit-text-fill-color: initial !important;
+}
+
+/* ── Re-allow: gradient text clips ── */
+[data-theme="light"] .text-grad,
+[data-theme="light"] .text-gold-gradient {
+  background: var(--gradient-text) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* ── Re-allow: white text on gradient/dark buttons ── */
+[data-theme="light"] .btn-grad,
+[data-theme="light"] .btn-grad *,
+[data-theme="light"] button.btn-grad,
+[data-theme="light"] a.btn-grad { color: #fff !important; }
+
+/* ── Re-allow: FloatTile (colored solid bg, white text always readable) ── */
+[data-theme="light"] .float-tile { color: #fff !important; box-shadow: none !important; }
+[data-theme="light"] body .nav-logo { color: #7124e5 !important; }
+[data-theme="light"] body .card-bigword { color: var(--bigword-c) !important; }
+
+/* ── Re-allow: any link/button with a solid vibrant background keeps white text ── */
+[data-theme="light"] [style*="background: #7124e5"],
+[data-theme="light"] [style*="background: rgb(113, 36, 229)"],
+[data-theme="light"] [style*="background: #6366f1"],
+[data-theme="light"] [style*="background: #4f46e5"],
+[data-theme="light"] [style*="background: #7c3aed"] { color: #fff !important; }
+[data-theme="light"] [style*="background: #7124e5"] *,
+[data-theme="light"] [style*="background: rgb(113, 36, 229)"] *,
+[data-theme="light"] [style*="background: #4f46e5"] * { color: #fff !important; }
+
+/* ── Re-allow: white text inside gradient-background panels (e.g. Login brand panel) ── */
+[data-theme="light"] [style*="linear-gradient(135deg, #4f46e5"],
+[data-theme="light"] [style*="linear-gradient(135deg, #3730a3"],
+[data-theme="light"] [style*="linear-gradient(135deg,#4f46e5"],
+[data-theme="light"] [style*="linear-gradient(135deg,#3730a3"] { color: #fff !important; }
+[data-theme="light"] [style*="linear-gradient(135deg, #4f46e5"] *,
+[data-theme="light"] [style*="linear-gradient(135deg, #3730a3"] *,
+[data-theme="light"] [style*="linear-gradient(135deg,#4f46e5"] *,
+[data-theme="light"] [style*="linear-gradient(135deg,#3730a3"] * { color: #fff !important; }
+
+/* ── Re-allow: semantic status colors ── */
+[data-theme="light"] .text-green-400,
+[data-theme="light"] .text-green-500,
+[data-theme="light"] .text-green-600 { color: #16a34a !important; }
+
+[data-theme="light"] .text-red-400,
+[data-theme="light"] .text-red-500,
+[data-theme="light"] .text-red-600   { color: #dc2626 !important; }
+
+[data-theme="light"] .text-yellow-400,
+[data-theme="light"] .text-yellow-500 { color: #ca8a04 !important; }
+
+[data-theme="light"] .text-orange-400,
+[data-theme="light"] .text-orange-500 { color: #ea580c !important; }
+
+[data-theme="light"] .text-sky-400,
+[data-theme="light"] .text-sky-500   { color: #0369a1 !important; }
+
+[data-theme="light"] .text-indigo-400,
+[data-theme="light"] .text-indigo-500 { color: #4338ca !important; }
+
+/* ── Re-allow: buttons that use white bg + dark text ── */
+[data-theme="light"] button[style*="background: #fff"],
+[data-theme="light"] button[style*="background:#fff"] { color: #0d0d0d !important; }
+
+/* ── Status/accent inline colors keep their meaning ── */
+[data-theme="light"] [style*="color: #f59e0b"],
+[data-theme="light"] [style*="color: rgb(245, 158, 11)"]  { color: #b45309 !important; }
+[data-theme="light"] [style*="color: #22c55e"],
+[data-theme="light"] [style*="color: rgb(34, 197, 94)"]   { color: #15803d !important; }
+[data-theme="light"] [style*="color: #ef4444"],
+[data-theme="light"] [style*="color: rgb(239, 68, 68)"]   { color: #b91c1c !important; }
+[data-theme="light"] [style*="color: #3b82f6"],
+[data-theme="light"] [style*="color: rgb(59, 130, 246)"]  { color: #1d4ed8 !important; }
+[data-theme="light"] [style*="color: #4ade80"],
+[data-theme="light"] [style*="color: rgb(74, 222, 128)"]  { color: #15803d !important; }
+[data-theme="light"] [style*="color: #a78bfa"],
+[data-theme="light"] [style*="color: rgb(167, 139, 250)"] { color: #5b21b6 !important; }
+[data-theme="light"] [style*="color: #818cf8"],
+[data-theme="light"] [style*="color: rgb(129, 140, 248)"] { color: #3730a3 !important; }
+[data-theme="light"] [style*="color: #38bdf8"],
+[data-theme="light"] [style*="color: rgb(56, 189, 248)"]  { color: #0369a1 !important; }

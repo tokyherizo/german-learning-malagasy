@@ -53,7 +53,7 @@ const GrammarSection = ({ section }) => (
           <tr style={{ borderBottom: '1px solid rgba(167,139,250,0.15)' }}>
             <th className="text-left py-2 pr-4 font-bold text-[11px] uppercase tracking-[2px]" style={{ color: 'rgba(167,139,250,0.55)' }}>Pronomen</th>
             <th className="text-left py-2 pr-4 font-bold text-[11px] uppercase tracking-[2px]" style={{ color: 'rgba(167,139,250,0.55)' }}>Verb</th>
-            <th className="text-left py-2 font-bold text-[11px] uppercase tracking-[2px]" style={{ color: 'rgba(167,139,250,0.55)' }}>Malagasy</th>
+            <th className="text-left py-2 font-bold text-[11px] uppercase tracking-[2px]" style={{ color: 'rgba(167,139,250,0.55)' }}>English</th>
           </tr>
         </thead>
         <tbody>
@@ -128,8 +128,8 @@ const VocabSection = ({ section }) => (
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-3 h-px" style={{ background: 'rgba(167,139,250,0.55)' }} />
-            <span className="font-semibold text-sm" style={{ color: '#a78bfa' }}>{word.malagasy}</span>
-            <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(167,139,250,0.15)', color: '#a78bfa' }}>MG</span>
+            <span className="font-semibold text-sm" style={{ color: '#a78bfa' }}>{word.english}</span>
+            <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(167,139,250,0.15)', color: '#a78bfa' }}>EN</span>
           </div>
           {word.example && <p className="text-[11px] italic mt-0.5" style={{ color: 'rgba(180,190,230,0.38)' }}>{word.example}</p>}
         </div>
@@ -151,7 +151,7 @@ const NumberTableSection = ({ section }) => (
         >
           <span className="text-2xl font-black" style={{ color: '#34d399' }}>{n.number}</span>
           <span className="text-sm font-bold text-white mt-1">{n.german}</span>
-          <span className="text-[11px] mt-0.5" style={{ color: 'rgba(180,190,230,0.45)' }}>{n.malagasy}</span>
+          <span className="text-[11px] mt-0.5" style={{ color: 'rgba(180,190,230,0.45)' }}>{n.english}</span>
         </div>
       ))}
     </div>
@@ -225,8 +225,8 @@ const MiniQuiz = ({ exercises, onComplete }) => {
       >
         {correct === exercises.length ? 'TOP!' : correct >= exercises.length / 2 ? 'GUT!' : 'OK!'}
       </div>
-      <div className="text-2xl font-black text-white mb-2">{correct}/{exercises.length} Marina!</div>
-      <p className="text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>Vita ny fanazaran-tsaina!</p>
+      <div className="text-2xl font-black text-white mb-2">{correct}/{exercises.length} Correct !</div>
+      <p className="text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>Quiz terminé !</p>
     </div>
   );
 
@@ -264,7 +264,7 @@ const MiniQuiz = ({ exercises, onComplete }) => {
             ? 'bg-green-500/10 border border-green-400/20 text-green-300'
             : 'bg-sky-500/10 border border-sky-400/22 text-sky-300'
         }`}>
-          <span className="font-bold mr-2">{selected === q.correct ? '✅ Marina!' : '❌ Diso!'}</span>
+          <span className="font-bold mr-2">{selected === q.correct ? '✅ Bravo !' : '❌ Incorrect !'}</span>
           {q.explanation}
         </div>
       )}

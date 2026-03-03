@@ -66,13 +66,14 @@ const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, ope
       }}
     >
       <div
-        className="absolute top-0 left-0 w-full flex items-start px-5 pt-5 pointer-events-none select-none"
+        className="card-bigword absolute top-0 left-0 w-full flex items-start px-5 pt-5 pointer-events-none select-none"
         style={{
+          '--bigword-c': bigWordColor ?? 'rgba(255,255,255,0.06)',
           fontSize: 'clamp(3.5rem, 8vw, 5.5rem)',
           fontWeight: 900,
           letterSpacing: '-0.04em',
           lineHeight: 1,
-          color: bigWordColor ?? (il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'),
+          color: bigWordColor ?? 'rgba(255,255,255,0.06)',
           userSelect: 'none',
         }}
       >
@@ -116,7 +117,7 @@ const CARD_META = [
   { bigWord: '500+',  bigWordColor: 'rgba(139,92,246,0.15)',  accent: '#7124e5', cat: 'Vocabulaire', to: '/vocabulary' },
   { bigWord: 'Quiz',  bigWordColor: 'rgba(234,179,8,0.12)',   accent: '#7124e5', cat: 'Exercices',   to: '/exercises'  },
   { bigWord: 'A2',    bigWordColor: 'rgba(168,85,247,0.18)',  accent: '#7124e5', cat: 'A2',          to: '/levels'     },
-  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#7124e5', cat: 'Grammaire',   to: '/levels'     },
+  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#7124e5', cat: 'Grammaire',    to: '/grammar'    },
   { bigWord: 'Wort',  bigWordColor: 'rgba(52,211,153,0.12)',  accent: '#7124e5', cat: 'Listes',      to: '/vocabulary' },
   { bigWord: 'XP',    bigWordColor: 'rgba(251,146,60,0.12)',  accent: '#7124e5', cat: 'Tout',        to: '/levels'     },
   { bigWord: 'Hallo', bigWordColor: 'rgba(244,63,94,0.12)',   accent: '#7124e5', cat: 'conversations',          to: '/levels'     },

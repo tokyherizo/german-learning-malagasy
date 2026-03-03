@@ -13,6 +13,7 @@ import Vocabulary from './pages/Vocabulary';
 import Profile from './pages/Profile';
 import Opportunities from './pages/Opportunities';
 import Community from './pages/Community';
+import Grammar from './pages/Grammar';
 
 /* Protected wrapper */
 const ProtectedLayout = ({ children }) => {
@@ -42,6 +43,7 @@ function AppRoutes() {
       <Route path="/lesson/:id" element={<ProtectedLayout><Lesson /></ProtectedLayout>} />
       <Route path="/exercises" element={<ProtectedLayout><Exercises /></ProtectedLayout>} />
       <Route path="/vocabulary" element={<ProtectedLayout><Vocabulary /></ProtectedLayout>} />
+      <Route path="/grammar" element={<ProtectedLayout><Grammar /></ProtectedLayout>} />
       <Route path="/opportunities" element={<ProtectedLayout><Opportunities /></ProtectedLayout>} />
       <Route path="/community"    element={<ProtectedLayout><Community /></ProtectedLayout>} />
       <Route path="/profile"       element={<ProtectedLayout><Profile /></ProtectedLayout>} />      {/* Fallback */}

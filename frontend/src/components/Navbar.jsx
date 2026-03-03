@@ -22,6 +22,7 @@ const Navbar = () => {
   const navLinks = [
     { path: '/', label: t?.nav?.home || 'Accueil' },
     { path: '/levels', label: t?.nav?.lessons || 'Leçons' },
+    { path: '/grammar', label: 'Grammaire' },
     { path: '/vocabulary', label: t?.nav?.vocabulary || 'Vocabulaire' },
     { path: '/exercises', label: t?.nav?.exercises || 'Exercices' },
     { path: '/opportunities', label: 'Opportunités', badge: '🇩🇪', badgeStyle: 'flag' },
@@ -41,7 +42,7 @@ const Navbar = () => {
 
   const isActive = (p) => location.pathname === p;
 
-  const LangFlag = { FR: '🇫🇷', DE: '🇩🇪' }; // Seulement FR et DE
+  const LangFlag = { EN: 'EN', DE: '🇩🇪' }; // EN and DE
 
   const purpleColor = '#8b5cf6';
 
@@ -61,11 +62,11 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
             <div
               className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black"
-              style={{ background: il ? '#0f172a' : '#fff', color: il ? '#fff' : '#0d0d0d' }}
+              style={{ background: '#7124e5', color: '#fff' }}
             >
               DE
             </div>
-            <span className="text-sm font-bold" style={{ color: il ? '#0f172a' : '#fff' }}>DeutschMG</span>
+            <span className="nav-logo text-sm font-bold" style={{ color: il ? '#7124e5' : '#fff' }}>DeutschLearn</span>
           </Link>
         </div>
 
@@ -113,7 +114,7 @@ const Navbar = () => {
               onMouseEnter={e => { e.currentTarget.style.background = il ? 'rgba(0,0,0,0.10)' : 'rgba(255,255,255,0.10)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'; }}
             >
-              {LangFlag[lang] || '🇫🇷'}
+              {LangFlag[lang] || '�🇧'}
               <svg width="8" height="8" viewBox="0 0 8 8" fill="none" style={{ opacity: 0.5, marginLeft: 1 }}>
                 <path d="M1 2.5l3 3 3-3" stroke={il ? '#0f172a' : 'white'} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -133,21 +134,21 @@ const Navbar = () => {
                     minWidth: 100,
                   }}
                 >
-                  {/* Seulement FR et DE */}
+                  {/* EN and DE only */}
                   <button
-                    onClick={() => { changeLang('FR'); setLangOpen(false); }}
+                    onClick={() => { changeLang('EN'); setLangOpen(false); }}
                     className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-xs font-semibold transition-colors"
                     style={{
-                      color: 'FR' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.50)'),
-                      background: 'FR' === lang ? purpleColor + '20' : 'transparent',
-                      borderLeft: 'FR' === lang ? `2px solid ${purpleColor}` : 'none',
+                      color: 'EN' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.50)'),
+                      background: 'EN' === lang ? purpleColor + '20' : 'transparent',
+                      borderLeft: 'EN' === lang ? `2px solid ${purpleColor}` : 'none',
                     }}
-                    onMouseEnter={e => { if ('FR' !== lang) e.currentTarget.style.background = il ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)'; }}
-                    onMouseLeave={e => { if ('FR' !== lang) e.currentTarget.style.background = 'transparent'; }}
+                    onMouseEnter={e => { if ('EN' !== lang) e.currentTarget.style.background = il ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)'; }}
+                    onMouseLeave={e => { if ('EN' !== lang) e.currentTarget.style.background = 'transparent'; }}
                   >
-                    <span>{LangFlag.FR}</span>
-                    <span>Français</span>
-                    {'FR' === lang && (
+                    <span>{LangFlag.EN}</span>
+                    <span>English</span>
+                    {'EN' === lang && (
                       <span className="ml-auto" style={{ color: purpleColor, fontSize: 10 }}>✓</span>
                     )}
                   </button>
@@ -241,19 +242,19 @@ const Navbar = () => {
             </Link>
           ))}
 
-          {/* Mobile language switcher (FR/DE seulement) */}
+          {/* Mobile language switcher (EN/DE only) */}
           <div className="h-px my-2" style={{ background: il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)' }} />
           <div className="flex items-center gap-1.5 px-3 py-1 mb-1">
             <button
-              onClick={() => changeLang('FR')}
+              onClick={() => changeLang('EN')}
               className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
               style={{
-                background: 'FR' === lang ? purpleColor + '20' : (il ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)'),
-                color: 'FR' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.40)'),
-                border: `1px solid ${'FR' === lang ? purpleColor + '40' : (il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)')}`
+                background: 'EN' === lang ? purpleColor + '20' : (il ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)'),
+                color: 'EN' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.40)'),
+                border: `1px solid ${'EN' === lang ? purpleColor + '40' : (il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)')}`
               }}
             >
-              {LangFlag.FR} FR
+              {LangFlag.EN} EN
             </button>
             <button
               onClick={() => changeLang('DE')}
