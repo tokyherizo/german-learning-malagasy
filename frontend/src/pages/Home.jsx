@@ -198,22 +198,22 @@ const Home = () => {
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
-            <span className="block md:hidden">DEUTSCH · MALAGASY</span>
-            <span className="hidden md:block">{t?.home?.badge || "Plateforme d'apprentissage de l'allemand pour les Malagasy"}</span>
+            <span className="block md:hidden">DEUTSCH · FREE FOR EVERYONE</span>
+            <span className="hidden md:block">{t?.home?.badge || 'Learn German — free for everyone'}</span>
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl md:text-[3.6rem] font-black leading-[1.1] mb-5" style={{ letterSpacing: '-0.03em', color: il ? '#0f172a' : '#fff' }}>
-            {t?.home?.h1a || 'Apprenez l\'Allemand'}<br />
-            {t?.home?.h1b || 'en Malagasy.'}
+            {t?.home?.h1a || 'Learn German'}<br />
+            {t?.home?.h1b || 'free for everyone.'}
           </h1>
 
           {/* Subtitle */}
           <p className="text-base md:text-lg mb-2" style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)', maxWidth: 480, lineHeight: 1.65 }}>
-            {t?.home?.subtitle || 'La plateforme gratuite pour Malgaches qui apprennent l\'allemand — leçons, vocabulaire et exercices.'}
+            {t?.home?.subtitle || 'The free platform to learn German — lessons, vocabulary and exercises for all.'}
           </p>
           <p className="text-sm italic mb-10" style={{ color: il ? 'rgba(15,23,42,0.30)' : 'rgba(255,255,255,0.2)' }}>
-            {t?.home?.subtitleDe || 'Die kostenlose Lernplattform für Madagassen.'}
+            {t?.home?.subtitleDe || 'Die kostenlose Deutschlernplattform für alle.'}
           </p>
 
           {/* CTAs */}
