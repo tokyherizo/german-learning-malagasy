@@ -71,7 +71,7 @@ const Navbar = () => {
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="28" height="28" rx="8" fill="url(#nbGrad)" />
               <text x="14" y="19.5" textAnchor="middle" fontFamily="system-ui,sans-serif"
-                fontWeight="900" fontSize="10.5" fill="white" letterSpacing="-0.5">DE</text>
+                fontWeight="900" fontSize="10.5" fill="white" letterSpacing="-0.5">DL</text>
               <defs>
                 <linearGradient id="nbGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
                   <stop stopColor="#4f46e5" />
