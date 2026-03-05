@@ -11,7 +11,7 @@ const FloatTile = ({ bg, label, style, delay = 0, size = '1rem' }) => (
     className="absolute rounded-2xl flex items-center justify-center font-black select-none animate-float tracking-tight"
     style={{
       background: bg,
-      boxShadow: '0 12px 40px rgba(69,64,60,0.96)',
+      boxShadow: '0 12px 40px rgba(0, 0, 0, 0)',
       animationDelay: `${delay}ms`,
       fontSize: size,
       padding: '14px 20px',
