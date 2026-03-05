@@ -152,14 +152,14 @@ router.post('/forgot-password', async (req, res) => {
 
     const transporter = createTransporter();
     await transporter.sendMail({
-      from: `"DeutschLearn 🗩️" <${process.env.EMAIL_USER}>`,
+      from: `"Germify" <${process.env.EMAIL_USER}>`,
       to: user.email,
-      subject: 'Password reset — DeutschLearn',
+      subject: 'Password reset — Germify',
       html: `
         <div style="font-family:sans-serif;max-width:500px;margin:auto;background:#0d0d0d;color:#fff;padding:36px;border-radius:16px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
             <div style="width:36px;height:36px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0d0d0d;font-size:13px;">DE</div>
-            <span style="font-size:20px;font-weight:900;">DeutschLearn</span>
+            <span style="font-size:20px;font-weight:900;">Germify</span>
           </div>
           <h2 style="margin:0 0 8px;font-size:22px;">Password Reset 🔐</h2>
           <p style="color:rgba(255,255,255,0.55);margin-bottom:20px;">Hello <strong style="color:#fff;">${user.name}</strong>,</p>

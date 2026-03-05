@@ -68,18 +68,18 @@ const Navbar = () => {
         <div className="flex items-center">
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
             {/* SVG Logo mark */}
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="28" height="28" rx="8" fill="url(#nbGrad)" />
-              <text x="14" y="19.5" textAnchor="middle" fontFamily="system-ui,sans-serif"
-                fontWeight="900" fontSize="10.5" fill="white" letterSpacing="-0.5">DE</text>
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="30" height="30" rx="9" fill="url(#nbGrad2)" />
+              <text x="15" y="20" textAnchor="middle" fontFamily="system-ui,sans-serif"
+                fontWeight="900" fontSize="13" fill="white" letterSpacing="-1">G</text>
               <defs>
-                <linearGradient id="nbGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#4f46e5" />
-                  <stop offset="1" stopColor="#7c3aed" />
+                <linearGradient id="nbGrad2" x1="0" y1="0" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#6d28d9" />
+                  <stop offset="1" stopColor="#a855f7" />
                 </linearGradient>
               </defs>
             </svg>
-            <span className="nav-logo text-sm font-bold" style={{ color: il ? '#7124e5' : '#fff' }}>DeutschLearn</span>
+            <span className="nav-logo text-sm font-bold" style={{ color: il ? '#7124e5' : '#fff' }}>Germify</span>
           </Link>
         </div>
 

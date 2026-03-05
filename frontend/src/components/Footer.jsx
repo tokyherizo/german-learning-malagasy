@@ -66,8 +66,12 @@ const Footer = () => {
           {/* Brand */}
           <div style={{ ...col, gap: 12 }}>
             <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 11, fontWeight: 900, padding: '4px 8px', borderRadius: 6, background: badgeDEbg, color: badgeDEclr, letterSpacing: '0.06em' }}>DE</span>
-              <span style={{ fontSize: 16, fontWeight: 900, color: brandName, letterSpacing: '-0.02em' }}>DeutschLearn</span>
+              <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: 7, flexShrink: 0 }}>
+                <rect width="30" height="30" rx="9" fill="url(#ftGrad)" />
+                <text x="15" y="20" textAnchor="middle" fontFamily="system-ui,sans-serif" fontWeight="900" fontSize="13" fill="white" letterSpacing="-1">G</text>
+                <defs><linearGradient id="ftGrad" x1="0" y1="0" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop stopColor="#6d28d9" /><stop offset="1" stopColor="#a855f7" /></linearGradient></defs>
+              </svg>
+              <span style={{ fontSize: 16, fontWeight: 900, color: brandName, letterSpacing: '-0.02em' }}>Germify</span>
             </Link>
             <p style={{ fontSize: 12, lineHeight: 1.7, color: descClr, margin: 0, maxWidth: 220 }}>
               Free German learning platform for everyone — from A1 to B2.
@@ -127,7 +131,7 @@ const Footer = () => {
           justifyContent: 'space-between', alignItems: 'center',
         }}>
           <span style={{ fontSize: 11, color: copyClr }}>
-            © {y} DeutschLearn — For everyone
+            © {y} Germify — For everyone
           </span>
           <a href={`mailto:${EMAIL}`} style={{
             fontSize: 11, color: mailBotClr, textDecoration: 'none', transition: 'color 0.15s',

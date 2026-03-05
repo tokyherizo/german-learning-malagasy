@@ -228,7 +228,7 @@ const LoginView = ({ onForgot, onRegister, t }) => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <ErrorBanner msg={error} />
         <InputField label={t?.login?.emailLabel || 'Email'} type="email" value={email} onChange={e => setEmail(e.target.value)}
-          placeholder={t?.login?.emailPH || 'demo@deutschlearn.com'} autoFocus />
+          placeholder={t?.login?.emailPH || 'demo@germify.com'} autoFocus />
         <div className="flex flex-col gap-1">
           <PasswordInput label={t?.login?.passLabel || 'Mot de passe'} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
           <button type="button" onClick={onForgot}
@@ -320,7 +320,7 @@ const RegisterView = ({ onLogin, t }) => {
           {t?.login?.regTitle || 'Créer un compte'} 
         </h2>
         <p className="text-sm" style={{ color: 'rgba(180,190,230,0.55)' }}>
-          {t?.login?.regSubtitle || 'Join DeutschLearn — free forever.'}
+          {t?.login?.regSubtitle || 'Join Germify — free forever.'}
         </p>
       </div>
       )}
@@ -501,7 +501,7 @@ const ResetPasswordView = ({ token, onBack }) => {
 const BrandPanel = ({ view, t }) => {
   const headlines = {
     login:    ['Learn', 'German', 'for everyone.'],
-    register: ['Join', 'DeutschLearn', 'for free.'],
+    register: ['Join', 'Germify', 'for free.'],
     forgot:   ['Recover', 'your', 'access.'],
   };
   const [a, b, c] = headlines[view] || headlines.login;
@@ -553,11 +553,11 @@ const BrandPanel = ({ view, t }) => {
 
         {/* Branding */}
         <div className="flex items-center gap-2.5 mt-10">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black"
-            style={{ background: '#fff', color: '#0d0d0d' }}>
-            DE
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[13px] font-black"
+            style={{ background: 'linear-gradient(135deg,#6d28d9,#a855f7)', color: '#fff' }}>
+            G
           </div>
-          <span className="text-sm font-bold text-white">DeutschLearn</span>
+          <span className="text-sm font-bold text-white">Germify</span>
         </div>
       </div>
     </div>
@@ -679,8 +679,8 @@ const Login = () => {
 
             {/* Mobile logo */}
             <div className="flex md:hidden items-center gap-2.5 mb-7">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black" style={{ background: '#fff', color: '#0d0d0d' }}>DE</div>
-              <span className="text-sm font-bold text-white">DeutschLearn</span>
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[13px] font-black" style={{ background: 'linear-gradient(135deg,#6d28d9,#a855f7)', color: '#fff' }}>G</div>
+              <span className="text-sm font-bold text-white">Germify</span>
             </div>
 
             {/* View content with slide transition */}
