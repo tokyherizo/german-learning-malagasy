@@ -13,6 +13,12 @@ import Vocabulary from './pages/Vocabulary';
 import Profile from './pages/Profile';
 import Opportunities from './pages/Opportunities';
 import Community from './pages/Community';
+import Horen from './pages/Horen';
+import Lesen from './pages/Lesen';
+import Schreiben from './pages/Schreiben';
+import Sprechen from './pages/Sprechen';
+import MiniGames from './pages/MiniGames';
+import Grammar from './pages/Grammar';
 
 /* Protected wrapper */
 const ProtectedLayout = ({ children }) => {
@@ -44,7 +50,13 @@ function AppRoutes() {
       <Route path="/vocabulary" element={<ProtectedLayout><Vocabulary /></ProtectedLayout>} />
       <Route path="/opportunities" element={<ProtectedLayout><Opportunities /></ProtectedLayout>} />
       <Route path="/community"    element={<ProtectedLayout><Community /></ProtectedLayout>} />
-      <Route path="/profile"       element={<ProtectedLayout><Profile /></ProtectedLayout>} />      {/* Fallback */}
+      <Route path="/profile"       element={<ProtectedLayout><Profile /></ProtectedLayout>} />
+      <Route path="/horen"         element={<ProtectedLayout><Horen /></ProtectedLayout>} />
+      <Route path="/lesen"         element={<ProtectedLayout><Lesen /></ProtectedLayout>} />
+      <Route path="/schreiben"     element={<ProtectedLayout><Schreiben /></ProtectedLayout>} />
+      <Route path="/sprechen"      element={<ProtectedLayout><Sprechen /></ProtectedLayout>} />
+      <Route path="/minigames"     element={<ProtectedLayout><MiniGames /></ProtectedLayout>} />
+      <Route path="/grammar"       element={<ProtectedLayout><Grammar /></ProtectedLayout>} />      {/* Fallback */}
       <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/login'} replace />} />
     </Routes>
   );
