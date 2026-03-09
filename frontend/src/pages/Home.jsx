@@ -49,7 +49,7 @@ const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, ope
   const { theme } = useTheme();
   const il = theme === 'light';
   const cardBg = il ? '#ffffff' : '#111';
-  const cardBorder = il ? 'rgba(0,0,0,0.09)' : 'rgba(255,255,255,0.07)';
+  const cardBorder = il ? 'rgba(242, 14, 14, 0.09)' : 'rgba(255,255,255,0.07)';
   const cardBorderHover = il ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.20)';
   return (
     <Link
@@ -164,11 +164,11 @@ const Home = () => {
       {/* HERO */}
       <section
         className="relative overflow-hidden flex flex-col items-center justify-center text-center"
-        style={{ minHeight: '88vh', background: il ? '#f0f2f5' : '#0d0d0d' }}
+        style={{ minHeight: '88vh', background: il ? '#f0f2f5' : '#000000' }}
       >
         {/* LEFT floating tiles */}
         <div className="hidden lg:block">
-          <FloatTile bg="#9e10ab" label="der/die/das" size="1.4rem" style={{ left: '7%',  top: '18%' }} delay={0}   />
+          <FloatTile bg="#9e10ab" label="Nominativ" size="1.4rem" style={{ left: '7%',  top: '18%' }} delay={0}   />
           <FloatTile bg="#da0909" label="A1"          size="2.2rem" style={{ left: '12%', top: '46%' }} delay={400} />
           <FloatTile bg="#0ab2af" label="Dativ"       size="1.5rem" style={{ left: '16%', top: '80%' }} delay={200} />
           <FloatTile bg="#23c77d" label="B1/B2"       size="1rem"   style={{ left: '7%',  top: '65%' }} delay={800} />
@@ -178,7 +178,7 @@ const Home = () => {
         <div className="hidden lg:block">
           <FloatTile bg="#0d0dcb" label="Akkusativ"   size="1.6rem" style={{ right: '7%',  top: '18%' }} delay={300} />
           <FloatTile bg="#e9079a" label="A2"          size="2.2rem" style={{ right: '12%', top: '46%' }} delay={600} />
-          <FloatTile bg="#aa6805" label="C1/C2"       size="1.1rem" style={{ right: '6%',  top: '65%' }} delay={100} />
+          <FloatTile bg="#aa6805" label="der/die/das"       size="1.1rem" style={{ right: '6%',  top: '65%' }} delay={100} />
           <FloatTile bg="#fb7900" label="Genitiv"     size="1.5rem" style={{ right: '17%', top: '80%' }} delay={500} />
         </div>
 

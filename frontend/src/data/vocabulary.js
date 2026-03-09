@@ -1,3 +1,4 @@
+import { k4Vocabulary } from './k4lessons.js';
 // German Vocabulary - English
 export const vocabulary = {
   A1: {
@@ -124,6 +125,8 @@ export const vocabulary = {
         { german: "die Stunde", english: "the hour", example: "Eine Stunde = 60 Minuten.", exampleEn: "One hour = 60 minutes." },
       ]
     }
+    ,
+    ...k4Vocabulary
   },
   A2: {
     professions: {

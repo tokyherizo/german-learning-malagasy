@@ -1,3 +1,4 @@
+import { k4Exercises } from './k4lessons.js';
 // Exercises / Übungen
 export const exercises = {
   A1: [
@@ -148,6 +149,8 @@ export const exercises = {
       explanation: "blau = blue. Der Himmel ist blau = The sky is blue.",
       xp: 10
     }
+    ,
+    ...k4Exercises
   ],
   A2: [
     {

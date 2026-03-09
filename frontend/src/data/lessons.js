@@ -1,3 +1,4 @@
+import { k4Lessons } from './k4lessons.js';
 // Lessons / Lektionen
 export const lessons = {
   A1: [
@@ -590,6 +591,8 @@ export const lessons = {
         }
       ]
     }
+    ,
+    ...k4Lessons
   ],
   A2: [
     {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getLessonsByLevel } from '../data/lessons';
 import { exercises as EX_DATA } from '../data/exercises';
 import { vocabulary as VOCAB_DATA } from '../data/vocabulary';
+import { A1_MODULES } from '../data/a1modules';
 import { progressService } from '../services/progress';
 import ProgressBar from '../components/ProgressBar';
 
@@ -12,8 +13,8 @@ import ProgressBar from '../components/ProgressBar';
 const ALL_LEVELS = [
   {
     id: 'A1', label: 'A1', name: 'Débutant', nameDe: 'Anfänger',
-    desc: 'Salutations, chiffres, famille, nourriture, couleurs, heure',
-    descDe: 'Begrüßungen, Zahlen, Familie, Essen, Farben, Uhrzeit',
+    desc: 'Begegnungen A1 — 8 Kapitel : salutations, travail, Munich, nourriture, quotidien, voyages, logement, événements',
+    descDe: 'Begegnungen A1 — 8 Kapitel: Begrüßungen, Arbeit, München, Essen, Alltag, Reisen, Wohnen, Ereignisse',
     accent: '#818cf8', accentBg: 'rgba(129,140,248,0.10)', accentBorder: 'rgba(129,140,248,0.25)',
     unlocked: true, color: 'indigo',
   },
@@ -80,6 +81,17 @@ const SCHREIBEN_DATA = {
     { en: 'The book is on the table.', de: 'Das Buch liegt auf dem Tisch.', hint: 'liegt auf dem...' },
     { en: 'Good morning! How are you?', de: 'Guten Morgen! Wie geht es Ihnen?', hint: 'Guten Morgen / Wie geht...' },
     { en: 'I have a brother and a sister.', de: 'Ich habe einen Bruder und eine Schwester.', hint: 'Ich habe einen... und eine...' },
+    // Kapitel 4 — Essen und Trinken
+    { en: 'I would like a coffee, please.', de: 'Ich möchte einen Kaffee, bitte.', hint: 'Ich möchte einen/eine/ein... bitte.' },
+    { en: 'The bread roll is with butter and jam.', de: 'Das Brötchen ist mit Butter und Marmelade.', hint: 'Das Brötchen ist mit...' },
+    { en: 'I eat chicken with potato salad.', de: 'Ich esse Hähnchen mit Kartoffelsalat.', hint: 'Ich esse... mit...' },
+    { en: 'Can I have the menu, please?', de: 'Kann ich die Speisekarte haben, bitte?', hint: 'Kann ich... haben?' },
+    { en: 'I take the Schnitzel with fries.', de: 'Ich nehme das Schnitzel mit Pommes.', hint: 'Ich nehme das/die/den... mit...' },
+    { en: 'The bill, please!', de: 'Die Rechnung, bitte!', hint: 'Die Rechnung...' },
+    { en: 'The soup is delicious!', de: 'Die Suppe ist lecker!', hint: '... ist lecker!' },
+    { en: 'Do you know him? He is the waiter.', de: 'Kennst du ihn? Er ist der Kellner.', hint: 'Kennst du ihn/sie/es?' },
+    { en: 'I don\'t eat meat.', de: 'Ich esse kein Fleisch.', hint: 'Ich esse kein/keine...' },
+    { en: 'Keep the change!', de: 'Stimmt so!', hint: 'Stimmt...' },
   ],
   A2: [
     { en: 'I have been learning German for two years.', de: 'Ich lerne seit zwei Jahren Deutsch.', hint: 'seit... Jahren' },
@@ -144,10 +156,246 @@ const LessonCard = ({ lesson, isCompleted, level }) => {
 };
 
 /* ─────────────────────────────────────────────
-   PANE: LEÇONS
+   TEIL CONFIG
+───────────────────────────────────────────── */
+const TEIL_CFG = {
+  A: { color: '#60a5fa', bg: 'rgba(96,165,250,0.10)',  border: 'rgba(96,165,250,0.22)',  glow: 'rgba(96,165,250,0.06)',  icon: '💬', label: 'Communication'        },
+  B: { color: '#34d399', bg: 'rgba(52,211,153,0.10)',  border: 'rgba(52,211,153,0.22)',  glow: 'rgba(52,211,153,0.06)',  icon: '🌍', label: 'Culture & Civilisation' },
+  C: { color: '#a78bfa', bg: 'rgba(167,139,250,0.10)', border: 'rgba(167,139,250,0.22)', glow: 'rgba(167,139,250,0.06)', icon: '∑',  label: 'Grammaire'              },
+  D: { color: '#f472b6', bg: 'rgba(244,114,182,0.10)', border: 'rgba(244,114,182,0.22)', glow: 'rgba(244,114,182,0.06)', icon: '✦',  label: 'Révision & Test'        },
+};
+
+/* ─────────────────────────────────────────────
+   TOPIC ROW — lesson card or placeholder
+───────────────────────────────────────────── */
+const TopicRow = ({ topic, lesson, isCompleted, tCfg, index }) => {
+  if (lesson) {
+    return (
+      <Link
+        to={`/lesson/${lesson.id}`}
+        className="group flex items-center gap-3 px-3.5 py-3 rounded-xl border transition-all duration-200"
+        style={{
+          background: isCompleted ? 'rgba(74,222,128,0.05)' : tCfg.glow,
+          borderColor: isCompleted ? 'rgba(74,222,128,0.20)' : tCfg.border,
+        }}
+      >
+        <div
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black shrink-0 transition-transform group-hover:scale-105"
+          style={{ background: isCompleted ? 'rgba(74,222,128,0.12)' : tCfg.bg, color: isCompleted ? '#4ade80' : tCfg.color, border: `1px solid ${isCompleted ? 'rgba(74,222,128,0.30)' : tCfg.border}` }}
+        >
+          {isCompleted ? '✓' : index + 1}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="font-semibold text-white/90 text-sm leading-tight group-hover:text-white transition-colors truncate">{lesson.title}</div>
+          {lesson.subtitle && <div className="text-[11px] text-white/35 mt-0.5 truncate">{lesson.subtitle}</div>}
+        </div>
+        <div className="shrink-0 flex items-center gap-2">
+          {lesson.xp && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ color: tCfg.color, background: tCfg.bg }}>+{lesson.xp} XP</span>}
+          {lesson.duration && <span className="text-[10px] text-white/25 hidden sm:block">{lesson.duration}</span>}
+          <span className="text-white/20 group-hover:text-white/60 text-xs transition-colors">→</span>
+        </div>
+      </Link>
+    );
+  }
+
+  return (
+    <div
+      className="flex items-center gap-3 px-3.5 py-3 rounded-xl border"
+      style={{ background: tCfg.glow, borderColor: 'rgba(255,255,255,0.05)' }}
+    >
+      <div
+        className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black shrink-0 opacity-40"
+        style={{ background: tCfg.bg, color: tCfg.color, border: `1px solid ${tCfg.border}` }}
+      >
+        {index + 1}
+      </div>
+      <span className="text-sm text-white/40 flex-1 truncate">{topic}</span>
+      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.07)' }}>
+        Bientôt
+      </span>
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────
+   PANE: LEÇONS — full Begegnungen A1 layout
 ───────────────────────────────────────────── */
 const LessonsPane = ({ levelId, level, progress }) => {
-  const list = getLessonsByLevel(levelId).filter(l => !l.type);
+  const allLessons = getLessonsByLevel(levelId);
+
+  /* ── A1: full expanded Begegnungen A1 structure ── */
+  if (levelId === 'A1' && A1_MODULES.length > 0) {
+    const lessonsById = {};
+    allLessons.forEach(l => { lessonsById[l.id] = l; });
+
+    return (
+      <div>
+        {/* ── Curriculum banner ── */}
+        <div className="flex items-center justify-between mb-6 px-4 py-3 rounded-2xl"
+          style={{ background: 'rgba(129,140,248,0.07)', border: '1px solid rgba(129,140,248,0.18)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-base"
+              style={{ background: 'rgba(129,140,248,0.15)', color: '#818cf8', border: '1px solid rgba(129,140,248,0.30)' }}>
+              A1
+            </div>
+            <div>
+              <div className="font-black text-white text-sm">Begegnungen A1</div>
+              <div className="text-[11px] text-white/35">8 Kapitel · Schubert Verlag · Teil A/B/C/D</div>
+            </div>
+          </div>
+          <div className="flex gap-1.5">
+            {Object.entries(TEIL_CFG).map(([k, v]) => (
+              <div key={k} className="flex flex-col items-center gap-0.5">
+                <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black"
+                  style={{ background: v.bg, color: v.color, border: `1px solid ${v.border}` }}>
+                  {k}
+                </div>
+                <span className="text-[8px] text-white/20 hidden sm:block font-medium">{v.label.split(' ')[0]}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Kapitel cards ── */}
+        <div className="space-y-10">
+          {A1_MODULES.map((mod, mi) => {
+            const completedCount = mod.lessons.filter(id => progress.completedLessons.includes(id)).length;
+            const totalCount     = mod.lessons.length;
+            const pct            = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+            return (
+              <div key={mod.id} className="relative">
+                {/* ── Vertical connector line between Kapitel ── */}
+                {mi < A1_MODULES.length - 1 && (
+                  <div className="absolute left-[22px] top-full w-px h-10 z-0"
+                    style={{ background: `linear-gradient(to bottom, ${mod.color}30, transparent)` }} />
+                )}
+
+                {/* ── Kapitel header ── */}
+                <div className="flex items-start gap-4 mb-4">
+                  {/* Number bubble */}
+                  <div className="shrink-0 w-11 h-11 rounded-2xl flex flex-col items-center justify-center font-black leading-none shadow-lg"
+                    style={{ background: `linear-gradient(135deg, ${mod.color}22, ${mod.color}0a)`, border: `1.5px solid ${mod.color}40`, color: mod.color }}>
+                    <span className="text-[8px] font-extrabold tracking-widest opacity-60">K</span>
+                    <span className="text-lg">{mod.number}</span>
+                  </div>
+
+                  <div className="flex-1 min-w-0 pt-0.5">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="text-xl">{mod.icon}</span>
+                      <h3 className="font-black text-white text-base leading-tight">{mod.title}</h3>
+                    </div>
+                    <p className="text-[11px] text-white/40 italic mb-2">{mod.titleFr} — {mod.subtitle}</p>
+
+                    {/* Progress bar */}
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                        <div className="h-1 rounded-full transition-all duration-500"
+                          style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${mod.color}cc, ${mod.color})` }} />
+                      </div>
+                      <span className="text-[10px] font-bold shrink-0" style={{ color: pct > 0 ? mod.color : 'rgba(255,255,255,0.20)' }}>
+                        {completedCount}/{totalCount}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Objectifs row ── */}
+                <div className="ml-[60px] mb-4 grid sm:grid-cols-2 gap-1.5">
+                  {mod.objectives.map((obj, oi) => (
+                    <div key={oi} className="flex items-start gap-1.5 text-[11px] text-white/45">
+                      <span className="shrink-0 mt-0.5 text-[9px]" style={{ color: `${mod.color}80` }}>◆</span>
+                      {obj}
+                    </div>
+                  ))}
+                </div>
+
+                {/* ── Teile ── */}
+                <div className="ml-[60px] space-y-3">
+                  {mod.teile.map(teil => {
+                    const tc = TEIL_CFG[teil.teil] || TEIL_CFG.A;
+                    return (
+                      <div key={teil.teil}
+                        className="rounded-2xl overflow-hidden"
+                        style={{ border: `1px solid ${tc.border}`, background: tc.glow }}>
+
+                        {/* Teil header */}
+                        <div className="flex items-center gap-2.5 px-4 py-2.5"
+                          style={{ background: tc.bg, borderBottom: `1px solid ${tc.border}` }}>
+                          <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-black"
+                            style={{ background: 'rgba(0,0,0,0.18)', color: tc.color }}>
+                            {teil.teil}
+                          </div>
+                          <span className="text-[10px] font-extrabold tracking-widest" style={{ color: tc.color }}>
+                            TEIL {teil.teil}
+                          </span>
+                          <span className="text-white/40 text-xs">—</span>
+                          <span className="text-[11px] font-bold text-white/70">{tc.label}</span>
+                          <span className="ml-auto text-base">{tc.icon}</span>
+                        </div>
+
+                        {/* Topics */}
+                        <div className="p-3 space-y-2">
+                          {teil.topics.map((topic, ti) => {
+                            const lid    = teil.lessonIds?.[ti];
+                            const lesson = lid ? lessonsById[lid] : null;
+                            const done   = lid ? progress.completedLessons.includes(lid) : false;
+                            return (
+                              <TopicRow
+                                key={ti}
+                                topic={topic}
+                                lesson={lesson}
+                                isCompleted={done}
+                                tCfg={tc}
+                                index={ti}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* ── Mini-test row ── */}
+                  <div className="flex items-center gap-3 px-4 py-3 rounded-2xl"
+                    style={{ background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.15)' }}>
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm"
+                      style={{ background: 'rgba(251,146,60,0.12)', border: '1px solid rgba(251,146,60,0.25)' }}>
+                      🏆
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-[10px] font-extrabold tracking-widest text-orange-400">MINI-TEST</div>
+                      <div className="text-[11px] text-white/35">Rückblick — test de fin · Kapitel {mod.number}</div>
+                    </div>
+                    {mod.grammarTopics?.length > 0 && (
+                      <div className="hidden sm:flex flex-wrap gap-1 justify-end max-w-[200px]">
+                        {mod.grammarTopics.map((gt, gi) => (
+                          <span key={gi} className="text-[9px] px-1.5 py-0.5 rounded-full"
+                            style={{ background: 'rgba(167,139,250,0.10)', color: '#a78bfa80', border: '1px solid rgba(167,139,250,0.15)' }}>
+                            {gt}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0"
+                      style={{ background: 'rgba(251,146,60,0.10)', color: 'rgba(251,146,60,0.50)', border: '1px solid rgba(251,146,60,0.18)' }}>
+                      Bientôt
+                    </span>
+                  </div>
+
+                  {/* ── Chapter separator ── */}
+                  <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${mod.color}20, transparent)` }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  /* ── Default flat list for other levels ── */
+  const list = allLessons.filter(l => !l.type);
   return (
     <div className="space-y-3">
       {list.length === 0 && <p className="text-white/35 text-sm py-8 text-center">Aucune leçon disponible.</p>}
@@ -567,6 +815,14 @@ const LevelDetail = ({ level, onBack }) => {
   const completed  = allLessons.filter(l => progress.completedLessons.includes(l.id));
   const pct = allLessons.length ? Math.round((completed.length / allLessons.length) * 100) : 0;
 
+  // For A1: count completed Kapitel (a chapter is "done" when all its lesson IDs are completed)
+  const a1KapitelInfo = level.id === 'A1' ? (() => {
+    const done = A1_MODULES.filter(mod =>
+      mod.lessons.length > 0 && mod.lessons.every(id => progress.completedLessons.includes(id))
+    ).length;
+    return { total: A1_MODULES.length, done };
+  })() : null;
+
   const CONTENT = {
     lessons:   <LessonsPane   levelId={level.id} level={level} progress={progress} />,
     grammar:   <GrammarPane   levelId={level.id} level={level} progress={progress} />,
@@ -595,13 +851,30 @@ const LevelDetail = ({ level, onBack }) => {
           {level.id}
         </div>
         <div className="flex-1 min-w-0">
-          <span className="font-black text-white text-sm">{level.name}</span>
-          <span className="text-white/30 text-xs ml-2">/ {level.nameDe}</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-black text-white text-sm">{level.name}</span>
+            <span className="text-white/30 text-xs">/ {level.nameDe}</span>
+            {a1KapitelInfo && (
+              <span className="text-[9px] font-extrabold tracking-widest px-2 py-0.5 rounded"
+                style={{ background: 'rgba(129,140,248,0.12)', color: '#818cf8', border: '1px solid rgba(129,140,248,0.22)' }}>
+                BEGEGNUNGEN A1 · {a1KapitelInfo.total} KAPITEL
+              </span>
+            )}
+          </div>
           <p className="text-[11px] text-white/35 truncate">{level.desc}</p>
         </div>
         <div className="text-right shrink-0 hidden sm:block">
-          <div className="text-2xl font-black" style={{ color: level.accent }}>{pct}%</div>
-          <div className="text-[10px] text-white/30">{completed.length}/{allLessons.length} leçons</div>
+          {a1KapitelInfo ? (
+            <>
+              <div className="text-2xl font-black" style={{ color: level.accent }}>{a1KapitelInfo.done}/{a1KapitelInfo.total}</div>
+              <div className="text-[10px] text-white/30">Kapitel terminés</div>
+            </>
+          ) : (
+            <>
+              <div className="text-2xl font-black" style={{ color: level.accent }}>{pct}%</div>
+              <div className="text-[10px] text-white/30">{completed.length}/{allLessons.length} leçons</div>
+            </>
+          )}
         </div>
       </div>
 
