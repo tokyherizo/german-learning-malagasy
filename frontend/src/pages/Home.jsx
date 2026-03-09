@@ -117,10 +117,10 @@ const CARD_META = [
   { bigWord: '500+',  bigWordColor: 'rgba(139,92,246,0.15)',  accent: '#7124e5', cat: 'Vocabulaire', to: '/vocabulary' },
   { bigWord: 'Quiz',  bigWordColor: 'rgba(234,179,8,0.12)',   accent: '#7124e5', cat: 'Exercices',   to: '/exercises'  },
   { bigWord: 'A2',    bigWordColor: 'rgba(168,85,247,0.18)',  accent: '#7124e5', cat: 'A2',          to: '/levels'     },
-  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#7124e5', cat: 'Grammaire',    to: '/levels'     },
+  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#7124e5', cat: 'Grammaire',    to: '/grammar'    },
   { bigWord: 'Wort',  bigWordColor: 'rgba(52,211,153,0.12)',  accent: '#7124e5', cat: 'Listes',      to: '/vocabulary' },
   { bigWord: 'XP',    bigWordColor: 'rgba(251,146,60,0.12)',  accent: '#7124e5', cat: 'Tout',        to: '/levels'     },
-  { bigWord: 'Hallo', bigWordColor: 'rgba(244,63,94,0.12)',   accent: '#7124e5', cat: 'conversations',          to: '/levels'     },
+  { bigWord: 'Hallo', bigWordColor: 'rgba(244,63,94,0.12)',   accent: '#7124e5', cat: 'conversations',          to: '/sprechen'   },
 ];
 
 /* Internal category keys (FR-indexed) used for filtering */
@@ -254,6 +254,204 @@ const Home = () => {
               </span>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* ── NOTRE MISSION ── */}
+      <section
+        style={{
+          background: il ? '#ffffff' : '#0a0a0f',
+          borderTop: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
+        <div className="max-w-5xl mx-auto px-6 py-20">
+
+          {/* Section label */}
+          <div className="flex justify-center mb-4">
+            <span
+              className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
+              style={{
+                background: il ? 'rgba(113,36,229,0.08)' : 'rgba(113,36,229,0.15)',
+                color: '#7124e5',
+                border: '1px solid rgba(113,36,229,0.25)',
+              }}
+            >
+              Notre Mission
+            </span>
+          </div>
+
+          {/* Main title */}
+          <h2
+            className="text-3xl sm:text-4xl font-black text-center leading-tight mb-5"
+            style={{ color: il ? '#0f172a' : '#ffffff', letterSpacing: '-0.02em' }}
+          >
+            Apprendre l'allemand,{' '}
+            <span style={{ color: '#7124e5' }}>simplement et efficacement.</span>
+          </h2>
+
+          {/* Intro paragraph */}
+          <p
+            className="text-base text-center leading-relaxed max-w-2xl mx-auto mb-14"
+            style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)' }}
+          >
+            DeutschLearn est né d'une conviction simple : apprendre une langue ne doit pas être compliqué.
+            Dans un monde de plus en plus connecté à l'Europe, maîtriser l'allemand ouvre des portes —
+            professionnelles, académiques et culturelles. Notre plateforme accompagne chaque apprenant,
+            du premier mot jusqu'au niveau A2, avec des contenus clairs, structurés et motivants.
+          </p>
+
+          {/* Three objective cards */}
+          <div className="grid sm:grid-cols-3 gap-6 mb-14">
+            {[
+              {
+                icon: '🎯',
+                color: '#7124e5',
+                title: 'Objectifs clairs',
+                body: 'Chaque leçon suit une progression pédagogique inspirée des méthodes modernes — du vocabulaire de base aux structures grammaticales du niveau A1–A2.',
+              },
+              {
+                icon: '🗣️',
+                color: '#0ab2af',
+                title: 'Pratique réelle',
+                body: 'Dialogues, exercices d\'écoute, expression écrite et orale : vous pratiquez l\'allemand tel qu\'il est vraiment parlé au quotidien en Allemagne.',
+              },
+              {
+                icon: '🇩🇪',
+                color: '#fb923c',
+                title: 'Immersion culturelle',
+                body: 'Comprendre une langue, c\'est aussi comprendre sa culture. Traditions, cuisine, villes, histoire — la section Kultur enrichit votre apprentissage.',
+              },
+            ].map(({ icon, color, title, body }) => (
+              <div
+                key={title}
+                className="rounded-2xl p-6"
+                style={{
+                  background: il ? '#f8fafc' : 'rgba(255,255,255,0.03)',
+                  border: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)',
+                }}
+              >
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-4"
+                  style={{ background: `${color}15`, border: `1px solid ${color}30` }}
+                >
+                  {icon}
+                </div>
+                <h3
+                  className="font-black text-sm mb-2"
+                  style={{ color: il ? '#0f172a' : '#fff' }}
+                >
+                  {title}
+                </h3>
+                <p
+                  className="text-[13px] leading-relaxed"
+                  style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)' }}
+                >
+                  {body}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Values row */}
+          <div
+            className="rounded-2xl px-8 py-7 mb-14"
+            style={{
+              background: il ? 'rgba(113,36,229,0.04)' : 'rgba(113,36,229,0.07)',
+              border: il ? '1px solid rgba(113,36,229,0.15)' : '1px solid rgba(113,36,229,0.20)',
+            }}
+          >
+            <div
+              className="text-[10px] font-black uppercase tracking-widest mb-5"
+              style={{ color: '#7124e5' }}
+            >
+              Nos valeurs
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { icon: '📈', label: 'Progression guidée',  desc: 'Du A1 au A2, étape par étape, sans sauter les bases.' },
+                { icon: '💬', label: 'Pratique constante',  desc: 'Exercices variés à chaque leçon pour ancrer les acquis.' },
+                { icon: '🌍', label: 'Immersion culturelle', desc: 'La langue et la culture, indissociablement liées.' },
+                { icon: '✨', label: 'Clarté & structure',   desc: 'Contenu simple, bien organisé, accessible à tous.' },
+              ].map(({ icon, label, desc }) => (
+                <div key={label} className="flex items-start gap-3">
+                  <span className="text-lg shrink-0 mt-0.5">{icon}</span>
+                  <div>
+                    <div
+                      className="text-[12px] font-black mb-0.5"
+                      style={{ color: il ? '#0f172a' : '#fff' }}
+                    >
+                      {label}
+                    </div>
+                    <div
+                      className="text-[11px] leading-relaxed"
+                      style={{ color: il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.40)' }}
+                    >
+                      {desc}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Vision block */}
+          <div className="flex flex-col sm:flex-row items-center gap-8">
+            <div className="flex-1">
+              <div
+                className="text-[10px] font-black uppercase tracking-widest mb-3"
+                style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.25)' }}
+              >
+                Notre Vision
+              </div>
+              <p
+                className="text-lg font-black leading-snug mb-3"
+                style={{ color: il ? '#0f172a' : '#fff' }}
+              >
+                "Rendre l'allemand accessible à tous les apprenants du monde."
+              </p>
+              <p
+                className="text-[13px] leading-relaxed"
+                style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)' }}
+              >
+                Demain, DeutschLearn sera une communauté mondiale d'étudiants
+                passionnés par la langue et la culture allemande — un espace interactif,
+                vivant et bienveillant, pour apprendre ensemble et progresser plus vite.
+              </p>
+            </div>
+            {/* Stats */}
+            <div className="shrink-0 grid grid-cols-2 gap-4">
+              {[
+                { val: 'A1–A2', label: 'Niveaux couverts' },
+                { val: '8',     label: 'Kapitels structurés' },
+                { val: '4',     label: 'Compétences (LSRE)' },
+                { val: '∞',     label: 'Motivation garantie' },
+              ].map(({ val, label }) => (
+                <div
+                  key={label}
+                  className="rounded-2xl px-5 py-4 text-center"
+                  style={{
+                    background: il ? '#f8fafc' : 'rgba(255,255,255,0.03)',
+                    border: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)',
+                    minWidth: 110,
+                  }}
+                >
+                  <div
+                    className="text-2xl font-black mb-1"
+                    style={{ color: '#7124e5' }}
+                  >
+                    {val}
+                  </div>
+                  <div
+                    className="text-[10px] font-medium leading-tight"
+                    style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}
+                  >
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
