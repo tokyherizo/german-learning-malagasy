@@ -19,6 +19,7 @@ import Schreiben from './pages/Schreiben';
 import Sprechen from './pages/Sprechen';
 import MiniGames from './pages/MiniGames';
 import Grammar from './pages/Grammar';
+import Kultur from './pages/Kultur';
 
 /* Protected wrapper */
 const ProtectedLayout = ({ children }) => {
@@ -56,7 +57,9 @@ function AppRoutes() {
       <Route path="/schreiben"     element={<ProtectedLayout><Schreiben /></ProtectedLayout>} />
       <Route path="/sprechen"      element={<ProtectedLayout><Sprechen /></ProtectedLayout>} />
       <Route path="/minigames"     element={<ProtectedLayout><MiniGames /></ProtectedLayout>} />
-      <Route path="/grammar"       element={<ProtectedLayout><Grammar /></ProtectedLayout>} />      {/* Fallback */}
+      <Route path="/grammar"       element={<ProtectedLayout><Grammar /></ProtectedLayout>} />
+      <Route path="/kultur"         element={<ProtectedLayout><Kultur /></ProtectedLayout>} />
+      {/* Fallback */}
       <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/login'} replace />} />
     </Routes>
   );

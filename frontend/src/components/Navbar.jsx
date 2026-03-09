@@ -10,6 +10,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [skillsOpen, setSkillsOpen] = useState(false);
+  const [kulturOpen, setKulturOpen] = useState(false);
   const location = useLocation();
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Navbar = () => {
   const navLinks = [
     { path: '/',             label: t?.nav?.home          || 'Home'          },
     { path: '/levels',       label: t?.nav?.levels        || 'Niveaux'       },
-    { path: '/vocabulary',   label: t?.nav?.vocabulary    || 'Vocabulaire'   },
+   // { path: '/vocabulary',   label: t?.nav?.vocabulary    || 'Vocabulaire'   },
     { path: '/opportunities',label: t?.nav?.opportunities || 'Opportunités', badge: '🇩🇪', badgeStyle: 'flag' },
     { path: '/community',    label: t?.nav?.community     || 'Communauté',   badge: 'NEW', badgeStyle: 'pill' },
   ];
@@ -34,6 +35,16 @@ const Navbar = () => {
     { path: '/schreiben',icon: '✍️', label: 'Schreiben',desc: 'Expression écrite'   },
     { path: '/sprechen', icon: '🎤', label: 'Sprechen', desc: 'Expression orale'    },
     { path: '/minigames',icon: '🎮', label: 'Mini Games',desc: 'Jeux d\'apprentissage' },
+  ];
+
+  const kulturLinks = [
+    { id: 'alltag',      icon: '🏙️', label: 'Alltag',       labelFr: 'Vie quotidienne'    },
+    { id: 'traditionen', icon: '🎄', label: 'Traditionen',  labelFr: 'Traditions'          },
+    { id: 'essen',       icon: '🥨', label: 'Essen',        labelFr: 'Cuisine & Boissons'  },
+    { id: 'feste',       icon: '🎉', label: 'Feste',        labelFr: 'Fêtes & Événements'  },
+    { id: 'staedte',     icon: '🗺️', label: 'Städte',       labelFr: 'Villes allemandes'   },
+    { id: 'Geschichte',  icon: '📜', label: 'Geschichte',   labelFr: 'Histoire'            },
+    { id: 'beruf',       icon: '💼', label: 'Berufsleben',  labelFr: 'Culture du travail'  },
   ];
 
   useEffect(() => {
@@ -137,6 +148,44 @@ const Navbar = () => {
                     <div>
                       <div className="text-xs font-bold" style={{ color: isActive(s.path) ? purpleColor : (il ? '#0f172a' : '#fff') }}>{s.label}</div>
                       <div className="text-[10px]" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.40)' }}>{s.desc}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ── Kultur dropdown ── */}
+          <div className="relative" onMouseEnter={() => setKulturOpen(true)} onMouseLeave={() => setKulturOpen(false)}>
+            <button
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 whitespace-nowrap lg:px-3.5 lg:text-sm lg:gap-1.5"
+              style={{
+                color: location.pathname === '/kultur' ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)'),
+                fontWeight: location.pathname === '/kultur' ? 600 : 400,
+                background: location.pathname === '/kultur' ? purpleColor + '20' : kulturOpen ? (il ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.06)') : 'transparent',
+                border: location.pathname === '/kultur' ? `1px solid ${purpleColor}40` : 'none',
+              }}>
+              🇩🇪 Kultur ▾
+            </button>
+            {kulturOpen && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 rounded-2xl overflow-hidden shadow-xl z-50 w-60"
+                style={{ background: il ? '#fff' : '#1a1a2e', border: il ? '1px solid rgba(0,0,0,0.10)' : '1px solid rgba(255,255,255,0.10)' }}>
+                <div className="px-4 py-2.5"
+                  style={{ background: il ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)', borderBottom: il ? '1px solid rgba(0,0,0,0.06)' : '1px solid rgba(255,255,255,0.06)' }}>
+                  <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: il ? 'rgba(15,23,42,0.40)' : 'rgba(255,255,255,0.30)' }}>
+                    Culture allemande
+                  </div>
+                </div>
+                {kulturLinks.map(k => (
+                  <Link key={k.id} to={`/kultur#${k.id}`}
+                    className="flex items-center gap-3 px-4 py-2.5 transition-colors"
+                    style={{ background: 'transparent', borderLeft: '2px solid transparent' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = il ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderLeftColor = purpleColor; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderLeftColor = 'transparent'; }}>
+                    <span className="text-base">{k.icon}</span>
+                    <div>
+                      <div className="text-xs font-bold" style={{ color: il ? '#0f172a' : '#fff' }}>{k.label}</div>
+                      <div className="text-[10px]" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.40)' }}>{k.labelFr}</div>
                     </div>
                   </Link>
                 ))}
@@ -300,6 +349,20 @@ const Navbar = () => {
                 color: isActive(path) ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)'),
                 background: isActive(path) ? purpleColor + '20' : 'transparent',
                 borderLeft: isActive(path) ? `2px solid ${purpleColor}` : 'none',
+              }}>
+              <span>{icon}</span>{label}
+            </Link>
+          ))}
+
+          {/* Mobile Kultur links */}
+          <div className="h-px my-1" style={{ background: il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)' }} />
+          <div className="px-3 py-1 text-[10px] font-black uppercase tracking-widest" style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.30)' }}>🇩🇪 Kultur</div>
+          {kulturLinks.map(({ id, icon, label }) => (
+            <Link key={id} to={`/kultur#${id}`}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+              style={{
+                color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)',
+                background: 'transparent',
               }}>
               <span>{icon}</span>{label}
             </Link>
