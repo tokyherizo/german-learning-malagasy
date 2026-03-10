@@ -28,26 +28,26 @@ const ALL_LEVELS = [
   {
     id: 'B1', label: 'B1', name: 'Intermédiaire', nameDe: 'Mittelstufe',
     desc: 'Opinions, récits, actualités, conversations complexes',
-    accent: '#64748b', accentBg: 'rgba(100,116,139,0.06)', accentBorder: 'rgba(100,116,139,0.15)',
-    unlocked: false,
+    accent: '#34d399', accentBg: 'rgba(52,211,153,0.08)', accentBorder: 'rgba(52,211,153,0.22)',
+    unlocked: false, color: 'emerald',
   },
   {
     id: 'B2', label: 'B2', name: 'Avancé', nameDe: 'Oberstufe',
     desc: 'Débats, textes littéraires, nuances culturelles',
-    accent: '#64748b', accentBg: 'rgba(100,116,139,0.06)', accentBorder: 'rgba(100,116,139,0.15)',
-    unlocked: false,
+    accent: '#f59e0b', accentBg: 'rgba(245,158,11,0.08)', accentBorder: 'rgba(245,158,11,0.22)',
+    unlocked: false, color: 'amber',
   },
   {
     id: 'C1', label: 'C1', name: 'Supérieur', nameDe: 'Fortgeschritten',
     desc: 'Langue académique, textes spécialisés, maîtrise grammaticale',
-    accent: '#64748b', accentBg: 'rgba(100,116,139,0.06)', accentBorder: 'rgba(100,116,139,0.15)',
-    unlocked: false,
+    accent: '#f97316', accentBg: 'rgba(249,115,22,0.08)', accentBorder: 'rgba(249,115,22,0.22)',
+    unlocked: false, color: 'orange',
   },
   {
     id: 'C2', label: 'C2', name: 'Maîtrise', nameDe: 'Meisterschaft',
     desc: 'Niveau natif — littérature, humour, expressions idiomatiques',
-    accent: '#64748b', accentBg: 'rgba(100,116,139,0.06)', accentBorder: 'rgba(100,116,139,0.15)',
-    unlocked: false,
+    accent: '#f43f5e', accentBg: 'rgba(244,63,94,0.08)', accentBorder: 'rgba(244,63,94,0.22)',
+    unlocked: false, color: 'rose',
   },
 ];
 
@@ -239,7 +239,7 @@ const LessonsPane = ({ levelId, level, progress }) => {
               A1
             </div>
             <div>
-              <div className="font-black text-white text-sm">Begegnungen A1</div>
+              <div className="font-black text-white text-sm">A1</div>
               <div className="text-[11px] text-white/35">8 Kapitel · Schubert Verlag · Teil A/B/C/D</div>
             </div>
           </div>
@@ -974,29 +974,33 @@ const Levels = () => {
               <button
                 key={lvl.id}
                 onClick={() => lvl.unlocked && setSelectedLevel(lvl.id)}
-                className={`relative flex flex-col p-5 rounded-3xl border text-left transition-all duration-200 ${lvl.unlocked ? 'card-hover cursor-pointer' : 'cursor-not-allowed opacity-40'}`}
+                className={`relative flex flex-col p-5 rounded-3xl border text-left transition-all duration-200 ${lvl.unlocked ? 'card-hover cursor-pointer' : 'cursor-not-allowed'}`}
                 style={{
-                  background: lvl.unlocked ? lvl.accentBg : 'rgba(255,255,255,0.02)',
-                  borderColor: lvl.unlocked ? lvl.accentBorder : 'rgba(255,255,255,0.06)',
+                  background: lvl.accentBg,
+                  borderColor: lvl.accentBorder,
+                  opacity: lvl.unlocked ? 1 : 0.55,
                 }}
               >
                 {/* Lock / progress badge */}
                 <div className="absolute top-3 right-3">
                   {!lvl.unlocked ? (
-                    <span className="text-[9px] font-extrabold tracking-widest px-2 py-0.5 rounded-full bg-white/5 text-white/20 border border-white/8">SOON</span>
+                    <span className="text-[9px] font-extrabold tracking-widest px-2 py-0.5 rounded-full border"
+                      style={{ background: lvl.accentBg, color: lvl.accent, borderColor: lvl.accentBorder }}>
+                      🔒 SOON
+                    </span>
                   ) : pct > 0 ? (
                     <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full" style={{ background: lvl.accentBg, color: lvl.accent, border: `1px solid ${lvl.accentBorder}` }}>{pct}%</span>
                   ) : null}
                 </div>
 
                 {/* Level label */}
-                <div className="text-4xl font-black mb-3 leading-none" style={{ color: lvl.unlocked ? lvl.accent : 'rgba(255,255,255,0.18)' }}>
+                <div className="text-4xl font-black mb-3 leading-none" style={{ color: lvl.accent }}>
                   {lvl.id}
                 </div>
 
-                <div className="font-bold text-sm mb-0.5" style={{ color: lvl.unlocked ? '#fff' : 'rgba(255,255,255,0.28)' }}>{lvl.name}</div>
-                <div className="text-[11px] mb-3" style={{ color: lvl.unlocked ? lvl.accent : 'rgba(255,255,255,0.18)' }}>{lvl.nameDe}</div>
-                <p className="text-[11px] leading-relaxed flex-1" style={{ color: lvl.unlocked ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.18)' }}>{lvl.desc}</p>
+                <div className="font-bold text-sm mb-0.5" style={{ color: lvl.unlocked ? '#fff' : 'rgba(255,255,255,0.80)' }}>{lvl.name}</div>
+                <div className="text-[11px] mb-3" style={{ color: lvl.accent }}>{lvl.nameDe}</div>
+                <p className="text-[11px] leading-relaxed flex-1" style={{ color: lvl.unlocked ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.45)' }}>{lvl.desc}</p>
 
                 {lvl.unlocked && (
                   <div className="mt-4">
