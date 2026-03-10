@@ -60,7 +60,7 @@ const Navbar = () => {
 
   const isActive = (p) => location.pathname === p;
 
-  const LangFlag = { EN: 'EN', DE: '🇩🇪' }; // EN and DE
+  const LangFlag = { EN: 'EN', DE: '🇩🇪', FR: 'FR' }; // EN, DE, FR
 
   const purpleColor = '#8b5cf6';
 
@@ -265,8 +265,23 @@ const Navbar = () => {
                     {'DE' === lang && (
                       <span className="ml-auto" style={{ color: purpleColor, fontSize: 10 }}>✓</span>
                     )}
-                  </button>
-                </div>
+                  </button>                  <button
+                    onClick={() => { changeLang('FR'); setLangOpen(false); }}
+                    className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-xs font-semibold transition-colors"
+                    style={{
+                      color: 'FR' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.50)'),
+                      background: 'FR' === lang ? purpleColor + '20' : 'transparent',
+                      borderLeft: 'FR' === lang ? `2px solid ${purpleColor}` : 'none',
+                    }}
+                    onMouseEnter={e => { if ('FR' !== lang) e.currentTarget.style.background = il ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)'; }}
+                    onMouseLeave={e => { if ('FR' !== lang) e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <span>{LangFlag.FR}</span>
+                    <span>Français</span>
+                    {'FR' === lang && (
+                      <span className="ml-auto" style={{ color: purpleColor, fontSize: 10 }}>✓</span>
+                    )}
+                  </button>                </div>
               </>
             )}
           </div>
@@ -392,6 +407,17 @@ const Navbar = () => {
               }}
             >
               {LangFlag.DE} DE
+            </button>
+            <button
+              onClick={() => changeLang('FR')}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
+              style={{
+                background: 'FR' === lang ? purpleColor + '20' : (il ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)'),
+                color: 'FR' === lang ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.40)'),
+                border: `1px solid ${'FR' === lang ? purpleColor + '40' : (il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)')}`
+              }}
+            >
+              {LangFlag.FR} FR
             </button>
           </div>
 

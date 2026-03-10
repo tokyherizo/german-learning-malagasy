@@ -92,53 +92,13 @@ const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, ope
 };
 
 /* ================================================================ */
-/* Navigation cards — correspond aux items du navbar               */
-const NAV_CARDS = [
-  {
-    bigWord: 'Niv',
-    bigWordColor: 'rgba(99,102,241,0.16)',
-    accent: '#7124e5',
-    to: '/levels',
-    title: 'Niveaux',
-    desc: '6 Kapitel A1 + 5 Kapitel A2 — progression complète du débutant.',
-    tag: 'Niveaux',
-  },
-  {
-    bigWord: 'Talk',
-    bigWordColor: 'rgba(10,178,175,0.16)',
-    accent: '#0ab2af',
-    to: '/community',
-    title: 'Communauté',
-    desc: 'Échangez, posez des questions et progressez avec d\'autres apprenants.',
-    tag: 'Communauté',
-  },
-  {
-    bigWord: 'Jobs',
-    bigWordColor: 'rgba(251,146,60,0.16)',
-    accent: '#fb923c',
-    to: '/opportunities',
-    title: 'Opportunités',
-    desc: 'Offres d\'emploi, stages et séjours linguistiques en Allemagne.',
-    tag: 'Opportunités · 🇩🇪',
-  },
-  {
-    bigWord: 'Skill',
-    bigWordColor: 'rgba(99,102,241,0.14)',
-    accent: '#6366f1',
-    to: '/horen',
-    title: 'Compétences',
-    desc: 'Hören, Lesen, Schreiben, Sprechen — les 4 aptitudes langagières.',
-    tag: 'Compétences',
-  },
-  {
-    bigWord: 'Kunst',
-    bigWordColor: 'rgba(168,85,247,0.16)',
-    accent: '#a855f7',
-    to: '/kultur',
-    title: 'Kultur',
-    desc: 'Traditions, cuisine, villes et histoire — la culture allemande.',
-    tag: 'Kultur',
-  },
+/* Navigation cards — layout data only (text comes from i18n)      */
+const NAV_STATIC = [
+  { bigWord: 'Niv',  bigWordColor: 'rgba(99,102,241,0.16)', accent: '#7124e5', to: '/levels'        },
+  { bigWord: 'Talk', bigWordColor: 'rgba(10,178,175,0.16)', accent: '#0ab2af', to: '/community'     },
+  { bigWord: 'Jobs', bigWordColor: 'rgba(251,146,60,0.16)', accent: '#fb923c', to: '/opportunities' },
+  { bigWord: 'Skill',bigWordColor: 'rgba(99,102,241,0.14)', accent: '#d80b90', to: '/horen'         },
+  { bigWord: 'Kunst',bigWordColor: 'rgba(168,85,247,0.16)', accent: '#ece225', to: '/kultur'        },
 ];
 
 const Home = () => {
@@ -147,6 +107,7 @@ const Home = () => {
   const { t } = useLanguage();
   const { theme } = useTheme();
   const il = theme === 'light';
+  const navCards = NAV_STATIC.map((s, i) => ({ ...s, ...(t?.home?.navCards?.[i] || {}) }));
 
   useEffect(() => { setTimeout(() => setAnimIn(true), 80); }, []);
 
@@ -190,7 +151,7 @@ const Home = () => {
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
-            <span className="block md:hidden">DEUTSCH · FREE FOR EVERYONE</span>
+            <span className="block md:hidden">{t?.home?.badge || 'DEUTSCH · FREE FOR EVERYONE'}</span>
             <span className="hidden md:block">{t?.home?.badge || 'Learn German — free for everyone'}</span>
           </div>
 
@@ -242,7 +203,9 @@ const Home = () => {
             >
               <span>⚡</span>
               <span>
-                <strong style={{ color: il ? '#0f172a' : '#fff' }}>{progress.stats.totalXP} XP</strong> gagnés au niveau {progress.level || 1}
+                {t?.home?.xpLabel
+                  ? t.home.xpLabel(progress.stats.totalXP, progress.level || 1)
+                  : (progress.stats.totalXP + ' XP gagnés au niveau ' + (progress.level || 1))}
               </span>
             </div>
           )}
@@ -275,7 +238,7 @@ const Home = () => {
                 }}
               >
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a855f7', display: 'inline-block' }} />
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#8b5cf6' }}>Notre Mission</span>
+                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#8b5cf6' }}>{t?.home?.missionBadge || 'Notre Mission'}</span>
               </div>
 
               {/* Titre editorial */}
@@ -283,7 +246,7 @@ const Home = () => {
                 className="font-black leading-[1.05] tracking-tight mb-8"
                 style={{ color: il ? '#0f172a' : '#ffffff', fontSize: 'clamp(1.8rem, 4.5vw, 3rem)' }}
               >
-                La langue allemande,{' '}
+                {t?.home?.missionH2a || 'La langue allemande,'}{' '}
                 <span
                   style={{
                     background: 'linear-gradient(135deg, #7124e5 0%, #a855f7 55%, #812bea 100%)',
@@ -292,7 +255,7 @@ const Home = () => {
                     backgroundClip: 'text',
                   }}
                 >
-                  à votre portée.
+                  {t?.home?.missionH2b || 'à votre portée.'}
                 </span>
               </h2>
 
@@ -301,20 +264,19 @@ const Home = () => {
                 className="text-base leading-relaxed mb-12"
                 style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)', maxWidth: 440 }}
               >
-                Maîtriser l'allemand ouvre des portes professionnelles, académiques et culturelles.
-                DeutschLearn vous accompagne du premier mot jusqu'au niveau A2 — structuré, clair, gratuit.
+                {t?.home?.missionPara || "Maîtriser l'allemand ouvre des portes professionnelles, académiques et culturelles. DeutschLearn vous accompagne du premier mot jusqu'au niveau A2 — structuré, clair, gratuit."}
               </p>
 
               {/* Valeurs — style liste editorial (pas de cards) */}
               <div className="flex flex-col">
-                {[
+                {(t?.home?.values || [
                   { num: '01', label: 'Progression guidée',   desc: 'Du A1 au A2, étape par étape, sans sauter les bases.' },
                   { num: '02', label: 'Pratique constante',    desc: 'Exercices variés à chaque leçon pour ancrer les acquis.' },
                   { num: '03', label: 'Immersion culturelle',  desc: 'Langue et culture, indissociablement liées.' },
                   { num: '04', label: 'Clarté & structure',    desc: 'Contenu simple, bien organisé, accessible à tous.' },
-                ].map(({ num, label, desc }, i, arr) => (
+                ]).map(({ num, label, desc }, i, arr) => (
                   <div
-                    key={label}
+                    key={num}
                     className="flex items-start gap-5 py-4"
                     style={{
                       borderBottom: i < arr.length - 1
@@ -344,10 +306,10 @@ const Home = () => {
                 <span className="text-2xl shrink-0">🌍</span>
                 <div>
                   <p className="text-sm font-black leading-snug mb-1" style={{ color: il ? '#0f172a' : '#fff' }}>
-                    "Rendre l'allemand accessible à tous."
+                    {t?.home?.visionQuote || '"Rendre l\'allemand accessible à tous."'}
                   </p>
                   <p className="text-[12px] leading-relaxed" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}>
-                    Une communauté mondiale et bienveillante pour apprendre ensemble.
+                    {t?.home?.visionSub || 'Une communauté mondiale et bienveillante pour apprendre ensemble.'}
                   </p>
                 </div>
               </div>
@@ -382,11 +344,11 @@ const Home = () => {
                     </div>
                     <div>
                       <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: '#8b5cf6' }}>DeutschLearn</div>
-                      <div className="text-[11px] font-bold" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}>Apprendre · Progresser</div>
+                      <div className="text-[11px] font-bold" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}>{t?.home?.featureSubtitle || 'Apprendre · Progresser'}</div>
                     </div>
                   </div>
                   <div className="text-[10px] font-black px-2.5 py-1 rounded-full" style={{ background: 'rgba(10,178,175,0.10)', color: '#0ab2af', border: '1px solid rgba(10,178,175,0.22)' }}>
-                    Gratuit
+                    {t?.home?.featureFree || 'Gratuit'}
                   </div>
                 </div>
 
@@ -395,14 +357,14 @@ const Home = () => {
                   className="font-black leading-[1.1] mb-4"
                   style={{ color: il ? '#0f172a' : '#fff', fontSize: 'clamp(1.2rem, 2.2vw, 1.55rem)', position: 'relative' }}
                 >
-                  Apprendre l'allemand.{' '}
+                  {t?.home?.featureH3a || "Apprendre l'allemand."}{' '}
                   <span style={{ background: 'linear-gradient(135deg, #9249ff 0%, #8f4af8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                    Progresser ensemble.
+                    {t?.home?.featureH3b || 'Progresser ensemble.'}
                   </span>
                 </h3>
 
                 <p className="text-[13px] leading-relaxed mb-7" style={{ color: il ? 'rgba(15,23,42,0.52)' : 'rgba(255,255,255,0.42)', position: 'relative' }}>
-                  Une plateforme construite pour tous — du A1 débutant au A2 confirmé. Chaque leçon, chaque exercice, chaque mot vous rapproche de la fluidité.
+                  {t?.home?.featurePara || 'Une plateforme construite pour tous — du A1 débutant au A2 confirmé. Chaque leçon, chaque exercice, chaque mot vous rapproche de la fluidité.'}
                 </p>
 
                 {/* Inline stats row */}
@@ -410,14 +372,10 @@ const Home = () => {
                   className="flex items-center gap-6 mb-7 pt-5"
                   style={{ borderTop: il ? '1px solid rgba(113,36,229,0.09)' : '1px solid rgba(255,255,255,0.07)', position: 'relative' }}
                 >
-                  {[
-                    { val: 'A1–A2', lbl: 'Niveaux' },
-                    { val: '8',     lbl: 'Kapitel'  },
-                    { val: '100%',  lbl: 'Gratuit'  },
-                  ].map(({ val, lbl }) => (
-                    <div key={lbl}>
+                  {(['A1–A2', '8', '100%']).map((val, i) => (
+                    <div key={val}>
                       <div className="font-black text-[15px] leading-none mb-0.5" style={{ color: il ? '#0f172a' : '#fff' }}>{val}</div>
-                      <div className="text-[10px]" style={{ color: il ? 'rgba(15,23,42,0.42)' : 'rgba(255,255,255,0.35)' }}>{lbl}</div>
+                      <div className="text-[10px]" style={{ color: il ? 'rgba(15,23,42,0.42)' : 'rgba(255,255,255,0.35)' }}>{(t?.home?.featureStats || ['Niveaux', 'Kapitel', 'Gratuit'])[i]}</div>
                     </div>
                   ))}
                 </div>
@@ -428,7 +386,7 @@ const Home = () => {
                   className="inline-flex items-center gap-2 text-[12px] font-black px-4 py-2 rounded-xl"
                   style={{ background: 'rgba(113,36,229,0.10)', color: '#7124e5', border: '1px solid rgba(113,36,229,0.20)', position: 'relative' }}
                 >
-                  Commencer le parcours <span>→</span>
+                  {t?.home?.featureCta || 'Commencer le parcours'} <span>→</span>
                 </Link>
               </div>
 
@@ -438,18 +396,18 @@ const Home = () => {
                   {
                     icon: '🗣️',
                     accent: '#0ab2af',
-                    label: 'Pratique réelle',
-                    body: "Dialogues et exercices oraux — l'allemand du quotidien.",
+                    label: t?.home?.practiceLabel || 'Pratique réelle',
+                    body: t?.home?.practiceBody || "Dialogues et exercices oraux — l'allemand du quotidien.",
                   },
                   {
                     icon: '🇩🇪',
                     accent: '#fb923c',
-                    label: 'Kultur',
-                    body: 'Traditions, cuisine et villes : la culture au cœur de l\'apprentissage.',
+                    label: t?.home?.kulturLabel || 'Kultur',
+                    body: t?.home?.kulturBody || "Traditions, cuisine et villes : la culture au cœur de l'apprentissage.",
                   },
                 ].map(({ icon, accent, label, body }) => (
                   <div
-                    key={label}
+                    key={icon}
                     className="rounded-2xl p-5 flex flex-col"
                     style={{
                       background: il ? '#fafafa' : 'rgba(255,255,255,0.03)',
@@ -459,7 +417,7 @@ const Home = () => {
                     <span className="text-2xl mb-4">{icon}</span>
                     <div className="text-[12px] font-black mb-1.5" style={{ color: il ? '#0f172a' : '#fff' }}>{label}</div>
                     <p className="text-[11px] leading-relaxed flex-1" style={{ color: il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.40)' }}>{body}</p>
-                    <div className="mt-4 text-[11px] font-bold" style={{ color: accent }}>Découvrir →</div>
+                    <div className="mt-4 text-[11px] font-bold" style={{ color: accent }}>{t?.home?.discoverBtn || 'Découvrir →'}</div>
                   </div>
                 ))}
               </div>
@@ -476,16 +434,16 @@ const Home = () => {
             className="font-black leading-tight tracking-tight mb-1"
             style={{ color: il ? '#0f172a' : '#fff', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}
           >
-            Explorer la plateforme
+            {t?.home?.exploreTitle || 'Explorer la plateforme'}
           </h2>
           <p className="text-[13px] mb-8" style={{ color: il ? 'rgba(15,23,42,0.48)' : 'rgba(255,255,255,0.38)' }}>
-            Tout ce dont vous avez besoin pour apprendre l'allemand — en un seul endroit.
+            {t?.home?.exploreSub || "Tout ce dont vous avez besoin pour apprendre l'allemand — en un seul endroit."}
           </p>
         </div>
         <div className="max-w-6xl mx-auto px-6 pb-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {NAV_CARDS.map((card) => (
-              <ResourceCard key={card.title} {...card} openBtn="Ouvrir →" />
+            {navCards.map((card) => (
+              <ResourceCard key={card.to} {...card} openBtn={t?.home?.openBtn || 'Ouvrir →'} />
             ))}
           </div>
         </div>
