@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
 /* ─── Dialog data ─────────────────────────────────────────────── */
@@ -82,23 +82,81 @@ const DIALOGS = [
   },
 ];
 
+/* ─── Voice & intonation helpers ───────────────────────────────── */
+// Pick the best available German voice (Google > Microsoft Katja > any de-DE)
+const getBestDeVoice = () => {
+  const voices = window.speechSynthesis?.getVoices() || [];
+  const de = voices.filter(v => v.lang === 'de-DE' || v.lang.startsWith('de'));
+  return (
+    de.find(v => /google/i.test(v.name) && v.lang === 'de-DE') ||
+    de.find(v => /google/i.test(v.name)) ||
+    de.find(v => /katja/i.test(v.name)) ||
+    de.find(v => /hedda|helene|magdalena|stefan/i.test(v.name)) ||
+    de.find(v => /microsoft/i.test(v.name)) ||
+    de.find(v => v.lang === 'de-DE') ||
+    de[0] || null
+  );
+};
+
+// German sentence intonation:
+//  Ja/Nein-Fragen ("Haben Sie…?") → rising pitch
+//  W-Fragen ("Was kostet…?")     → falling pitch (like a statement)
+//  Exclamations                  → slightly energetic
+//  Statements                    → neutral
+const getIntonation = (text) => {
+  const t = text.trim();
+  const isQ   = t.endsWith('?');
+  const isExcl = t.endsWith('!');
+  const isWQ  = isQ && /^(wer|was|wie|wo |woher|wohin|wann|warum|weshalb|welch|wessen|wieso|inwiefern|womit|wof)/i.test(t);
+  const isYNQ = isQ && !isWQ;
+  return {
+    rate:  0.93,
+    pitch: isYNQ ? 1.18 : isWQ ? 0.92 : isExcl ? 1.07 : 1.0,
+  };
+};
+
+const makeUtterance = (text, { onStart, onEnd, onError } = {}) => {
+  if (!window.speechSynthesis) return null;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE';
+  const { rate, pitch } = getIntonation(text);
+  u.rate = rate; u.pitch = pitch;
+  const voice = getBestDeVoice();
+  if (voice) u.voice = voice;
+  if (onStart) u.onstart = onStart;
+  if (onEnd)   u.onend   = onEnd;
+  if (onError) u.onerror = onError;
+  return u;
+};
+
 /* ─── Small speaker button ─────────────────────────────────────── */
 const SpeakBtn = ({ text, compact = false }) => {
   const [speaking, setSpeaking] = useState(false);
-  const speak = useCallback(() => {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'de-DE'; u.rate = 0.85; u.pitch = 1;
-    const voices = window.speechSynthesis.getVoices();
-    const de = voices.find(v => v.lang === 'de-DE') || voices.find(v => v.lang.startsWith('de'));
-    if (de) u.voice = de;
-    u.onstart = () => setSpeaking(true);
-    u.onend = () => setSpeaking(false);
-    window.speechSynthesis.speak(u);
-  }, [text]);
   const { theme } = useTheme();
   const il = theme === 'light';
+
+  const speak = useCallback(() => {
+    if (!window.speechSynthesis) return;
+    if (speaking) { window.speechSynthesis.cancel(); setSpeaking(false); return; }
+    window.speechSynthesis.cancel();
+    const trySpeak = () => {
+      const u = makeUtterance(text, {
+        onStart: () => setSpeaking(true),
+        onEnd:   () => setSpeaking(false),
+        onError: () => setSpeaking(false),
+      });
+      if (u) window.speechSynthesis.speak(u);
+    };
+    if (window.speechSynthesis.getVoices().length > 0) {
+      trySpeak();
+    } else {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.onvoiceschanged = null;
+        trySpeak();
+      };
+    }
+  }, [text, speaking]);
+
   return (
     <button onClick={speak}
       className={`flex items-center justify-center rounded-full transition-all ${compact ? 'w-7 h-7 text-sm' : 'w-9 h-9 text-base'}`}
@@ -108,8 +166,69 @@ const SpeakBtn = ({ text, compact = false }) => {
         border: '1px solid #7124e522',
         flexShrink: 0,
       }}
-      title="Écouter">
+      title={speaking ? 'Stop' : 'Écouter'}>
       {speaking ? '⏹' : '▶'}
+    </button>
+  );
+};
+
+/* ─── Play full dialog sequentially ────────────────────────────── */
+const PlayAllBtn = ({ lines, onLineChange }) => {
+  const [playing, setPlaying] = useState(false);
+  const stopRef = useRef(false);
+  const { theme } = useTheme();
+  const il = theme === 'light';
+
+  const playFromRef = useRef(null);
+  useEffect(() => {
+    playFromRef.current = (idx) => {
+      if (stopRef.current || idx >= lines.length) {
+        setPlaying(false);
+        onLineChange?.(-1);
+        return;
+      }
+      onLineChange?.(idx);
+      const u = makeUtterance(lines[idx].text, {
+        onEnd:   () => { if (!stopRef.current) setTimeout(() => playFromRef.current(idx + 1), 380); },
+        onError: () => { if (!stopRef.current) setTimeout(() => playFromRef.current(idx + 1), 200); },
+      });
+      if (u) window.speechSynthesis.speak(u);
+    };
+  });
+  const playFrom = useCallback((idx) => playFromRef.current?.(idx), []);
+
+  const toggle = useCallback(() => {
+    if (playing) {
+      stopRef.current = true;
+      window.speechSynthesis.cancel();
+      setPlaying(false);
+      onLineChange?.(-1);
+    } else {
+      stopRef.current = false;
+      setPlaying(true);
+      window.speechSynthesis.cancel();
+      const start = () => playFrom(0);
+      if (window.speechSynthesis.getVoices().length > 0) {
+        start();
+      } else {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.onvoiceschanged = null;
+          start();
+        };
+      }
+    }
+  }, [playing, playFrom, onLineChange]);
+
+  return (
+    <button onClick={toggle}
+      className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+      style={{
+        background: playing ? '#7124e5' : (il ? 'rgba(113,36,229,0.10)' : 'rgba(113,36,229,0.18)'),
+        color: playing ? '#fff' : '#7124e5',
+        border: '1px solid #7124e533',
+        flexShrink: 0,
+      }}>
+      {playing ? '⏹ Stop' : '▶ Écouter le dialogue'}
     </button>
   );
 };
@@ -139,6 +258,7 @@ export default function Horen() {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [scores, setScores] = useState({});
+  const [activeLine, setActiveLine] = useState(-1);
   const contentRef = useRef(null);
 
   const scrollToContent = () => {
@@ -249,13 +369,14 @@ export default function Horen() {
                   <h2 className="text-xl font-black" style={{ color: text }}>{dialog.title}</h2>
                 </div>
                 {/* Play full dialog */}
-                <SpeakBtn text={dialog.lines.map(l => l.text).join('. ')} />
+                <PlayAllBtn lines={dialog.lines} onLineChange={setActiveLine} />
               </div>
 
               {/* Script */}
               <div className="flex flex-col gap-3">
                 {dialog.lines.map((line, i) => (
-                  <div key={i} className={`flex gap-3 items-start ${line.speaker === 'A' ? '' : 'flex-row-reverse'}`}>
+                  <div key={i} className={`flex gap-3 items-start ${line.speaker === 'A' ? '' : 'flex-row-reverse'}`}
+                    style={{ transition: 'opacity 0.2s', opacity: activeLine === -1 || activeLine === i ? 1 : 0.35 }}>
                     <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black shrink-0"
                       style={{ background: line.speaker === 'A' ? '#4f46e5' : '#7124e5', color: '#fff' }}>
                       {line.name.charAt(0)}
