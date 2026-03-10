@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const NAV_LINKS = [
-  { label: 'Home',          to: '/' },
-  { label: 'Niveaux',       to: '/levels' },
-  { label: 'Opportunités',  to: '/opportunities', badge: '🇩🇪' },
-  { label: 'Communauté',    to: '/community',     badge: 'NEW' },
-  { label: 'Profil',        to: '/profile' },
+  { labelKey: 'home',          to: '/' },
+  { labelKey: 'levels',        to: '/levels' },
+  { labelKey: 'opportunities', to: '/opportunities', badge: '🇩🇪' },
+  { labelKey: 'community',     to: '/community',     badge: 'NEW' },
+  { labelKey: 'profile',       to: '/profile' },
 ];
 
 const SKILL_LINKS = [
@@ -19,10 +20,10 @@ const SKILL_LINKS = [
 ];
 
 const LEVELS = [
-  { lvl: 'A1', label: 'Beginner' },
-  { lvl: 'A2', label: 'Elementary' },
-  { lvl: 'B1/B2', label: 'Intermediate' },
-  { lvl: 'C1/C2', label: 'Advanced' },
+  { lvl: 'A1' },
+  { lvl: 'A2' },
+  { lvl: 'B1/B2' },
+  { lvl: 'C1/C2' },
 ];
 
 const col = { display: 'flex', flexDirection: 'column', gap: 4 };
@@ -31,6 +32,7 @@ const Footer = () => {
   const y = new Date().getFullYear();
   const EMAIL = 'tokyherizo004@gmail.com';
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const il = theme === 'light';
 
   /* ── couleurs selon le thème ───────────────────────────────── */
@@ -86,20 +88,20 @@ const Footer = () => {
               <span style={{ fontSize: 16, fontWeight: 700, color: il ? '#7124e5' : '#fff', letterSpacing: '-0.02em' }}>DeutschLearn</span>
             </Link>
             <p style={{ fontSize: 12, lineHeight: 1.7, color: descClr, margin: 0, maxWidth: 220 }}>
-              Free German learning platform for everyone — from A1 to C2.
+              {t?.footer?.desc || 'Free German learning platform for everyone — from A1 to C2.'}
             </p>
-            <span style={{ fontSize: 12, color: flagClr }}>Deutschland 🇩🇪</span>
+            <span style={{ fontSize: 12, color: flagClr }}>{t?.footer?.tagline || 'Deutschland 🇩🇪'}</span>
           </div>
 
           {/* Navigation */}
           <div style={col}>
-            <span style={colTitle}>Navigation</span>
+            <span style={colTitle}>{t?.footer?.nav || 'Navigation'}</span>
             {NAV_LINKS.map(l => (
               <Link key={l.to} to={l.to}
                 style={{ ...lnk, display: 'inline-flex', alignItems: 'center', gap: 6 }}
                 onMouseEnter={e => { e.currentTarget.style.color = lnkHover; }}
                 onMouseLeave={e => { e.currentTarget.style.color = lnkClr; }}>
-                {l.label}
+                {t?.nav?.[l.labelKey] || l.labelKey}
                 {l.badge && (
                   <span style={{
                     fontSize: 9, fontWeight: 800,
@@ -115,7 +117,7 @@ const Footer = () => {
 
           {/* Skills */}
           <div style={col}>
-            <span style={colTitle}>Compétences</span>
+            <span style={colTitle}>{t?.footer?.skills || 'Compétences'}</span>
             {SKILL_LINKS.map(s => (
               <Link key={s.to} to={s.to}
                 style={{ ...lnk, display: 'inline-flex', alignItems: 'center', gap: 6 }}
@@ -129,8 +131,8 @@ const Footer = () => {
 
           {/* Niveaux */}
           <div style={col}>
-            <span style={colTitle}>Levels</span>
-            {LEVELS.map(({ lvl, label }) => (
+            <span style={colTitle}>{t?.footer?.levels || 'Levels'}</span>
+            {LEVELS.map(({ lvl }, i) => (
               <Link key={lvl} to={`/lessons/${lvl}`} style={{ ...lnk, display: 'inline-flex', alignItems: 'center', gap: 8 }}
                 onMouseEnter={e => { e.currentTarget.style.color = lnkHover; }}
                 onMouseLeave={e => { e.currentTarget.style.color = lnkClr; }}>
@@ -139,14 +141,14 @@ const Footer = () => {
                   background: badgeBg, border: `1px solid ${badgeBorder}`,
                   color: badgeClr, letterSpacing: '0.05em',
                 }}>{lvl}</span>
-                <span style={{ fontSize: 12 }}>{label}</span>
+                <span style={{ fontSize: 12 }}>{t?.footer?.levelLabels?.[i] || lvl}</span>
               </Link>
             ))}
           </div>
 
           {/* Contact */}
           <div style={col}>
-            <span style={colTitle}>Contact</span>
+            <span style={colTitle}>{t?.footer?.contact || 'Contact'}</span>
             <a href={`mailto:${EMAIL}`} style={{
               fontSize: 12, fontWeight: 600, color: contactClr,
               textDecoration: 'none', wordBreak: 'break-all', transition: 'color 0.15s',
@@ -167,7 +169,7 @@ const Footer = () => {
           justifyContent: 'space-between', alignItems: 'center',
         }}>
           <span style={{ fontSize: 11, color: copyClr }}>
-            © {y} DeutschLearn — For everyone
+            {t?.footer?.copy ? t.footer.copy(y) : `© ${y} DeutschLearn`}
           </span>
           <a href={`mailto:${EMAIL}`} style={{
             fontSize: 11, color: mailBotClr, textDecoration: 'none', transition: 'color 0.15s',
