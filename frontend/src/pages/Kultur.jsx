@@ -990,6 +990,12 @@ const Kultur = () => {
             : `linear-gradient(135deg, rgba(13,13,20,1) 0%, rgba(20,10,40,1) 100%)`,
           borderBottom: il ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.06)',
         }}>
+        {/* Decorative flag colors */}
+        <div className="absolute top-0 left-0 right-0 h-1 flex">
+          <div className="flex-1" style={{ background: '#1a1a1a' }} />
+          <div className="flex-1" style={{ background: '#cc0000' }} />
+          <div className="flex-1" style={{ background: '#ffcc00' }} />
+        </div>
         <div className="absolute inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse 60% 80% at 80% 50%, ${cat.color}18, transparent)` }} />
         <div className="max-w-6xl mx-auto px-6 py-10">
           <div className="flex items-center gap-3 mb-3">
