@@ -23,26 +23,7 @@ const FloatTile = ({ bg, label, style, delay = 0, size = '1rem' }) => (
   </div>
 );
 
-/* --- Category chip */
-const Chip = ({ label, active, onClick }) => {
-  const { theme } = useTheme();
-  const il = theme === 'light';
-  return (
-    <button
-      onClick={onClick}
-      className="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150"
-      style={{
-        background: active ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'),
-        color: active ? '#fff' : (il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.55)'),
-        border: active
-          ? `1px solid ${il ? '#0f172a' : '#fff'}`
-          : `1px solid ${il ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)'}`,
-      }}
-    >
-      {label}
-    </button>
-  );
-};
+
 
 /* --- Resource card */
 const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, openBtn }) => {
@@ -111,52 +92,63 @@ const ResourceCard = ({ bigWord, bigWordColor, title, desc, tag, to, accent, ope
 };
 
 /* ================================================================ */
-/* Card visual metadata (fixed — only layout/accent info)           */
-const CARD_META = [
-  { bigWord: 'A1',    bigWordColor: 'rgba(99,102,241,0.18)',  accent: '#7124e5', cat: 'A1',          to: '/levels'     },
-  { bigWord: '500+',  bigWordColor: 'rgba(139,92,246,0.15)',  accent: '#7124e5', cat: 'Vocabulaire', to: '/vocabulary' },
-  { bigWord: 'Quiz',  bigWordColor: 'rgba(234,179,8,0.12)',   accent: '#7124e5', cat: 'Exercices',   to: '/exercises'  },
-  { bigWord: 'A2',    bigWordColor: 'rgba(168,85,247,0.18)',  accent: '#7124e5', cat: 'A2',          to: '/levels'     },
-  { bigWord: 'der',   bigWordColor: 'rgba(56,189,248,0.12)',  accent: '#7124e5', cat: 'Grammaire',    to: '/grammar'    },
-  { bigWord: 'Wort',  bigWordColor: 'rgba(52,211,153,0.12)',  accent: '#7124e5', cat: 'Listes',      to: '/vocabulary' },
-  { bigWord: 'XP',    bigWordColor: 'rgba(251,146,60,0.12)',  accent: '#7124e5', cat: 'Tout',        to: '/levels'     },
-  { bigWord: 'Hallo', bigWordColor: 'rgba(244,63,94,0.12)',   accent: '#7124e5', cat: 'conversations',          to: '/sprechen'   },
+/* Navigation cards — correspond aux items du navbar               */
+const NAV_CARDS = [
+  {
+    bigWord: 'Niv',
+    bigWordColor: 'rgba(99,102,241,0.16)',
+    accent: '#7124e5',
+    to: '/levels',
+    title: 'Niveaux',
+    desc: '6 Kapitel A1 + 5 Kapitel A2 — progression complète du débutant.',
+    tag: 'Niveaux',
+  },
+  {
+    bigWord: 'Talk',
+    bigWordColor: 'rgba(10,178,175,0.16)',
+    accent: '#0ab2af',
+    to: '/community',
+    title: 'Communauté',
+    desc: 'Échangez, posez des questions et progressez avec d\'autres apprenants.',
+    tag: 'Communauté',
+  },
+  {
+    bigWord: 'Jobs',
+    bigWordColor: 'rgba(251,146,60,0.16)',
+    accent: '#fb923c',
+    to: '/opportunities',
+    title: 'Opportunités',
+    desc: 'Offres d\'emploi, stages et séjours linguistiques en Allemagne.',
+    tag: 'Opportunités · 🇩🇪',
+  },
+  {
+    bigWord: 'Skill',
+    bigWordColor: 'rgba(99,102,241,0.14)',
+    accent: '#6366f1',
+    to: '/horen',
+    title: 'Compétences',
+    desc: 'Hören, Lesen, Schreiben, Sprechen — les 4 aptitudes langagières.',
+    tag: 'Compétences',
+  },
+  {
+    bigWord: 'Kunst',
+    bigWordColor: 'rgba(168,85,247,0.16)',
+    accent: '#a855f7',
+    to: '/kultur',
+    title: 'Kultur',
+    desc: 'Traditions, cuisine, villes et histoire — la culture allemande.',
+    tag: 'Kultur',
+  },
 ];
-
-/* Internal category keys (FR-indexed) used for filtering */
-const CAT_INTERNAL = ['Tout', 'A1', 'A2', 'Grammaire', 'Vocabulaire', 'Exercices', 'Listes'];
 
 const Home = () => {
   const [progress] = useState(() => progressService.getProgress());
-  const [activeIdx, setActiveIdx] = useState(0);
   const [animIn, setAnimIn] = useState(false);
   const { t } = useLanguage();
   const { theme } = useTheme();
   const il = theme === 'light';
 
   useEffect(() => { setTimeout(() => setAnimIn(true), 80); }, []);
-
-  const cats = t?.home?.categories || [
-    'Tout', 'A1', 'A2', 'Grammaire', 'Vocabulaire', 'Exercices', 'Listes'
-  ];
-
-  const allCards = CARD_META.map((m, i) => ({
-    ...m,
-    title: t?.home?.cards?.[i]?.title || 
-      ['Fanombohana — A1', 'Vocabulaire', 'Exercices Interactifs', 'Mioha — A2', 
-       'Grammaire Allemande', 'Listes Thématiques', 'Système de Progression', 'Débuter en Allemand'][i],
-    desc: t?.home?.cards?.[i]?.desc ||
-      ['6 leçons — salutations, nombres, famille...', '500+ mots par thème', 'Multiple choice, exercices', 
-       '5 leçons — travail, ville, météo...', 'Articles, conjugaison, cas', 'Familles, couleurs, métiers',
-       'Gagne des XP à chaque leçon', 'Premiers mots, salutations'][i],
-    tag: t?.home?.cards?.[i]?.tag ||
-      ['A1 · 6 leçons', '500+ mots', 'Interactif', 'A2 · 5 leçons', 
-       'Grammaire', 'Listes', 'Gamification', 'A1 · Débutant'][i],
-  }));
-
-  const filtered = activeIdx === 0
-    ? allCards
-    : allCards.filter(c => c.cat === CAT_INTERNAL[activeIdx]);
 
   return (
     <div style={{ paddingTop: '52px', background: il ? '#f0f2f5' : '#0d0d0d', minHeight: '100vh' }}>
@@ -257,227 +249,246 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ── NOTRE MISSION ── */}
+      {/* ══════════════════════════════════════════
+           NOTRE MISSION — editorial split
+         ══════════════════════════════════════════ */}
       <section
         style={{
-          background: il ? '#ffffff' : '#0a0a0f',
-          borderTop: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.06)',
+          position: 'relative',
+          overflow: 'hidden',
+          background: il ? '#ffffff' : '#000000',
+          borderTop: il ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.07)',
         }}
       >
-        <div className="max-w-5xl mx-auto px-6 py-20">
+        <div className="max-w-6xl mx-auto px-6 py-24">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
 
-          {/* Section label */}
-          <div className="flex justify-center mb-4">
-            <span
-              className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
-              style={{
-                background: il ? 'rgba(113,36,229,0.08)' : 'rgba(113,36,229,0.15)',
-                color: '#7124e5',
-                border: '1px solid rgba(113,36,229,0.25)',
-              }}
-            >
-              Notre Mission
-            </span>
-          </div>
+            {/* ══ COLONNE GAUCHE ══ */}
+            <div className="flex flex-col">
 
-          {/* Main title */}
-          <h2
-            className="text-3xl sm:text-4xl font-black text-center leading-tight mb-5"
-            style={{ color: il ? '#0f172a' : '#ffffff', letterSpacing: '-0.02em' }}
-          >
-            Apprendre l'allemand,{' '}
-            <span style={{ color: '#7124e5' }}>simplement et efficacement.</span>
-          </h2>
-
-          {/* Intro paragraph */}
-          <p
-            className="text-base text-center leading-relaxed max-w-2xl mx-auto mb-14"
-            style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)' }}
-          >
-            DeutschLearn est né d'une conviction simple : apprendre une langue ne doit pas être compliqué.
-            Dans un monde de plus en plus connecté à l'Europe, maîtriser l'allemand ouvre des portes —
-            professionnelles, académiques et culturelles. Notre plateforme accompagne chaque apprenant,
-            du premier mot jusqu'au niveau A2, avec des contenus clairs, structurés et motivants.
-          </p>
-
-          {/* Three objective cards */}
-          <div className="grid sm:grid-cols-3 gap-6 mb-14">
-            {[
-              {
-                icon: '🎯',
-                color: '#7124e5',
-                title: 'Objectifs clairs',
-                body: 'Chaque leçon suit une progression pédagogique inspirée des méthodes modernes — du vocabulaire de base aux structures grammaticales du niveau A1–A2.',
-              },
-              {
-                icon: '🗣️',
-                color: '#0ab2af',
-                title: 'Pratique réelle',
-                body: 'Dialogues, exercices d\'écoute, expression écrite et orale : vous pratiquez l\'allemand tel qu\'il est vraiment parlé au quotidien en Allemagne.',
-              },
-              {
-                icon: '🇩🇪',
-                color: '#fb923c',
-                title: 'Immersion culturelle',
-                body: 'Comprendre une langue, c\'est aussi comprendre sa culture. Traditions, cuisine, villes, histoire — la section Kultur enrichit votre apprentissage.',
-              },
-            ].map(({ icon, color, title, body }) => (
+              {/* Badge */}
               <div
-                key={title}
-                className="rounded-2xl p-6"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-10 w-fit"
                 style={{
-                  background: il ? '#f8fafc' : 'rgba(255,255,255,0.03)',
-                  border: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)',
+                  background: 'transparent',
+                  border: '1px solid rgba(113,36,229,0.35)',
                 }}
               >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-4"
-                  style={{ background: `${color}15`, border: `1px solid ${color}30` }}
-                >
-                  {icon}
-                </div>
-                <h3
-                  className="font-black text-sm mb-2"
-                  style={{ color: il ? '#0f172a' : '#fff' }}
-                >
-                  {title}
-                </h3>
-                <p
-                  className="text-[13px] leading-relaxed"
-                  style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)' }}
-                >
-                  {body}
-                </p>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a855f7', display: 'inline-block' }} />
+                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#8b5cf6' }}>Notre Mission</span>
               </div>
-            ))}
-          </div>
 
-          {/* Values row */}
-          <div
-            className="rounded-2xl px-8 py-7 mb-14"
-            style={{
-              background: il ? 'rgba(113,36,229,0.04)' : 'rgba(113,36,229,0.07)',
-              border: il ? '1px solid rgba(113,36,229,0.15)' : '1px solid rgba(113,36,229,0.20)',
-            }}
-          >
-            <div
-              className="text-[10px] font-black uppercase tracking-widest mb-5"
-              style={{ color: '#7124e5' }}
-            >
-              Nos valeurs
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                { icon: '📈', label: 'Progression guidée',  desc: 'Du A1 au A2, étape par étape, sans sauter les bases.' },
-                { icon: '💬', label: 'Pratique constante',  desc: 'Exercices variés à chaque leçon pour ancrer les acquis.' },
-                { icon: '🌍', label: 'Immersion culturelle', desc: 'La langue et la culture, indissociablement liées.' },
-                { icon: '✨', label: 'Clarté & structure',   desc: 'Contenu simple, bien organisé, accessible à tous.' },
-              ].map(({ icon, label, desc }) => (
-                <div key={label} className="flex items-start gap-3">
-                  <span className="text-lg shrink-0 mt-0.5">{icon}</span>
-                  <div>
-                    <div
-                      className="text-[12px] font-black mb-0.5"
-                      style={{ color: il ? '#0f172a' : '#fff' }}
-                    >
-                      {label}
-                    </div>
-                    <div
-                      className="text-[11px] leading-relaxed"
-                      style={{ color: il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.40)' }}
-                    >
-                      {desc}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Vision block */}
-          <div className="flex flex-col sm:flex-row items-center gap-8">
-            <div className="flex-1">
-              <div
-                className="text-[10px] font-black uppercase tracking-widest mb-3"
-                style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.25)' }}
+              {/* Titre editorial */}
+              <h2
+                className="font-black leading-[1.05] tracking-tight mb-8"
+                style={{ color: il ? '#0f172a' : '#ffffff', fontSize: 'clamp(1.8rem, 4.5vw, 3rem)' }}
               >
-                Notre Vision
-              </div>
-              <p
-                className="text-lg font-black leading-snug mb-3"
-                style={{ color: il ? '#0f172a' : '#fff' }}
-              >
-                "Rendre l'allemand accessible à tous les apprenants du monde."
-              </p>
-              <p
-                className="text-[13px] leading-relaxed"
-                style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)' }}
-              >
-                Demain, DeutschLearn sera une communauté mondiale d'étudiants
-                passionnés par la langue et la culture allemande — un espace interactif,
-                vivant et bienveillant, pour apprendre ensemble et progresser plus vite.
-              </p>
-            </div>
-            {/* Stats */}
-            <div className="shrink-0 grid grid-cols-2 gap-4">
-              {[
-                { val: 'A1–A2', label: 'Niveaux couverts' },
-                { val: '8',     label: 'Kapitels structurés' },
-                { val: '4',     label: 'Compétences (LSRE)' },
-                { val: '∞',     label: 'Motivation garantie' },
-              ].map(({ val, label }) => (
-                <div
-                  key={label}
-                  className="rounded-2xl px-5 py-4 text-center"
+                La langue allemande,{' '}
+                <span
                   style={{
-                    background: il ? '#f8fafc' : 'rgba(255,255,255,0.03)',
-                    border: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)',
-                    minWidth: 110,
+                    background: 'linear-gradient(135deg, #7124e5 0%, #a855f7 55%, #812bea 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
                   }}
                 >
+                  à votre portée.
+                </span>
+              </h2>
+
+              {/* Paragraphe intro */}
+              <p
+                className="text-base leading-relaxed mb-12"
+                style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)', maxWidth: 440 }}
+              >
+                Maîtriser l'allemand ouvre des portes professionnelles, académiques et culturelles.
+                DeutschLearn vous accompagne du premier mot jusqu'au niveau A2 — structuré, clair, gratuit.
+              </p>
+
+              {/* Valeurs — style liste editorial (pas de cards) */}
+              <div className="flex flex-col">
+                {[
+                  { num: '01', label: 'Progression guidée',   desc: 'Du A1 au A2, étape par étape, sans sauter les bases.' },
+                  { num: '02', label: 'Pratique constante',    desc: 'Exercices variés à chaque leçon pour ancrer les acquis.' },
+                  { num: '03', label: 'Immersion culturelle',  desc: 'Langue et culture, indissociablement liées.' },
+                  { num: '04', label: 'Clarté & structure',    desc: 'Contenu simple, bien organisé, accessible à tous.' },
+                ].map(({ num, label, desc }, i, arr) => (
                   <div
-                    className="text-2xl font-black mb-1"
-                    style={{ color: '#7124e5' }}
+                    key={label}
+                    className="flex items-start gap-5 py-4"
+                    style={{
+                      borderBottom: i < arr.length - 1
+                        ? il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.06)'
+                        : 'none',
+                    }}
                   >
-                    {val}
+                    <span
+                      className="text-[11px] font-black shrink-0 mt-0.5"
+                      style={{ color: '#7124e5', fontVariantNumeric: 'tabular-nums', minWidth: 24 }}
+                    >
+                      {num}
+                    </span>
+                    <div>
+                      <div className="text-[13px] font-black mb-0.5" style={{ color: il ? '#0f172a' : '#fff' }}>{label}</div>
+                      <div className="text-[12px] leading-relaxed" style={{ color: il ? 'rgba(15,23,42,0.48)' : 'rgba(255,255,255,0.38)' }}>{desc}</div>
+                    </div>
                   </div>
-                  <div
-                    className="text-[10px] font-medium leading-tight"
-                    style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}
-                  >
-                    {label}
+                ))}
+              </div>
+
+              {/* Vision — inline subtle */}
+              <div
+                className="mt-10 pt-8 flex gap-4 items-start"
+                style={{ borderTop: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)' }}
+              >
+                <span className="text-2xl shrink-0">🌍</span>
+                <div>
+                  <p className="text-sm font-black leading-snug mb-1" style={{ color: il ? '#0f172a' : '#fff' }}>
+                    "Rendre l'allemand accessible à tous."
+                  </p>
+                  <p className="text-[12px] leading-relaxed" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}>
+                    Une communauté mondiale et bienveillante pour apprendre ensemble.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ══ COLONNE DROITE ══ */}
+            <div className="flex flex-col gap-5 lg:pt-16">
+
+              {/* Feature principale — grande, sobre */}
+              <div
+                className="rounded-2xl p-8"
+                style={{
+                  background: il
+                    ? 'linear-gradient(145deg, #faf5ff 0%, #f0f9ff 100%)'
+                    : 'linear-gradient(145deg, rgba(113,36,229,0.10) 0%, rgba(10,178,175,0.06) 100%)',
+                  border: il ? '1px solid rgba(113,36,229,0.13)' : '1px solid rgba(113,36,229,0.22)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Accent orb */}
+                <div style={{ position: 'absolute', width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle, rgba(113,36,229,0.08) 0%, transparent 70%)', top: -60, right: -40, pointerEvents: 'none' }} />
+
+                {/* Top row */}
+                <div className="flex items-center justify-between mb-7" style={{ position: 'relative' }}>
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center text-xl"
+                      style={{ background: 'rgba(113,36,229,0.12)', border: '1px solid rgba(113,36,229,0.20)' }}
+                    >
+                      🇩🇪
+                    </div>
+                    <div>
+                      <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: '#8b5cf6' }}>DeutschLearn</div>
+                      <div className="text-[11px] font-bold" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}>Apprendre · Progresser</div>
+                    </div>
+                  </div>
+                  <div className="text-[10px] font-black px-2.5 py-1 rounded-full" style={{ background: 'rgba(10,178,175,0.10)', color: '#0ab2af', border: '1px solid rgba(10,178,175,0.22)' }}>
+                    Gratuit
                   </div>
                 </div>
-              ))}
+
+                {/* Headline */}
+                <h3
+                  className="font-black leading-[1.1] mb-4"
+                  style={{ color: il ? '#0f172a' : '#fff', fontSize: 'clamp(1.2rem, 2.2vw, 1.55rem)', position: 'relative' }}
+                >
+                  Apprendre l'allemand.{' '}
+                  <span style={{ background: 'linear-gradient(135deg, #9249ff 0%, #8f4af8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                    Progresser ensemble.
+                  </span>
+                </h3>
+
+                <p className="text-[13px] leading-relaxed mb-7" style={{ color: il ? 'rgba(15,23,42,0.52)' : 'rgba(255,255,255,0.42)', position: 'relative' }}>
+                  Une plateforme construite pour tous — du A1 débutant au A2 confirmé. Chaque leçon, chaque exercice, chaque mot vous rapproche de la fluidité.
+                </p>
+
+                {/* Inline stats row */}
+                <div
+                  className="flex items-center gap-6 mb-7 pt-5"
+                  style={{ borderTop: il ? '1px solid rgba(113,36,229,0.09)' : '1px solid rgba(255,255,255,0.07)', position: 'relative' }}
+                >
+                  {[
+                    { val: 'A1–A2', lbl: 'Niveaux' },
+                    { val: '8',     lbl: 'Kapitel'  },
+                    { val: '100%',  lbl: 'Gratuit'  },
+                  ].map(({ val, lbl }) => (
+                    <div key={lbl}>
+                      <div className="font-black text-[15px] leading-none mb-0.5" style={{ color: il ? '#0f172a' : '#fff' }}>{val}</div>
+                      <div className="text-[10px]" style={{ color: il ? 'rgba(15,23,42,0.42)' : 'rgba(255,255,255,0.35)' }}>{lbl}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA link */}
+                <Link
+                  to="/levels"
+                  className="inline-flex items-center gap-2 text-[12px] font-black px-4 py-2 rounded-xl"
+                  style={{ background: 'rgba(113,36,229,0.10)', color: '#7124e5', border: '1px solid rgba(113,36,229,0.20)', position: 'relative' }}
+                >
+                  Commencer le parcours <span>→</span>
+                </Link>
+              </div>
+
+              {/* 2 cards côte à côte — sobres */}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  {
+                    icon: '🗣️',
+                    accent: '#0ab2af',
+                    label: 'Pratique réelle',
+                    body: "Dialogues et exercices oraux — l'allemand du quotidien.",
+                  },
+                  {
+                    icon: '🇩🇪',
+                    accent: '#fb923c',
+                    label: 'Kultur',
+                    body: 'Traditions, cuisine et villes : la culture au cœur de l\'apprentissage.',
+                  },
+                ].map(({ icon, accent, label, body }) => (
+                  <div
+                    key={label}
+                    className="rounded-2xl p-5 flex flex-col"
+                    style={{
+                      background: il ? '#fafafa' : 'rgba(255,255,255,0.03)',
+                      border: il ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.07)',
+                    }}
+                  >
+                    <span className="text-2xl mb-4">{icon}</span>
+                    <div className="text-[12px] font-black mb-1.5" style={{ color: il ? '#0f172a' : '#fff' }}>{label}</div>
+                    <p className="text-[11px] leading-relaxed flex-1" style={{ color: il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.40)' }}>{body}</p>
+                    <div className="mt-4 text-[11px] font-bold" style={{ color: accent }}>Découvrir →</div>
+                  </div>
+                ))}
+              </div>
+
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* FILTER + CARDS */}
+      {/* NAV CARDS */}
       <section style={{ background: il ? '#f0f2f5' : '#0d0d0d', borderTop: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)' }}>
-
-        {/* Sticky chip bar */}
-        <div
-          className="sticky top-[52px] z-40 flex items-center justify-center gap-2 overflow-x-auto px-6 py-3 no-scrollbar"
-          style={{ background: il ? 'rgba(240,242,245,0.97)' : 'rgba(13,13,13,0.96)', borderBottom: il ? '1px solid rgba(0,0,0,0.07)' : '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(10px)' }}
-        >
-          {cats.map((cat, idx) => (
-            <Chip key={cat} label={cat} active={activeIdx === idx} onClick={() => setActiveIdx(idx)} />
-          ))}
+        <div className="max-w-6xl mx-auto px-6 pt-12 pb-2">
+          <h2
+            className="font-black leading-tight tracking-tight mb-1"
+            style={{ color: il ? '#0f172a' : '#fff', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}
+          >
+            Explorer la plateforme
+          </h2>
+          <p className="text-[13px] mb-8" style={{ color: il ? 'rgba(15,23,42,0.48)' : 'rgba(255,255,255,0.38)' }}>
+            Tout ce dont vous avez besoin pour apprendre l'allemand — en un seul endroit.
+          </p>
         </div>
-
-        {/* Card grid */}
-        <div className="max-w-6xl mx-auto px-6 py-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filtered.map((card) => (
-              <ResourceCard key={card.title} {...card} openBtn={t?.home?.openBtn || 'Ouvrir →'} />
+        <div className="max-w-6xl mx-auto px-6 pb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {NAV_CARDS.map((card) => (
+              <ResourceCard key={card.title} {...card} openBtn="Ouvrir →" />
             ))}
           </div>
         </div>
-
-
       </section>
     </div>
   );
