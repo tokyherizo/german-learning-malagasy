@@ -168,51 +168,291 @@ const TEIL_CFG = {
 /* ─────────────────────────────────────────────
    TOPIC ROW — lesson card or placeholder
 ───────────────────────────────────────────── */
-const TopicRow = ({ topic, lesson, isCompleted, tCfg, index }) => {
+const TopicRow = ({ topicObj, lesson, isCompleted, tCfg, index }) => {
+  const xp       = lesson?.xp       || topicObj.xp;
+  const duration = lesson?.duration  || topicObj.duration;
+  const title    = lesson?.title     || topicObj.title;
+  const desc     = lesson?.subtitle  || topicObj.desc;
+  const icon     = topicObj.icon;
+
   if (lesson) {
     return (
       <Link
         to={`/lesson/${lesson.id}`}
-        className="group flex items-center gap-3 px-3.5 py-3 rounded-xl border transition-all duration-200"
+        className="group flex items-start gap-3 px-3.5 py-3 rounded-xl border transition-all duration-200"
         style={{
           background: isCompleted ? 'rgba(74,222,128,0.05)' : tCfg.glow,
           borderColor: isCompleted ? 'rgba(74,222,128,0.20)' : tCfg.border,
         }}
       >
-        <div
-          className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black shrink-0 transition-transform group-hover:scale-105"
-          style={{ background: isCompleted ? 'rgba(74,222,128,0.12)' : tCfg.bg, color: isCompleted ? '#4ade80' : tCfg.color, border: `1px solid ${isCompleted ? 'rgba(74,222,128,0.30)' : tCfg.border}` }}
-        >
+        {/* Index badge */}
+        <div className="mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black shrink-0 transition-transform group-hover:scale-105"
+          style={{ background: isCompleted ? 'rgba(74,222,128,0.12)' : tCfg.bg, color: isCompleted ? '#4ade80' : tCfg.color, border: `1px solid ${isCompleted ? 'rgba(74,222,128,0.30)' : tCfg.border}` }}>
           {isCompleted ? '✓' : index + 1}
         </div>
+        {/* Content */}
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-white/90 text-sm leading-tight group-hover:text-white transition-colors truncate">{lesson.title}</div>
-          {lesson.subtitle && <div className="text-[11px] text-white/35 mt-0.5 truncate">{lesson.subtitle}</div>}
+          <div className="flex items-center gap-1.5 mb-0.5">
+            {icon && <span className="text-sm">{icon}</span>}
+            <span className="font-semibold text-white/90 text-sm leading-tight group-hover:text-white transition-colors">{title}</span>
+          </div>
+          {desc && <div className="text-[11px] text-white/40 leading-relaxed mb-1.5">{desc}</div>}
+          <div className="flex items-center gap-2">
+            {xp       && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ color: tCfg.color, background: tCfg.bg }}>+{xp} XP</span>}
+            {duration && <span className="text-[10px] text-white/25">⏱ {duration}</span>}
+          </div>
         </div>
-        <div className="shrink-0 flex items-center gap-2">
-          {lesson.xp && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ color: tCfg.color, background: tCfg.bg }}>+{lesson.xp} XP</span>}
-          {lesson.duration && <span className="text-[10px] text-white/25 hidden sm:block">{lesson.duration}</span>}
-          <span className="text-white/20 group-hover:text-white/60 text-xs transition-colors">→</span>
-        </div>
+        <span className="text-white/20 group-hover:text-white/60 text-xs transition-colors mt-1 shrink-0">→</span>
       </Link>
     );
   }
 
   return (
-    <div
-      className="flex items-center gap-3 px-3.5 py-3 rounded-xl border"
-      style={{ background: tCfg.glow, borderColor: 'rgba(255,255,255,0.05)' }}
-    >
-      <div
-        className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black shrink-0 opacity-40"
-        style={{ background: tCfg.bg, color: tCfg.color, border: `1px solid ${tCfg.border}` }}
-      >
+    <div className="flex items-start gap-3 px-3.5 py-3 rounded-xl border"
+      style={{ background: tCfg.glow, borderColor: 'rgba(255,255,255,0.06)' }}>
+      {/* Index badge */}
+      <div className="mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black shrink-0 opacity-35"
+        style={{ background: tCfg.bg, color: tCfg.color, border: `1px solid ${tCfg.border}` }}>
         {index + 1}
       </div>
-      <span className="text-sm text-white/40 flex-1 truncate">{topic}</span>
-      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.07)' }}>
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5 mb-0.5">
+          {icon && <span className="text-sm">{icon}</span>}
+          <span className="font-semibold text-white/55 text-sm leading-tight">{title}</span>
+        </div>
+        {desc && <div className="text-[11px] text-white/30 leading-relaxed mb-1.5">{desc}</div>}
+        <div className="flex items-center gap-2">
+          {xp       && <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full" style={{ color: `${tCfg.color}60`, background: `${tCfg.bg}80` }}>+{xp} XP</span>}
+          {duration && <span className="text-[10px] text-white/20">⏱ {duration}</span>}
+        </div>
+      </div>
+      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0 mt-1"
+        style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.07)' }}>
         Bientôt
       </span>
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────
+   A1 KAPITEL ACCORDION
+───────────────────────────────────────────── */
+const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
+  const [openSet, setOpenSet] = useState(() => new Set([modules[0]?.id]));
+
+  const toggle = (id) => setOpenSet(prev => {
+    const next = new Set(prev);
+    next.has(id) ? next.delete(id) : next.add(id);
+    return next;
+  });
+
+  return (
+    <div>
+      {/* ── Header banner ── */}
+      <div className="flex items-center justify-between mb-6 px-4 py-3 rounded-2xl"
+        style={{ background: 'rgba(129,140,248,0.07)', border: '1px solid rgba(129,140,248,0.18)' }}>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-base"
+            style={{ background: 'rgba(129,140,248,0.15)', color: '#818cf8', border: '1px solid rgba(129,140,248,0.30)' }}>
+            A1
+          </div>
+          <div>
+            <div className="font-black text-white text-sm">Begegnungen A1</div>
+            <div className="text-[11px] text-white/35">{modules.length} Kapitel · Schubert Verlag · Teil A/B/C/D</div>
+          </div>
+        </div>
+        <div className="flex gap-1.5">
+          {Object.entries(TEIL_CFG).map(([k, v]) => (
+            <div key={k} className="flex flex-col items-center gap-0.5">
+              <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black"
+                style={{ background: v.bg, color: v.color, border: `1px solid ${v.border}` }}>
+                {k}
+              </div>
+              <span className="text-[8px] text-white/20 hidden sm:block font-medium">{v.label.split(' ')[0]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Kapitel list ── */}
+      <div className="space-y-4">
+        {modules.map((mod) => {
+          const completedCount = mod.lessons.filter(id => progress.completedLessons.includes(id)).length;
+          const totalCount     = mod.lessons.length;
+          const pct            = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+          const isOpen         = openSet.has(mod.id);
+
+          return (
+            <div key={mod.id}
+              className="rounded-2xl overflow-hidden transition-all duration-300"
+              style={{
+                border: `1.5px solid ${isOpen ? mod.color + '55' : mod.color + '20'}`,
+                background: isOpen
+                  ? `linear-gradient(135deg, ${mod.color}0d 0%, rgba(10,10,20,0.95) 100%)`
+                  : 'rgba(255,255,255,0.02)',
+                boxShadow: isOpen ? `0 0 32px ${mod.color}18` : 'none',
+              }}>
+
+              {/* ── Colored top accent bar ── */}
+              <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${mod.color}, ${mod.color}40, transparent)` }} />
+
+              {/* ── Clickable Kapitel header ── */}
+              <button
+                onClick={() => toggle(mod.id)}
+                className="w-full text-left flex items-center gap-4 px-5 py-4 transition-all duration-200 hover:bg-white/[0.03] active:bg-white/[0.06]"
+              >
+                {/* Big number badge */}
+                <div className="shrink-0 flex flex-col items-center justify-center w-14 h-14 rounded-2xl shadow-lg"
+                  style={{
+                    background: `linear-gradient(135deg, ${mod.color}28, ${mod.color}10)`,
+                    border: `2px solid ${mod.color}${isOpen ? '60' : '30'}`,
+                  }}>
+                  <span className="text-[9px] font-black tracking-[0.2em] uppercase" style={{ color: `${mod.color}90` }}>Kap.</span>
+                  <span className="text-2xl font-black leading-none" style={{ color: mod.color }}>{mod.number}</span>
+                </div>
+
+                {/* Title block */}
+                <div className="flex-1 min-w-0">
+                  {/* KAPITEL label + icon */}
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[9px] font-black tracking-[0.3em] uppercase px-2 py-0.5 rounded-full"
+                      style={{ background: `${mod.color}18`, color: mod.color, border: `1px solid ${mod.color}30` }}>
+                      KAPITEL {mod.number}
+                    </span>
+                    <span className="text-lg">{mod.icon}</span>
+                  </div>
+                  {/* Title */}
+                  <h3 className="font-black text-white text-base leading-tight mb-0.5 truncate">{mod.title}</h3>
+                  <p className="text-[11px] text-white/35 italic truncate mb-2">{mod.titleFr} — {mod.subtitle}</p>
+
+                  {/* Progress bar */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                      <div className="h-1.5 rounded-full transition-all duration-700"
+                        style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${mod.color}99, ${mod.color})` }} />
+                    </div>
+                    <span className="text-[10px] font-bold shrink-0 min-w-[36px] text-right"
+                      style={{ color: pct > 0 ? mod.color : 'rgba(255,255,255,0.18)' }}>
+                      {completedCount}/{totalCount}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Teil badges + chevron */}
+                <div className="shrink-0 flex flex-col items-end gap-2">
+                  <svg className="w-4 h-4 transition-transform duration-300"
+                    style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', color: isOpen ? mod.color : 'rgba(255,255,255,0.25)' }}
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                  <div className="hidden sm:flex flex-col gap-1">
+                    {mod.teile.map(t => {
+                      const tc = TEIL_CFG[t.teil] || TEIL_CFG.A;
+                      return (
+                        <div key={t.teil} className="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-black"
+                          style={{ background: tc.bg, color: tc.color, border: `1px solid ${tc.border}` }}>
+                          {t.teil}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </button>
+
+              {/* ── Expanded content: objectives + teile A→D ── */}
+              {isOpen && (
+                <div className="px-4 pb-4" style={{ borderTop: `1px solid ${mod.color}20` }}>
+
+                  {/* Objectives */}
+                  {mod.objectives.length > 0 && (
+                    <div className="mt-3 mb-4 grid sm:grid-cols-2 gap-1.5">
+                      {mod.objectives.map((obj, oi) => (
+                        <div key={oi} className="flex items-start gap-1.5 text-[11px] text-white/45">
+                          <span className="shrink-0 mt-0.5 text-[9px]" style={{ color: `${mod.color}80` }}>◆</span>
+                          {obj}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Teile A → D */}
+                  <div className="space-y-3">
+                    {mod.teile.map(teil => {
+                      const tc = TEIL_CFG[teil.teil] || TEIL_CFG.A;
+                      return (
+                        <div key={teil.teil} className="rounded-2xl overflow-hidden"
+                          style={{ border: `1px solid ${tc.border}`, background: tc.glow }}>
+
+                          {/* Teil header */}
+                          <div className="flex items-center gap-2.5 px-4 py-2.5"
+                            style={{ background: tc.bg, borderBottom: `1px solid ${tc.border}` }}>
+                            <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-black"
+                              style={{ background: 'rgba(0,0,0,0.18)', color: tc.color }}>
+                              {teil.teil}
+                            </div>
+                            <span className="text-[10px] font-extrabold tracking-widest" style={{ color: tc.color }}>
+                              TEIL {teil.teil}
+                            </span>
+                            <span className="text-white/40 text-xs">—</span>
+                            <span className="text-[11px] font-bold text-white/70">{tc.label}</span>
+                            <span className="ml-auto text-base">{tc.icon}</span>
+                          </div>
+
+                          {/* Topics */}
+                          <div className="p-3 space-y-2">
+                            {teil.topics.map((topicObj, ti) => {
+                              const lesson = topicObj.lessonId ? lessonsById[topicObj.lessonId] : null;
+                              const done   = topicObj.lessonId ? progress.completedLessons.includes(topicObj.lessonId) : false;
+                              return (
+                                <TopicRow
+                                  key={ti}
+                                  topicObj={topicObj}
+                                  lesson={lesson}
+                                  isCompleted={done}
+                                  tCfg={tc}
+                                  index={ti}
+                                />
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {/* Mini-test */}
+                    <div className="flex items-center gap-3 px-4 py-3 rounded-2xl"
+                      style={{ background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.15)' }}>
+                      <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm"
+                        style={{ background: 'rgba(251,146,60,0.12)', border: '1px solid rgba(251,146,60,0.25)' }}>
+                        🏆
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-[10px] font-extrabold tracking-widest text-orange-400">MINI-TEST</div>
+                        <div className="text-[11px] text-white/35">Rückblick — test de fin · Kapitel {mod.number}</div>
+                      </div>
+                      {mod.grammarTopics?.length > 0 && (
+                        <div className="hidden sm:flex flex-wrap gap-1 justify-end max-w-[200px]">
+                          {mod.grammarTopics.map((gt, gi) => (
+                            <span key={gi} className="text-[9px] px-1.5 py-0.5 rounded-full"
+                              style={{ background: 'rgba(167,139,250,0.10)', color: '#a78bfa80', border: '1px solid rgba(167,139,250,0.15)' }}>
+                              {gt}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0"
+                        style={{ background: 'rgba(251,146,60,0.10)', color: 'rgba(251,146,60,0.50)', border: '1px solid rgba(251,146,60,0.18)' }}>
+                        Bientôt
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -223,175 +463,12 @@ const TopicRow = ({ topic, lesson, isCompleted, tCfg, index }) => {
 const LessonsPane = ({ levelId, level, progress }) => {
   const allLessons = getLessonsByLevel(levelId);
 
-  /* ── A1: full expanded Begegnungen A1 structure ── */
+  /* ── A1: accordion Kapitel ── */
   if (levelId === 'A1' && A1_MODULES.length > 0) {
     const lessonsById = {};
     allLessons.forEach(l => { lessonsById[l.id] = l; });
 
-    return (
-      <div>
-        {/* ── Curriculum banner ── */}
-        <div className="flex items-center justify-between mb-6 px-4 py-3 rounded-2xl"
-          style={{ background: 'rgba(129,140,248,0.07)', border: '1px solid rgba(129,140,248,0.18)' }}>
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-base"
-              style={{ background: 'rgba(129,140,248,0.15)', color: '#818cf8', border: '1px solid rgba(129,140,248,0.30)' }}>
-              A1
-            </div>
-            <div>
-              <div className="font-black text-white text-sm">A1</div>
-              <div className="text-[11px] text-white/35">8 Kapitel · Schubert Verlag · Teil A/B/C/D</div>
-            </div>
-          </div>
-          <div className="flex gap-1.5">
-            {Object.entries(TEIL_CFG).map(([k, v]) => (
-              <div key={k} className="flex flex-col items-center gap-0.5">
-                <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black"
-                  style={{ background: v.bg, color: v.color, border: `1px solid ${v.border}` }}>
-                  {k}
-                </div>
-                <span className="text-[8px] text-white/20 hidden sm:block font-medium">{v.label.split(' ')[0]}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Kapitel cards ── */}
-        <div className="space-y-10">
-          {A1_MODULES.map((mod, mi) => {
-            const completedCount = mod.lessons.filter(id => progress.completedLessons.includes(id)).length;
-            const totalCount     = mod.lessons.length;
-            const pct            = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-
-            return (
-              <div key={mod.id} className="relative">
-                {/* ── Vertical connector line between Kapitel ── */}
-                {mi < A1_MODULES.length - 1 && (
-                  <div className="absolute left-[22px] top-full w-px h-10 z-0"
-                    style={{ background: `linear-gradient(to bottom, ${mod.color}30, transparent)` }} />
-                )}
-
-                {/* ── Kapitel header ── */}
-                <div className="flex items-start gap-4 mb-4">
-                  {/* Number bubble */}
-                  <div className="shrink-0 w-11 h-11 rounded-2xl flex flex-col items-center justify-center font-black leading-none shadow-lg"
-                    style={{ background: `linear-gradient(135deg, ${mod.color}22, ${mod.color}0a)`, border: `1.5px solid ${mod.color}40`, color: mod.color }}>
-                    <span className="text-[8px] font-extrabold tracking-widest opacity-60">K</span>
-                    <span className="text-lg">{mod.number}</span>
-                  </div>
-
-                  <div className="flex-1 min-w-0 pt-0.5">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className="text-xl">{mod.icon}</span>
-                      <h3 className="font-black text-white text-base leading-tight">{mod.title}</h3>
-                    </div>
-                    <p className="text-[11px] text-white/40 italic mb-2">{mod.titleFr} — {mod.subtitle}</p>
-
-                    {/* Progress bar */}
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
-                        <div className="h-1 rounded-full transition-all duration-500"
-                          style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${mod.color}cc, ${mod.color})` }} />
-                      </div>
-                      <span className="text-[10px] font-bold shrink-0" style={{ color: pct > 0 ? mod.color : 'rgba(255,255,255,0.20)' }}>
-                        {completedCount}/{totalCount}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* ── Objectifs row ── */}
-                <div className="ml-[60px] mb-4 grid sm:grid-cols-2 gap-1.5">
-                  {mod.objectives.map((obj, oi) => (
-                    <div key={oi} className="flex items-start gap-1.5 text-[11px] text-white/45">
-                      <span className="shrink-0 mt-0.5 text-[9px]" style={{ color: `${mod.color}80` }}>◆</span>
-                      {obj}
-                    </div>
-                  ))}
-                </div>
-
-                {/* ── Teile ── */}
-                <div className="ml-[60px] space-y-3">
-                  {mod.teile.map(teil => {
-                    const tc = TEIL_CFG[teil.teil] || TEIL_CFG.A;
-                    return (
-                      <div key={teil.teil}
-                        className="rounded-2xl overflow-hidden"
-                        style={{ border: `1px solid ${tc.border}`, background: tc.glow }}>
-
-                        {/* Teil header */}
-                        <div className="flex items-center gap-2.5 px-4 py-2.5"
-                          style={{ background: tc.bg, borderBottom: `1px solid ${tc.border}` }}>
-                          <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-black"
-                            style={{ background: 'rgba(0,0,0,0.18)', color: tc.color }}>
-                            {teil.teil}
-                          </div>
-                          <span className="text-[10px] font-extrabold tracking-widest" style={{ color: tc.color }}>
-                            TEIL {teil.teil}
-                          </span>
-                          <span className="text-white/40 text-xs">—</span>
-                          <span className="text-[11px] font-bold text-white/70">{tc.label}</span>
-                          <span className="ml-auto text-base">{tc.icon}</span>
-                        </div>
-
-                        {/* Topics */}
-                        <div className="p-3 space-y-2">
-                          {teil.topics.map((topic, ti) => {
-                            const lid    = teil.lessonIds?.[ti];
-                            const lesson = lid ? lessonsById[lid] : null;
-                            const done   = lid ? progress.completedLessons.includes(lid) : false;
-                            return (
-                              <TopicRow
-                                key={ti}
-                                topic={topic}
-                                lesson={lesson}
-                                isCompleted={done}
-                                tCfg={tc}
-                                index={ti}
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                  {/* ── Mini-test row ── */}
-                  <div className="flex items-center gap-3 px-4 py-3 rounded-2xl"
-                    style={{ background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.15)' }}>
-                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm"
-                      style={{ background: 'rgba(251,146,60,0.12)', border: '1px solid rgba(251,146,60,0.25)' }}>
-                      🏆
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-[10px] font-extrabold tracking-widest text-orange-400">MINI-TEST</div>
-                      <div className="text-[11px] text-white/35">Rückblick — test de fin · Kapitel {mod.number}</div>
-                    </div>
-                    {mod.grammarTopics?.length > 0 && (
-                      <div className="hidden sm:flex flex-wrap gap-1 justify-end max-w-[200px]">
-                        {mod.grammarTopics.map((gt, gi) => (
-                          <span key={gi} className="text-[9px] px-1.5 py-0.5 rounded-full"
-                            style={{ background: 'rgba(167,139,250,0.10)', color: '#a78bfa80', border: '1px solid rgba(167,139,250,0.15)' }}>
-                            {gt}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0"
-                      style={{ background: 'rgba(251,146,60,0.10)', color: 'rgba(251,146,60,0.50)', border: '1px solid rgba(251,146,60,0.18)' }}>
-                      Bientôt
-                    </span>
-                  </div>
-
-                  {/* ── Chapter separator ── */}
-                  <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${mod.color}20, transparent)` }} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
+    return <A1KapitelAccordion modules={A1_MODULES} lessonsById={lessonsById} progress={progress} />;
   }
 
   /* ── Default flat list for other levels ── */
