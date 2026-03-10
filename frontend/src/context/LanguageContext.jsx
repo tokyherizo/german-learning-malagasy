@@ -197,7 +197,7 @@ const T = {
       logout:        'Abmelden',
     },
     home: {
-      badge:       'The German learning platform for everyone',
+      badge:       'Die Deutschlernplattform für alle',
       h1a:         'Lernen Sie Deutsch',
       h1b:         'für alle.',
       subtitle:    'Die kostenlose Plattform für alle — Lektionen, Wortschatz und Übungen.',
