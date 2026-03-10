@@ -99,34 +99,65 @@ const getBestDeVoice = () => {
 };
 
 // German sentence intonation:
-//  Ja/Nein-Fragen ("Haben Sie…?") → rising pitch
-//  W-Fragen ("Was kostet…?")     → falling pitch (like a statement)
-//  Exclamations                  → slightly energetic
-//  Statements                    → neutral
-const getIntonation = (text) => {
-  const t = text.trim();
-  const isQ   = t.endsWith('?');
-  const isExcl = t.endsWith('!');
-  const isWQ  = isQ && /^(wer|was|wie|wo |woher|wohin|wann|warum|weshalb|welch|wessen|wieso|inwiefern|womit|wof)/i.test(t);
-  const isYNQ = isQ && !isWQ;
-  return {
-    rate:  0.93,
-    pitch: isYNQ ? 1.18 : isWQ ? 0.92 : isExcl ? 1.07 : 1.0,
-  };
+//  Ja/Nein-Fragen  → split at last 2 words → tail spoken higher+slower (true rising end)
+//  W-Fragen        → flat falling (whole utterance lower pitch)
+//  Statements      → neutral
+const isWQuestion = (text) => {
+  if (!text.trim().endsWith('?')) return false;
+  // W-words can appear anywhere (after "Und", "Entschuldigung," etc.)
+  return /\b(wer|was|wie|wo\b|woher|wohin|wann|warum|weshalb|welch|wessen|wieso|inwiefern|womit|wof)/i.test(text);
 };
 
-const makeUtterance = (text, { onStart, onEnd, onError } = {}) => {
-  if (!window.speechSynthesis) return null;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'de-DE';
-  const { rate, pitch } = getIntonation(text);
-  u.rate = rate; u.pitch = pitch;
-  const voice = getBestDeVoice();
-  if (voice) u.voice = voice;
-  if (onStart) u.onstart = onStart;
-  if (onEnd)   u.onend   = onEnd;
-  if (onError) u.onerror = onError;
-  return u;
+// speakText — handles intonation internally, calls onStart/onEnd/onError
+const speakText = (text, { onStart, onEnd, onError } = {}) => {
+  if (!window.speechSynthesis) return;
+  const t = text.trim();
+  const isQ    = t.endsWith('?');
+  const isExcl = t.endsWith('!');
+  const isYNQ  = isQ && !isWQuestion(t);
+  const voice  = getBestDeVoice();
+
+  const mkU = (str, rate, pitch) => {
+    const u = new SpeechSynthesisUtterance(str);
+    u.lang = 'de-DE'; u.rate = rate; u.pitch = pitch;
+    if (voice) u.voice = voice;
+    return u;
+  };
+
+  if (isYNQ) {
+    // Rising end: body at normal pitch → last 2 words much higher + slower
+    const words = t.replace(/\?+$/, '').trim().split(/\s+/);
+    if (words.length <= 2) {
+      // Short question — whole thing high
+      const u = mkU(t, 0.82, 1.35);
+      if (onStart) u.onstart = onStart;
+      if (onEnd)   u.onend   = onEnd;
+      if (onError) u.onerror = onError;
+      window.speechSynthesis.speak(u);
+    } else {
+      const splitAt = Math.max(1, words.length - 2);
+      const body = words.slice(0, splitAt).join(' ');
+      const tail = words.slice(splitAt).join(' ') + '?';
+      const u1 = mkU(body, 0.93, 1.0);
+      if (onStart) u1.onstart = onStart;
+      if (onError) u1.onerror = onError;
+      u1.onend = () => {
+        const u2 = mkU(tail, 0.76, 1.45);
+        if (onEnd)   u2.onend   = onEnd;
+        if (onError) u2.onerror = onError;
+        window.speechSynthesis.speak(u2);
+      };
+      window.speechSynthesis.speak(u1);
+    }
+  } else {
+    // W-question (falling), statement, exclamation
+    const pitch = isWQuestion(t) ? 0.90 : isExcl ? 1.07 : 1.0;
+    const u = mkU(t, 0.93, pitch);
+    if (onStart) u.onstart = onStart;
+    if (onEnd)   u.onend   = onEnd;
+    if (onError) u.onerror = onError;
+    window.speechSynthesis.speak(u);
+  }
 };
 
 /* ─── Small speaker button ─────────────────────────────────────── */
@@ -140,12 +171,11 @@ const SpeakBtn = ({ text, compact = false }) => {
     if (speaking) { window.speechSynthesis.cancel(); setSpeaking(false); return; }
     window.speechSynthesis.cancel();
     const trySpeak = () => {
-      const u = makeUtterance(text, {
+      speakText(text, {
         onStart: () => setSpeaking(true),
         onEnd:   () => setSpeaking(false),
         onError: () => setSpeaking(false),
       });
-      if (u) window.speechSynthesis.speak(u);
     };
     if (window.speechSynthesis.getVoices().length > 0) {
       trySpeak();
@@ -188,11 +218,10 @@ const PlayAllBtn = ({ lines, onLineChange }) => {
         return;
       }
       onLineChange?.(idx);
-      const u = makeUtterance(lines[idx].text, {
+      speakText(lines[idx].text, {
         onEnd:   () => { if (!stopRef.current) setTimeout(() => playFromRef.current(idx + 1), 380); },
         onError: () => { if (!stopRef.current) setTimeout(() => playFromRef.current(idx + 1), 200); },
       });
-      if (u) window.speechSynthesis.speak(u);
     };
   });
   const playFrom = useCallback((idx) => playFromRef.current?.(idx), []);
