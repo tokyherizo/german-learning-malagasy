@@ -65,9 +65,19 @@ const Footer = () => {
 
           {/* Brand */}
           <div style={{ ...col, gap: 12 }}>
-            <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 11, fontWeight: 900, padding: '4px 8px', borderRadius: 6, background: badgeDEbg, color: badgeDEclr, letterSpacing: '0.06em' }}>DE</span>
-              <span style={{ fontSize: 16, fontWeight: 900, color: brandName, letterSpacing: '-0.02em' }}>DeutschLearn</span>
+            <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="28" height="28" rx="8" fill="url(#ftGrad)" />
+                <text x="14" y="19.5" textAnchor="middle" fontFamily="system-ui,sans-serif"
+                  fontWeight="900" fontSize="10.5" fill="white" letterSpacing="-0.5">DL</text>
+                <defs>
+                  <linearGradient id="ftGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#4f46e5" />
+                    <stop offset="1" stopColor="#7c3aed" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span style={{ fontSize: 16, fontWeight: 700, color: il ? '#7124e5' : '#fff', letterSpacing: '-0.02em' }}>DeutschLearn</span>
             </Link>
             <p style={{ fontSize: 12, lineHeight: 1.7, color: descClr, margin: 0, maxWidth: 220 }}>
               Free German learning platform for everyone — from A1 to B2.
