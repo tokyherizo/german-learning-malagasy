@@ -970,6 +970,13 @@ const Kultur = () => {
   const handleCatChange = (id) => {
     setManualCat(id);
     if (contentRef.current) contentRef.current.scrollTop = 0;
+    // On mobile, scroll window to the content area
+    setTimeout(() => {
+      if (contentRef.current) {
+        const top = contentRef.current.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, 50);
   };
 
   return (
