@@ -3,76 +3,61 @@ import { vocabulary, getAllTopics } from '../data/vocabulary';
 import { progressService } from '../services/progress';
 import AudioWord from '../components/AudioWord';
 
-/* ── Dictionary row: 🇩🇪 DE | 🇬🇧 EN | 🇫🇷 FR ── */
-const DictRow = ({ word, isLearned, onLearn }) => (
-  <div
+/* ── Dictionary table row ── */
+const DictTableRow = ({ word, isLearned, onLearn }) => (
+  <tr
     onClick={onLearn}
-    className="cursor-pointer rounded-xl px-4 py-3 transition-all"
     style={{
-      background: isLearned ? 'rgba(74,222,128,0.04)' : 'rgba(255,255,255,0.02)',
-      border: `1px solid ${isLearned ? 'rgba(74,222,128,0.18)' : 'rgba(255,255,255,0.07)'}`,
+      cursor: 'pointer',
+      background: isLearned ? 'rgba(74,222,128,0.04)' : 'transparent',
+      borderBottom: '1px solid rgba(255,255,255,0.05)',
+      transition: 'background 0.15s',
     }}
-    onMouseEnter={e => {
-      if (!isLearned) {
-        e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)';
-      }
-    }}
-    onMouseLeave={e => {
-      e.currentTarget.style.background = isLearned ? 'rgba(74,222,128,0.04)' : 'rgba(255,255,255,0.02)';
-      e.currentTarget.style.borderColor = isLearned ? 'rgba(74,222,128,0.18)' : 'rgba(255,255,255,0.07)';
-    }}
+    onMouseEnter={e => { if (!isLearned) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
+    onMouseLeave={e => { e.currentTarget.style.background = isLearned ? 'rgba(74,222,128,0.04)' : 'transparent'; }}
   >
-    <div className="flex items-center gap-3 flex-wrap">
-      <div className="w-2 h-2 rounded-full shrink-0" style={{ background: isLearned ? '#4ade80' : 'rgba(255,255,255,0.15)' }} />
-
-      {/* 🇩🇪 German */}
-      <div className="flex items-center gap-1.5 min-w-[150px]">
-        <span className="text-sm">🇩🇪</span>
-        <span className="font-bold text-white text-sm">{word.german}</span>
-        <div onClick={e => e.stopPropagation()}><AudioWord word={word.german} /></div>
+    {/* 🇩🇪 Deutsch */}
+    <td style={{ padding: '10px 14px 10px 12px', verticalAlign: 'top', width: '33%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: isLearned ? '#4ade80' : 'rgba(255,255,255,0.15)' }} />
+        <span style={{ fontWeight: 700, color: '#fff', fontSize: 14 }}>{word.german}</span>
+        <div onClick={e => e.stopPropagation()} style={{ flexShrink: 0 }}><AudioWord word={word.german} /></div>
+        {!isLearned && <span style={{ marginLeft: 'auto', fontSize: 10, color: 'rgba(255,255,255,0.20)' }}>+2 XP</span>}
       </div>
-
-      <div className="hidden sm:block w-px h-4 shrink-0" style={{ background: 'rgba(255,255,255,0.12)' }} />
-
-      {/* 🇬🇧 English */}
-      <div className="flex items-center gap-1.5 min-w-[150px]">
-        <span className="text-sm">🇬🇧</span>
-        <span className="text-sm font-medium" style={{ color: '#a78bfa' }}>{word.english}</span>
-      </div>
-
-      <div className="hidden sm:block w-px h-4 shrink-0" style={{ background: 'rgba(255,255,255,0.12)' }} />
-
-      {/* 🇫🇷 French */}
-      <div className="flex items-center gap-1.5 min-w-[150px]">
-        <span className="text-sm">🇫🇷</span>
-        <span className="text-sm font-medium" style={{ color: '#60a5fa' }}>{word.french || '—'}</span>
-      </div>
-
-      {!isLearned && (
-        <span className="ml-auto text-[10px] shrink-0" style={{ color: 'rgba(255,255,255,0.20)' }}>+2 XP</span>
+      {word.example && (
+        <div style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(255,255,255,0.30)', marginTop: 4, paddingLeft: 15 }}>{word.example}</div>
       )}
-    </div>
+    </td>
 
-    {word.example && (
-      <div className="mt-1.5 pl-5 flex items-start gap-2 flex-wrap">
-        <span className="text-xs italic" style={{ color: 'rgba(255,255,255,0.28)' }}>{word.example}</span>
-        {word.exampleEn && (
-          <>
-            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.12)' }}>·</span>
-            <span className="text-xs italic" style={{ color: 'rgba(167,139,250,0.45)' }}>{word.exampleEn}</span>
-          </>
-        )}
-      </div>
-    )}
-  </div>
+    {/* 🇬🇧 English */}
+    <td style={{ padding: '10px 14px', verticalAlign: 'top', width: '34%', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
+      <span style={{ fontWeight: 500, color: '#a78bfa', fontSize: 14 }}>{word.english}</span>
+      {word.exampleEn && (
+        <div style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(167,139,250,0.45)', marginTop: 4 }}>{word.exampleEn}</div>
+      )}
+    </td>
+
+    {/* 🇫🇷 Français */}
+    <td style={{ padding: '10px 12px 10px 14px', verticalAlign: 'top', width: '33%', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
+      <span style={{ fontWeight: 500, color: '#60a5fa', fontSize: 14 }}>{word.french || '—'}</span>
+    </td>
+  </tr>
 );
 
-const LEVELS = ['A1', 'A2'];
+const LEVELS = ['A1', 'A2', 'A-L', 'M-Z'];
+
+const LEVEL_LABELS = {
+  'A1': 'A1',
+  'A2': 'A2',
+  'A-L': 'A → L',
+  'M-Z': 'M → Z',
+};
 
 const levelAccents = {
-  A1: { color: '#818cf8', bg: 'rgba(129,140,248,0.10)', border: 'rgba(129,140,248,0.25)' },
-  A2: { color: '#a78bfa', bg: 'rgba(167,139,250,0.10)', border: 'rgba(167,139,250,0.25)' },
+  A1:   { color: '#818cf8', bg: 'rgba(129,140,248,0.10)', border: 'rgba(129,140,248,0.25)' },
+  A2:   { color: '#a78bfa', bg: 'rgba(167,139,250,0.10)', border: 'rgba(167,139,250,0.25)' },
+  'A-L': { color: '#34d399', bg: 'rgba(52,211,153,0.10)',  border: 'rgba(52,211,153,0.25)'  },
+  'M-Z': { color: '#f59e0b', bg: 'rgba(245,158,11,0.10)',  border: 'rgba(245,158,11,0.25)'  },
 };
 
 const Chip = ({ label, active, onClick }) => (
@@ -176,7 +161,7 @@ const Vocabulary = () => {
         style={{ top: '52px', background: 'rgba(13,13,13,0.96)', borderBottom: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(10px)' }}
       >
         {LEVELS.map(l => (
-          <Chip key={l} label={l} active={level === l} onClick={() => { setLevel(l); setTopic(null); }} />
+          <Chip key={l} label={LEVEL_LABELS[l] ?? l} active={level === l} onClick={() => { setLevel(l); setTopic(null); }} />
         ))}
       </div>
 
@@ -281,17 +266,7 @@ const Vocabulary = () => {
             </div>
           )}
 
-          {/* Column headers */}
-          {filtered.length > 0 && (
-            <div className="flex items-center gap-3 px-4 mb-2">
-              <div className="w-2 h-2 shrink-0" />
-              <div className="min-w-[150px] text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'rgba(255,255,255,0.22)' }}>🇩🇪 Deutsch</div>
-              <div className="hidden sm:block min-w-[150px] text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'rgba(255,255,255,0.22)' }}>🇬🇧 English</div>
-              <div className="hidden sm:block min-w-[150px] text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'rgba(255,255,255,0.22)' }}>🇫🇷 Français</div>
-            </div>
-          )}
-
-          {/* Dictionary rows */}
+          {/* Dictionary table */}
           {filtered.length === 0 ? (
             <div className="text-center py-16" style={{ color: 'rgba(255,255,255,0.30)' }}>
               <div
@@ -303,18 +278,29 @@ const Vocabulary = () => {
               <p>Mot introuvable &quot;{search}&quot;</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-2">
-              {filtered.map((word, i) => {
-                const id = `${level}-${effectiveTopic}-${word.german}`;
-                return (
-                  <DictRow
-                    key={i}
-                    word={word}
-                    isLearned={isWordLearned(word)}
-                    onLearn={() => handleLearnWord(id)}
-                  />
-                );
-              })}
+            <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.09)' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+                <thead>
+                  <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.10)' }}>
+                    <th style={{ padding: '9px 14px 9px 12px', textAlign: 'left', fontWeight: 600, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.40)', width: '33%' }}>🇩🇪 Deutsch</th>
+                    <th style={{ padding: '9px 14px', textAlign: 'left', fontWeight: 600, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.40)', borderLeft: '1px solid rgba(255,255,255,0.08)', width: '34%' }}>🇬🇧 English</th>
+                    <th style={{ padding: '9px 12px 9px 14px', textAlign: 'left', fontWeight: 600, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.40)', borderLeft: '1px solid rgba(255,255,255,0.08)', width: '33%' }}>🇫🇷 Français</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map((word, i) => {
+                    const id = `${level}-${effectiveTopic}-${word.german}`;
+                    return (
+                      <DictTableRow
+                        key={i}
+                        word={word}
+                        isLearned={isWordLearned(word)}
+                        onLearn={() => handleLearnWord(id)}
+                      />
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
 
