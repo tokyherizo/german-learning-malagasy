@@ -3,6 +3,71 @@ import { vocabulary, getAllTopics } from '../data/vocabulary';
 import { progressService } from '../services/progress';
 import AudioWord from '../components/AudioWord';
 
+/* ── Dictionary row: 🇩🇪 DE | 🇬🇧 EN | 🇫🇷 FR ── */
+const DictRow = ({ word, isLearned, onLearn }) => (
+  <div
+    onClick={onLearn}
+    className="cursor-pointer rounded-xl px-4 py-3 transition-all"
+    style={{
+      background: isLearned ? 'rgba(74,222,128,0.04)' : 'rgba(255,255,255,0.02)',
+      border: `1px solid ${isLearned ? 'rgba(74,222,128,0.18)' : 'rgba(255,255,255,0.07)'}`,
+    }}
+    onMouseEnter={e => {
+      if (!isLearned) {
+        e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)';
+      }
+    }}
+    onMouseLeave={e => {
+      e.currentTarget.style.background = isLearned ? 'rgba(74,222,128,0.04)' : 'rgba(255,255,255,0.02)';
+      e.currentTarget.style.borderColor = isLearned ? 'rgba(74,222,128,0.18)' : 'rgba(255,255,255,0.07)';
+    }}
+  >
+    <div className="flex items-center gap-3 flex-wrap">
+      <div className="w-2 h-2 rounded-full shrink-0" style={{ background: isLearned ? '#4ade80' : 'rgba(255,255,255,0.15)' }} />
+
+      {/* 🇩🇪 German */}
+      <div className="flex items-center gap-1.5 min-w-[150px]">
+        <span className="text-sm">🇩🇪</span>
+        <span className="font-bold text-white text-sm">{word.german}</span>
+        <div onClick={e => e.stopPropagation()}><AudioWord word={word.german} /></div>
+      </div>
+
+      <div className="hidden sm:block w-px h-4 shrink-0" style={{ background: 'rgba(255,255,255,0.12)' }} />
+
+      {/* 🇬🇧 English */}
+      <div className="flex items-center gap-1.5 min-w-[150px]">
+        <span className="text-sm">🇬🇧</span>
+        <span className="text-sm font-medium" style={{ color: '#a78bfa' }}>{word.english}</span>
+      </div>
+
+      <div className="hidden sm:block w-px h-4 shrink-0" style={{ background: 'rgba(255,255,255,0.12)' }} />
+
+      {/* 🇫🇷 French */}
+      <div className="flex items-center gap-1.5 min-w-[150px]">
+        <span className="text-sm">🇫🇷</span>
+        <span className="text-sm font-medium" style={{ color: '#60a5fa' }}>{word.french || '—'}</span>
+      </div>
+
+      {!isLearned && (
+        <span className="ml-auto text-[10px] shrink-0" style={{ color: 'rgba(255,255,255,0.20)' }}>+2 XP</span>
+      )}
+    </div>
+
+    {word.example && (
+      <div className="mt-1.5 pl-5 flex items-start gap-2 flex-wrap">
+        <span className="text-xs italic" style={{ color: 'rgba(255,255,255,0.28)' }}>{word.example}</span>
+        {word.exampleEn && (
+          <>
+            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.12)' }}>·</span>
+            <span className="text-xs italic" style={{ color: 'rgba(167,139,250,0.45)' }}>{word.exampleEn}</span>
+          </>
+        )}
+      </div>
+    )}
+  </div>
+);
+
 const LEVELS = ['A1', 'A2'];
 
 const levelAccents = {
@@ -10,7 +75,6 @@ const levelAccents = {
   A2: { color: '#a78bfa', bg: 'rgba(167,139,250,0.10)', border: 'rgba(167,139,250,0.25)' },
 };
 
-/* ── Chip (matches Home design) ── */
 const Chip = ({ label, active, onClick }) => (
   <button
     onClick={onClick}
@@ -25,105 +89,22 @@ const Chip = ({ label, active, onClick }) => (
   </button>
 );
 
-const WordCard = ({ word, isLearned, onLearn, showExample }) => {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-    <div
-      className={`cursor-pointer group relative h-40 transition-all duration-300 card-hover ${isLearned ? 'opacity-80' : ''}`}
-      onClick={() => { setFlipped(!flipped); if (!isLearned) onLearn(); }}
-      style={{ perspective: '800px' }}
-    >
-      <div className={`w-full h-full transition-all duration-500 relative ${flipped ? '[transform:rotateY(180deg)]' : ''}`}
-        style={{ transformStyle: 'preserve-3d' }}>
-
-        {/* Front */}
-        <div className={`absolute inset-0 rounded-2xl border p-4 flex flex-col justify-between backface-hidden ${
-          isLearned
-            ? 'bg-green-500/5 border-green-400/20'
-            : 'bg-white/3 border-white/8 hover:border-white/18'
-        }`} style={{ backfaceVisibility: 'hidden' }}>
-          <div className="flex items-start justify-between">
-            <span className="text-[10px] font-semibold text-white/25 uppercase tracking-widest">Deutsch</span>
-            {isLearned && <span className="text-green-400 text-xs">✓</span>}
-          </div>
-          <div className="text-center">
-            <div className="text-xl font-black text-white leading-tight mb-2">{word.german}</div>
-            <div className="flex justify-center" onClick={e => e.stopPropagation()}>
-              <AudioWord word={word.german} size="md" />
-            </div>
-          </div>
-          <div className="text-[10px] text-white/25 text-center">Click / Tippen</div>
-        </div>
-
-        {/* Back */}
-        <div className="absolute inset-0 rounded-2xl border bg-violet-500/10 border-violet-400/22 p-4 flex flex-col justify-between"
-          style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
-          <span className="text-[10px] font-semibold text-violet-400/60 uppercase tracking-widest">English</span>
-          <div className="text-center">
-            <div className="text-lg font-black text-violet-300 leading-tight">{word.english}</div>
-            {showExample && word.example && (
-              <div className="text-[11px] text-white/35 italic mt-2 leading-snug">„{word.example}"</div>
-            )}
-          </div>
-          <div className="text-[10px] text-violet-400/45 text-center">Click again</div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const WordList = ({ word, isLearned, onLearn }) => (
-  <div
-    onClick={onLearn}
-    className="flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-200"
-    style={{
-      background: isLearned ? 'rgba(74,222,128,0.04)' : 'rgba(255,255,255,0.02)',
-      border: `1px solid ${isLearned ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.07)'}`,
-    }}
-    onMouseEnter={e => { if (!isLearned) { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)'; } }}
-    onMouseLeave={e => { e.currentTarget.style.background = isLearned ? 'rgba(74,222,128,0.04)' : 'rgba(255,255,255,0.02)'; e.currentTarget.style.borderColor = isLearned ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.07)'; }}
-  >
-    <div className="w-2 h-2 rounded-full shrink-0" style={{ background: isLearned ? '#4ade80' : 'rgba(255,255,255,0.15)' }} />
-    <div className="flex-1 min-w-0">
-      <span className="font-bold text-white text-sm">{word.german}</span>
-      <span className="mx-2 text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>→</span>
-      <span className="text-sm font-medium" style={{ color: '#a78bfa' }}>{word.english}</span>
-    </div>
-    <div onClick={e => e.stopPropagation()}>
-      <AudioWord word={word.german} />
-    </div>
-    {word.example && (
-      <div className="hidden md:block text-xs italic truncate max-w-[200px]" style={{ color: 'rgba(255,255,255,0.25)' }}>
-        {word.example}
-      </div>
-    )}
-    {!isLearned && (
-      <span className="text-[10px] shrink-0" style={{ color: 'rgba(255,255,255,0.20)' }}>+2 XP</span>
-    )}
-  </div>
-);
-
 const Vocabulary = () => {
   const [level, setLevel] = useState('A1');
   const [topic, setTopic] = useState(null);
-  const [viewMode, setViewMode] = useState('cards'); // 'cards' | 'list'
-  const [showExamples, setShowExamples] = useState(true);
   const [progress, setProgress] = useState(() => progressService.getProgress());
   const [search, setSearch] = useState('');
 
   const topics = getAllTopics(level);
-
-  // Derive active topic at render time — avoids setState inside useEffect
   const effectiveTopic = topic && topics.includes(topic) ? topic : (topics[0] ?? null);
-
   const currentTopic = vocabulary[level]?.[effectiveTopic] || { title: '', words: [] };
   const allWords = currentTopic.words || [];
 
   const filtered = search
     ? allWords.filter(w =>
         w.german.toLowerCase().includes(search.toLowerCase()) ||
-        w.english.toLowerCase().includes(search.toLowerCase())
+        w.english.toLowerCase().includes(search.toLowerCase()) ||
+        (w.french && w.french.toLowerCase().includes(search.toLowerCase()))
       )
     : allWords;
 
@@ -139,7 +120,6 @@ const Vocabulary = () => {
 
   const learnedInTopic = allWords.filter(w => isWordLearned(w)).length;
   const totalLearned = progress.vocabularyLearned.length;
-
   const la = levelAccents[level] || levelAccents.A1;
 
   return (
@@ -150,23 +130,26 @@ const Vocabulary = () => {
         className="relative py-14 overflow-hidden"
         style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
       >
-        {/* Big decorative background word */}
         <div
           className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center font-black select-none pointer-events-none"
-          style={{ fontSize: 'clamp(5rem,18vw,11rem)', color: 'rgba(255,255,255,0.03)', letterSpacing: '-0.04em', lineHeight: 1 }}
+          style={{ fontSize: 'clamp(4rem,16vw,10rem)', color: 'rgba(255,255,255,0.03)', letterSpacing: '-0.04em', lineHeight: 1 }}
         >
-          WÖRTER
+          WÖRTERBUCH
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-5">
             <div>
               <h1 className="text-3xl md:text-5xl font-black mb-2" style={{ letterSpacing: '-0.03em' }}>
-                <span className="text-white">Teny /</span>{' '}
-                <span className="text-grad">Vokabeln</span>
+                <span className="text-white">Dictionnaire /</span>{' '}
+                <span className="text-grad">Wörterbuch</span>
               </h1>
-              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>
-                Learn vocabulary by topic — German ↔ English
+              <p className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>
+                <span>🇩🇪 Deutsch</span>
+                <span style={{ color: 'rgba(255,255,255,0.15)' }}>·</span>
+                <span>🇬🇧 English</span>
+                <span style={{ color: 'rgba(255,255,255,0.15)' }}>·</span>
+                <span>🇫🇷 Français</span>
               </p>
             </div>
             <div
@@ -187,7 +170,7 @@ const Vocabulary = () => {
         </div>
       </section>
 
-      {/* ── Sticky level chip bar (matches Home) ── */}
+      {/* ── Sticky level bar ── */}
       <div
         className="sticky z-40 flex items-center justify-center gap-2 overflow-x-auto px-6 py-3 no-scrollbar"
         style={{ top: '52px', background: 'rgba(13,13,13,0.96)', borderBottom: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(10px)' }}
@@ -205,7 +188,7 @@ const Vocabulary = () => {
             className="rounded-2xl p-4"
             style={{ background: '#111', border: '1px solid rgba(255,255,255,0.07)' }}
           >
-            <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'rgba(255,255,255,0.30)' }}>Lohahevitra</div>
+            <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'rgba(255,255,255,0.30)' }}>Thèmes</div>
             <div className="flex flex-col gap-1">
               {topics.map(t => {
                 const topicData = vocabulary[level]?.[t] || {};
@@ -240,7 +223,7 @@ const Vocabulary = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-medium truncate">{topicData.title?.split('/')[1]?.trim() || t}</div>
-                      <div className="text-[10px] mt-0.5" style={{ color: 'rgba(255,255,255,0.25)' }}>{topicWords.length} teny{pct > 0 ? ` · ${pct}%` : ''}</div>
+                      <div className="text-[10px] mt-0.5" style={{ color: 'rgba(255,255,255,0.25)' }}>{topicWords.length} mots{pct > 0 ? ` · ${pct}%` : ''}</div>
                     </div>
                     {pct === 100 && <span className="text-[10px] font-bold shrink-0" style={{ color: '#4ade80' }}>✓</span>}
                   </button>
@@ -249,82 +232,44 @@ const Vocabulary = () => {
             </div>
           </div>
         </aside>
-                
-      
 
         {/* ── Main content ── */}
         <div className="flex-1 min-w-0">
-          {/* Topic header — text badge instead of emoji */}
+
+          {/* Topic header + search */}
           {currentTopic.title && (
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h2 className="text-lg font-black text-white">{currentTopic.title}</h2>
                 <div className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                  {learnedInTopic}/{allWords.length} appris
+                  {learnedInTopic}/{allWords.length} appris — cliquez sur un mot pour le marquer
                 </div>
               </div>
-
-              <div className="flex items-center gap-2">
-                {/* Search */}
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Hikaroka..."
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    className="rounded-xl px-3.5 py-2 text-sm focus:outline-none w-36 sm:w-44 transition-all"
-                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: '#fff' }}
-                    onFocus={e => e.target.style.borderColor = 'rgba(129,140,248,0.35)'}
-                    onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.10)'}
-                  />
-                  {search && (
-                    <button onClick={() => setSearch('')}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2"
-                      style={{ color: 'rgba(255,255,255,0.30)' }}>✕</button>
-                  )}
-                </div>
-
-                {/* View toggle — text labels, no emoji */}
-                <div
-                  className="flex gap-1 rounded-xl p-1"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-                >
-                  {[{ key: 'cards', label: 'Grid' }, { key: 'list', label: 'List' }].map(v => (
-                    <button
-                      key={v.key}
-                      onClick={() => setViewMode(v.key)}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all"
-                      style={{
-                        background: viewMode === v.key ? 'rgba(255,255,255,0.10)' : 'transparent',
-                        color: viewMode === v.key ? '#fff' : 'rgba(255,255,255,0.35)',
-                      }}
-                    >
-                      {v.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Examples toggle — no emoji */}
-                <button
-                  onClick={() => setShowExamples(!showExamples)}
-                  className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
-                  style={{
-                    background: showExamples ? 'rgba(129,140,248,0.12)' : 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${showExamples ? 'rgba(129,140,248,0.28)' : 'rgba(255,255,255,0.10)'}`,
-                    color: showExamples ? '#818cf8' : 'rgba(255,255,255,0.35)',
-                  }}
-                >
-                  Ohatra
-                </button>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Rechercher..."
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="rounded-xl px-3.5 py-2 text-sm focus:outline-none w-44 transition-all"
+                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: '#fff' }}
+                  onFocus={e => e.target.style.borderColor = 'rgba(129,140,248,0.35)'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.10)'}
+                />
+                {search && (
+                  <button onClick={() => setSearch('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2"
+                    style={{ color: 'rgba(255,255,255,0.30)' }}>✕</button>
+                )}
               </div>
             </div>
           )}
 
-          {/* Progress bar for topic */}
+          {/* Progress bar */}
           {allWords.length > 0 && (
-            <div className="mb-6">
+            <div className="mb-5">
               <div className="flex items-center justify-between text-xs mb-1.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                <span>Fandrosoan&apos;ny lohahevitra</span>
+                <span>Progression du thème</span>
                 <span className="font-semibold" style={{ color: la.color }}>{learnedInTopic}/{allWords.length}</span>
               </div>
               <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
@@ -336,7 +281,17 @@ const Vocabulary = () => {
             </div>
           )}
 
-          {/* Words display */}
+          {/* Column headers */}
+          {filtered.length > 0 && (
+            <div className="flex items-center gap-3 px-4 mb-2">
+              <div className="w-2 h-2 shrink-0" />
+              <div className="min-w-[150px] text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'rgba(255,255,255,0.22)' }}>🇩🇪 Deutsch</div>
+              <div className="hidden sm:block min-w-[150px] text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'rgba(255,255,255,0.22)' }}>🇬🇧 English</div>
+              <div className="hidden sm:block min-w-[150px] text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'rgba(255,255,255,0.22)' }}>🇫🇷 Français</div>
+            </div>
+          )}
+
+          {/* Dictionary rows */}
           {filtered.length === 0 ? (
             <div className="text-center py-16" style={{ color: 'rgba(255,255,255,0.30)' }}>
               <div
@@ -345,29 +300,14 @@ const Vocabulary = () => {
               >
                 404
               </div>
-              <p>Tsy hita ny teny &quot;{search}&quot;</p>
-            </div>
-          ) : viewMode === 'cards' ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {filtered.map((word, i) => {
-                const id = `${level}-${effectiveTopic}-${word.german}`;
-                return (
-                  <WordCard
-                    key={i}
-                    word={word}
-                    isLearned={isWordLearned(word)}
-                    showExample={showExamples}
-                    onLearn={() => handleLearnWord(id)}
-                  />
-                );
-              })}
+              <p>Mot introuvable &quot;{search}&quot;</p>
             </div>
           ) : (
             <div className="flex flex-col gap-2">
               {filtered.map((word, i) => {
                 const id = `${level}-${effectiveTopic}-${word.german}`;
                 return (
-                  <WordList
+                  <DictRow
                     key={i}
                     word={word}
                     isLearned={isWordLearned(word)}
@@ -388,7 +328,7 @@ const Vocabulary = () => {
                 className="font-black leading-none mb-2 select-none"
                 style={{ fontSize: 'clamp(3rem,12vw,6rem)', color: 'rgba(74,222,128,0.15)', letterSpacing: '-0.04em' }}
               >
-                VITA!
+                PARFAIT !
               </div>
               <div className="text-lg font-black text-green-400 mb-1">Thème terminé !</div>
               <p className="text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>Vous avez appris les {allWords.length} mots !</p>

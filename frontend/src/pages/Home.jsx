@@ -131,7 +131,7 @@ const Home = () => {
         <div className="hidden lg:block">
           <FloatTile bg="#0d0dcb" label="Akkusativ"   size="1.6rem" style={{ right: '7%',  top: '18%' }} delay={300} />
           <FloatTile bg="#e9079a" label="A2"          size="2.2rem" style={{ right: '12%', top: '46%' }} delay={600} />
-          <FloatTile bg="#aa6805" label="der/die/das"       size="1.1rem" style={{ right: '6%',  top: '65%' }} delay={100} />
+          <FloatTile bg="#aa6805" label="C1/C2"       size="1.1rem" style={{ right: '6%',  top: '65%' }} delay={100} />
           <FloatTile bg="#fb7900" label="Genitiv"     size="1.5rem" style={{ right: '17%', top: '80%' }} delay={500} />
         </div>
 
@@ -249,7 +249,7 @@ const Home = () => {
                 {t?.home?.missionH2a || 'La langue allemande,'}{' '}
                 <span
                   style={{
-                    background: 'linear-gradient(135deg, #7124e5 0%, #a855f7 55%, #812bea 100%)',
+                    background: 'linear-gradient(135deg, #a855f7 0%, #a855f7 55%, #a855f7 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
@@ -381,13 +381,7 @@ const Home = () => {
                 </div>
 
                 {/* CTA link */}
-                <Link
-                  to="/levels"
-                  className="inline-flex items-center gap-2 text-[12px] font-black px-4 py-2 rounded-xl"
-                  style={{ background: 'rgba(113,36,229,0.10)', color: '#7124e5', border: '1px solid rgba(113,36,229,0.20)', position: 'relative' }}
-                >
-                  {t?.home?.featureCta || 'Commencer le parcours'} <span>→</span>
-                </Link>
+               
               </div>
 
               {/* 2 cards côte à côte — sobres */}
@@ -434,10 +428,10 @@ const Home = () => {
             className="font-black leading-tight tracking-tight mb-1"
             style={{ color: il ? '#0f172a' : '#fff', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}
           >
-            {t?.home?.exploreTitle || 'Explorer la plateforme'}
+            Explorer la plateforme
           </h2>
           <p className="text-[13px] mb-8" style={{ color: il ? 'rgba(15,23,42,0.48)' : 'rgba(255,255,255,0.38)' }}>
-            {t?.home?.exploreSub || "Tout ce dont vous avez besoin pour apprendre l'allemand — en un seul endroit."}
+            Tout ce dont vous avez besoin pour apprendre l'allemand — en un seul endroit.
           </p>
         </div>
         <div className="max-w-6xl mx-auto px-6 pb-10">

@@ -88,7 +88,7 @@ const Footer = () => {
               <span style={{ fontSize: 16, fontWeight: 700, color: il ? '#7124e5' : '#fff', letterSpacing: '-0.02em' }}>DeutschLearn</span>
             </Link>
             <p style={{ fontSize: 12, lineHeight: 1.7, color: descClr, margin: 0, maxWidth: 220 }}>
-              {t?.footer?.desc || 'Free German learning platform for everyone — from A1 to C2.'}
+              {t?.footer?.desc || 'Free German learning platform for everyone — from A1 to A2.'}
             </p>
             <span style={{ fontSize: 12, color: flagClr }}>{t?.footer?.tagline || 'Deutschland 🇩🇪'}</span>
           </div>

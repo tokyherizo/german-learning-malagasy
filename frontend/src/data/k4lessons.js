@@ -718,78 +718,78 @@ export const k4Vocabulary = {
     title: "Breakfast / Frühstück",
     icon: "🥐",
     words: [
-      { german: "das Frühstück", english: "breakfast", example: "Das Frühstück beginnt um 7 Uhr.", exampleEn: "Breakfast starts at 7 o'clock." },
-      { german: "das Brötchen", english: "bread roll", example: "Zwei Brötchen mit Butter, bitte.", exampleEn: "Two bread rolls with butter, please." },
-      { german: "die Butter", english: "butter", example: "Brötchen mit Butter und Marmelade.", exampleEn: "Rolls with butter and jam." },
-      { german: "die Marmelade", english: "jam", example: "Erdbeermarmelade ist lecker!", exampleEn: "Strawberry jam is delicious!" },
-      { german: "der Honig", english: "honey", example: "Möchten Sie Honig?", exampleEn: "Would you like honey?" },
-      { german: "der Aufschnitt", english: "cold cuts", example: "Der Aufschnitt ist frisch.", exampleEn: "The cold cuts are fresh." },
-      { german: "der Käse", english: "cheese", example: "Ich esse gern Käse.", exampleEn: "I like eating cheese." },
-      { german: "das Müsli", english: "muesli / cereal", example: "Müsli mit Milch und Obst.", exampleEn: "Muesli with milk and fruit." },
-      { german: "der Orangensaft", english: "orange juice", example: "Ein Glas Orangensaft, bitte.", exampleEn: "A glass of orange juice, please." },
-      { german: "das gekochte Ei", english: "boiled egg", example: "Ein gekochtes Ei, bitte.", exampleEn: "A boiled egg, please." }
+      { german: "das Frühstück", english: "breakfast", french: "le petit-déjeuner", example: "Das Frühstück beginnt um 7 Uhr.", exampleEn: "Breakfast starts at 7 o'clock." },
+      { german: "das Brötchen", english: "bread roll", french: "le petit pain", example: "Zwei Brötchen mit Butter, bitte.", exampleEn: "Two bread rolls with butter, please." },
+      { german: "die Butter", english: "butter", french: "le beurre", example: "Brötchen mit Butter und Marmelade.", exampleEn: "Rolls with butter and jam." },
+      { german: "die Marmelade", english: "jam", french: "la confiture", example: "Erdbeermarmelade ist lecker!", exampleEn: "Strawberry jam is delicious!" },
+      { german: "der Honig", english: "honey", french: "le miel", example: "Möchten Sie Honig?", exampleEn: "Would you like honey?" },
+      { german: "der Aufschnitt", english: "cold cuts", french: "la charcuterie", example: "Der Aufschnitt ist frisch.", exampleEn: "The cold cuts are fresh." },
+      { german: "der Käse", english: "cheese", french: "le fromage", example: "Ich esse gern Käse.", exampleEn: "I like eating cheese." },
+      { german: "das Müsli", english: "muesli / cereal", french: "le muesli", example: "Müsli mit Milch und Obst.", exampleEn: "Muesli with milk and fruit." },
+      { german: "der Orangensaft", english: "orange juice", french: "le jus d'orange", example: "Ein Glas Orangensaft, bitte.", exampleEn: "A glass of orange juice, please." },
+      { german: "das gekochte Ei", english: "boiled egg", french: "l'œuf à la coque", example: "Ein gekochtes Ei, bitte.", exampleEn: "A boiled egg, please." }
     ]
   },
   tableware: {
     title: "Tableware / Geschirr",
     icon: "🍽️",
     words: [
-      { german: "der Teller", english: "plate", example: "Der Teller ist sauber.", exampleEn: "The plate is clean." },
-      { german: "die Tasse", english: "cup", example: "Eine Tasse Kaffee, bitte.", exampleEn: "A cup of coffee, please." },
-      { german: "das Glas", english: "glass", example: "Ein Glas Wasser, bitte.", exampleEn: "A glass of water, please." },
-      { german: "die Gabel", english: "fork", example: "Die Gabel liegt links.", exampleEn: "The fork is on the left." },
-      { german: "das Messer", english: "knife", example: "Das Messer liegt rechts.", exampleEn: "The knife is on the right." },
-      { german: "der Löffel", english: "spoon", example: "Ich brauche einen Löffel.", exampleEn: "I need a spoon." },
-      { german: "die Serviette", english: "napkin", example: "Eine Serviette, bitte.", exampleEn: "A napkin, please." },
-      { german: "die Schüssel", english: "bowl", example: "Die Suppe ist in der Schüssel.", exampleEn: "The soup is in the bowl." },
-      { german: "die Kanne", english: "pot / jug", example: "Eine Kanne Tee, bitte.", exampleEn: "A pot of tea, please." },
-      { german: "das Besteck", english: "cutlery", example: "Das Besteck liegt auf dem Tisch.", exampleEn: "The cutlery is on the table." }
+      { german: "der Teller", english: "plate", french: "l'assiette", example: "Der Teller ist sauber.", exampleEn: "The plate is clean." },
+      { german: "die Tasse", english: "cup", french: "la tasse", example: "Eine Tasse Kaffee, bitte.", exampleEn: "A cup of coffee, please." },
+      { german: "das Glas", english: "glass", french: "le verre", example: "Ein Glas Wasser, bitte.", exampleEn: "A glass of water, please." },
+      { german: "die Gabel", english: "fork", french: "la fourchette", example: "Die Gabel liegt links.", exampleEn: "The fork is on the left." },
+      { german: "das Messer", english: "knife", french: "le couteau", example: "Das Messer liegt rechts.", exampleEn: "The knife is on the right." },
+      { german: "der Löffel", english: "spoon", french: "la cuillère", example: "Ich brauche einen Löffel.", exampleEn: "I need a spoon." },
+      { german: "die Serviette", english: "napkin", french: "la serviette", example: "Eine Serviette, bitte.", exampleEn: "A napkin, please." },
+      { german: "die Schüssel", english: "bowl", french: "le bol", example: "Die Suppe ist in der Schüssel.", exampleEn: "The soup is in the bowl." },
+      { german: "die Kanne", english: "pot / jug", french: "la cafetière / la théière", example: "Eine Kanne Tee, bitte.", exampleEn: "A pot of tea, please." },
+      { german: "das Besteck", english: "cutlery", french: "les couverts", example: "Das Besteck liegt auf dem Tisch.", exampleEn: "The cutlery is on the table." }
     ]
   },
   food: {
     title: "Food & Meals / Essen",
     icon: "🍎",
     words: [
-      { german: "die Wurst", english: "sausage", example: "Deutsche Wurst ist berühmt.", exampleEn: "German sausage is famous." },
-      { german: "der Schinken", english: "ham", example: "Schinken auf Brot schmeckt gut.", exampleEn: "Ham on bread tastes good." },
-      { german: "der Fisch", english: "fish", example: "Ich esse freitags Fisch.", exampleEn: "I eat fish on Fridays." },
-      { german: "das Gemüse", english: "vegetables", example: "Gemüse ist gesund.", exampleEn: "Vegetables are healthy." },
-      { german: "das Obst", english: "fruit", example: "Ich esse gern Obst.", exampleEn: "I like eating fruit." },
-      { german: "die Kartoffel", english: "potato", example: "Kartoffeln mit Butter.", exampleEn: "Potatoes with butter." },
-      { german: "der Kuchen", english: "cake", example: "Der Kuchen ist lecker!", exampleEn: "The cake is delicious!" },
-      { german: "die Suppe", english: "soup", example: "Eine Tomatensuppe, bitte.", exampleEn: "A tomato soup, please." },
-      { german: "das Hähnchen", english: "chicken", example: "Ich nehme das Hähnchen.", exampleEn: "I'll have the chicken." },
-      { german: "das Schnitzel", english: "schnitzel", example: "Wiener Schnitzel ist typisch.", exampleEn: "Wiener Schnitzel is typical." }
+      { german: "die Wurst", english: "sausage", french: "la saucisse", example: "Deutsche Wurst ist berühmt.", exampleEn: "German sausage is famous." },
+      { german: "der Schinken", english: "ham", french: "le jambon", example: "Schinken auf Brot schmeckt gut.", exampleEn: "Ham on bread tastes good." },
+      { german: "der Fisch", english: "fish", french: "le poisson", example: "Ich esse freitags Fisch.", exampleEn: "I eat fish on Fridays." },
+      { german: "das Gemüse", english: "vegetables", french: "les légumes", example: "Gemüse ist gesund.", exampleEn: "Vegetables are healthy." },
+      { german: "das Obst", english: "fruit", french: "les fruits", example: "Ich esse gern Obst.", exampleEn: "I like eating fruit." },
+      { german: "die Kartoffel", english: "potato", french: "la pomme de terre", example: "Kartoffeln mit Butter.", exampleEn: "Potatoes with butter." },
+      { german: "der Kuchen", english: "cake", french: "le gâteau", example: "Der Kuchen ist lecker!", exampleEn: "The cake is delicious!" },
+      { german: "die Suppe", english: "soup", french: "la soupe", example: "Eine Tomatensuppe, bitte.", exampleEn: "A tomato soup, please." },
+      { german: "das Hähnchen", english: "chicken", french: "le poulet", example: "Ich nehme das Hähnchen.", exampleEn: "I'll have the chicken." },
+      { german: "das Schnitzel", english: "schnitzel", french: "l'escalope", example: "Wiener Schnitzel ist typisch.", exampleEn: "Wiener Schnitzel is typical." }
     ]
   },
   drinks: {
     title: "Drinks / Getränke",
     icon: "🥤",
     words: [
-      { german: "das Bier", english: "beer", example: "Ein Bier, bitte!", exampleEn: "A beer, please!" },
-      { german: "der Wein", english: "wine", example: "Rotwein oder Weißwein?", exampleEn: "Red wine or white wine?" },
-      { german: "der Saft", english: "juice", example: "Apfelsaft ist mein Favorit.", exampleEn: "Apple juice is my favourite." },
-      { german: "die Limonade", english: "lemonade", example: "Eine Limonade, bitte.", exampleEn: "A lemonade, please." },
-      { german: "das Mineralwasser", english: "mineral water", example: "Mit oder ohne Kohlensäure?", exampleEn: "Sparkling or still?" },
-      { german: "der Kakao", english: "hot chocolate", example: "Ein Kakao für das Kind.", exampleEn: "A hot chocolate for the child." }
+      { german: "das Bier", english: "beer", french: "la bière", example: "Ein Bier, bitte!", exampleEn: "A beer, please!" },
+      { german: "der Wein", english: "wine", french: "le vin", example: "Rotwein oder Weißwein?", exampleEn: "Red wine or white wine?" },
+      { german: "der Saft", english: "juice", french: "le jus", example: "Apfelsaft ist mein Favorit.", exampleEn: "Apple juice is my favourite." },
+      { german: "die Limonade", english: "lemonade", french: "la limonade", example: "Eine Limonade, bitte.", exampleEn: "A lemonade, please." },
+      { german: "das Mineralwasser", english: "mineral water", french: "l'eau minérale", example: "Mit oder ohne Kohlensäure?", exampleEn: "Sparkling or still?" },
+      { german: "der Kakao", english: "hot chocolate", french: "le chocolat chaud", example: "Ein Kakao für das Kind.", exampleEn: "A hot chocolate for the child." }
     ]
   },
   restaurant: {
     title: "Restaurant / Im Restaurant",
     icon: "🍝",
     words: [
-      { german: "die Speisekarte", english: "menu", example: "Die Speisekarte, bitte.", exampleEn: "The menu, please." },
-      { german: "bestellen", english: "to order", example: "Ich möchte bestellen.", exampleEn: "I would like to order." },
-      { german: "die Rechnung", english: "the bill", example: "Die Rechnung, bitte!", exampleEn: "The bill, please!" },
-      { german: "das Trinkgeld", english: "tip", example: "Stimmt so!", exampleEn: "Keep the change!" },
-      { german: "die Vorspeise", english: "starter", example: "Als Vorspeise die Suppe.", exampleEn: "The soup as a starter." },
-      { german: "das Hauptgericht", english: "main course", example: "Das Hauptgericht ist Schnitzel.", exampleEn: "The main course is Schnitzel." },
-      { german: "die Nachspeise", english: "dessert", example: "Möchten Sie eine Nachspeise?", exampleEn: "Would you like a dessert?" },
-      { german: "die Beilage", english: "side dish", example: "Pommes oder Reis als Beilage?", exampleEn: "Fries or rice as a side?" },
-      { german: "lecker", english: "delicious", example: "Das Essen war lecker!", exampleEn: "The food was delicious!" },
-      { german: "empfehlen", english: "to recommend", example: "Was empfehlen Sie?", exampleEn: "What do you recommend?" },
-      { german: "der Kellner", english: "waiter", example: "Der Kellner ist freundlich.", exampleEn: "The waiter is friendly." },
-      { german: "reservieren", english: "to reserve", example: "Ich möchte einen Tisch reservieren.", exampleEn: "I would like to reserve a table." }
+      { german: "die Speisekarte", english: "menu", french: "la carte / le menu", example: "Die Speisekarte, bitte.", exampleEn: "The menu, please." },
+      { german: "bestellen", english: "to order", french: "commander", example: "Ich möchte bestellen.", exampleEn: "I would like to order." },
+      { german: "die Rechnung", english: "the bill", french: "l'addition", example: "Die Rechnung, bitte!", exampleEn: "The bill, please!" },
+      { german: "das Trinkgeld", english: "tip", french: "le pourboire", example: "Stimmt so!", exampleEn: "Keep the change!" },
+      { german: "die Vorspeise", english: "starter", french: "l'entrée", example: "Als Vorspeise die Suppe.", exampleEn: "The soup as a starter." },
+      { german: "das Hauptgericht", english: "main course", french: "le plat principal", example: "Das Hauptgericht ist Schnitzel.", exampleEn: "The main course is Schnitzel." },
+      { german: "die Nachspeise", english: "dessert", french: "le dessert", example: "Möchten Sie eine Nachspeise?", exampleEn: "Would you like a dessert?" },
+      { german: "die Beilage", english: "side dish", french: "le plat d'accompagnement", example: "Pommes oder Reis als Beilage?", exampleEn: "Fries or rice as a side?" },
+      { german: "lecker", english: "delicious", french: "délicieux", example: "Das Essen war lecker!", exampleEn: "The food was delicious!" },
+      { german: "empfehlen", english: "to recommend", french: "recommander", example: "Was empfehlen Sie?", exampleEn: "What do you recommend?" },
+      { german: "der Kellner", english: "waiter", french: "le serveur", example: "Der Kellner ist freundlich.", exampleEn: "The waiter is friendly." },
+      { german: "reservieren", english: "to reserve", french: "réserver", example: "Ich möchte einen Tisch reservieren.", exampleEn: "I would like to reserve a table." }
     ]
   }
 };
