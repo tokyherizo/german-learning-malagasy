@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
 /* ─── Reading texts ────────────────────────────────────────────── */
@@ -118,6 +118,16 @@ export default function Lesen() {
   const [submitted, setSubmitted] = useState(false);
   const [scores, setScores] = useState({});
   const [showVocab, setShowVocab] = useState(false);
+  const contentRef = useRef(null);
+
+  const scrollToContent = () => {
+    setTimeout(() => {
+      if (contentRef.current) {
+        const top = contentRef.current.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, 50);
+  };
 
   const filtered = levelFilter === 'Tout' ? TEXTS : TEXTS.filter(t => t.level === levelFilter);
   const text = TEXTS.find(t => t.id === selected) || filtered[0];
@@ -173,7 +183,7 @@ export default function Lesen() {
           {filtered.map(t => {
             const sc = scores[t.id];
             return (
-              <button key={t.id} onClick={() => { setSelected(t.id); setAnswers({}); setSubmitted(false); setShowVocab(false); }}
+              <button key={t.id} onClick={() => { setSelected(t.id); setAnswers({}); setSubmitted(false); setShowVocab(false); scrollToContent(); }}
                 className="text-left rounded-2xl p-4 transition-all"
                 style={{ background: selected === t.id ? accent + '14' : card, border: `1px solid ${selected === t.id ? accent + '55' : border}` }}>
                 <div className="flex items-center justify-between mb-1">
@@ -189,7 +199,7 @@ export default function Lesen() {
 
         {/* ── Right: text + vocab + quiz ─────────────────────────── */}
         {text && (
-          <div className="flex-1 flex flex-col gap-5">
+          <div ref={contentRef} className="flex-1 flex flex-col gap-5">
 
             {/* Text block */}
             <div className="rounded-3xl p-6" style={{ background: card, border: `1px solid ${border}` }}>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
 /* ─── Writing prompts ─────────────────────────────────────────── */
@@ -109,6 +109,16 @@ export default function Schreiben() {
   const [writing, setWriting] = useState('');
   const [showExample, setShowExample] = useState(false);
   const [completed, setCompleted] = useState({});
+  const contentRef = useRef(null);
+
+  const scrollToContent = () => {
+    setTimeout(() => {
+      if (contentRef.current) {
+        const top = contentRef.current.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, 50);
+  };
 
   const filtered = levelFilter === 'Tout' ? PROMPTS : PROMPTS.filter(p => p.level === levelFilter);
   const prompt = PROMPTS.find(p => p.id === selected) || filtered[0];
@@ -121,7 +131,7 @@ export default function Schreiben() {
   };
 
   const handleSelect = (id) => {
-    setSelected(id); setWriting(''); setShowExample(false);
+    setSelected(id); setWriting(''); setShowExample(false); scrollToContent();
   };
 
   return (
@@ -175,7 +185,7 @@ export default function Schreiben() {
 
         {/* ── Right: writing area ─────────────────────────── */}
         {prompt && (
-          <div className="flex-1 flex flex-col gap-5">
+          <div ref={contentRef} className="flex-1 flex flex-col gap-5">
 
             {/* Prompt & checklist */}
             <div className="rounded-3xl p-6" style={{ background: card, border: `1px solid ${border}` }}>

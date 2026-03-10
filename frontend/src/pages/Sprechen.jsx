@@ -119,6 +119,16 @@ export default function Sprechen() {
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [showPhonetics, setShowPhonetics] = useState(false);
   const [results, setResults] = useState({});
+  const contentRef = useRef(null);
+
+  const scrollToContent = () => {
+    setTimeout(() => {
+      if (contentRef.current) {
+        const top = contentRef.current.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, 50);
+  };
 
   const { speaking, speak } = useTTS();
   const { transcript, listening, startListening, stopListening, setTranscript } = useSpeechRecognition();
@@ -196,7 +206,7 @@ export default function Sprechen() {
           {/* List */}
           <div className="flex flex-col gap-2 mt-1">
             {filtered.map((p, i) => (
-              <button key={p.id} onClick={() => { setPhraseIdx(i); setTranscript(''); }}
+              <button key={p.id} onClick={() => { setPhraseIdx(i); setTranscript(''); scrollToContent(); }}
                 className="text-left rounded-xl p-3 transition-all"
                 style={{ background: phrase.id === p.id ? accent + '14' : card, border: `1px solid ${phrase.id === p.id ? accent + '55' : border}` }}>
                 <div className="flex items-center gap-1.5 mb-1">
@@ -213,7 +223,7 @@ export default function Sprechen() {
         </div>
 
         {/* ── Right: practice zone ─────────────────────────── */}
-        <div className="flex-1 flex flex-col gap-5">
+        <div ref={contentRef} className="flex-1 flex flex-col gap-5">
 
           {/* Main phrase card */}
           <div className="rounded-3xl p-8 text-center" style={{ background: card, border: `1px solid ${border}` }}>

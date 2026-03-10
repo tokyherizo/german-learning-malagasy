@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
 /* ─── Dialog data ─────────────────────────────────────────────── */
@@ -139,6 +139,16 @@ export default function Horen() {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [scores, setScores] = useState({});
+  const contentRef = useRef(null);
+
+  const scrollToContent = () => {
+    setTimeout(() => {
+      if (contentRef.current) {
+        const top = contentRef.current.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, 50);
+  };
 
   const levels = ['Tout', 'A1', 'A2', 'B1'];
   const filtered = levelFilter === 'Tout' ? DIALOGS : DIALOGS.filter(d => d.level === levelFilter);
@@ -203,7 +213,7 @@ export default function Horen() {
           {filtered.map(d => {
             const sc = scores[d.id];
             return (
-              <button key={d.id} onClick={() => { setSelected(d.id); setAnswers({}); setSubmitted(false); }}
+              <button key={d.id} onClick={() => { setSelected(d.id); setAnswers({}); setSubmitted(false); scrollToContent(); }}
                 className="text-left rounded-2xl p-4 transition-all"
                 style={{
                   background: selected === d.id ? accentPurple + '14' : card,
@@ -226,7 +236,7 @@ export default function Horen() {
 
         {/* ── Right: dialog player + quiz ─────────────────────────── */}
         {dialog && (
-          <div className="flex-1 flex flex-col gap-5">
+          <div ref={contentRef} className="flex-1 flex flex-col gap-5">
 
             {/* Dialog header */}
             <div className="rounded-3xl p-6" style={{ background: card, border: `1px solid ${border}` }}>
