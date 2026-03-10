@@ -2,11 +2,20 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
 const NAV_LINKS = [
-  { label: 'Home',       to: '/' },
-  { label: 'Levels',     to: '/levels' },
-  { label: 'Exercises',  to: '/exercises' },
-  { label: 'Vocabulary', to: '/vocabulary' },
-  { label: 'Profile',    to: '/profile' },
+  { label: 'Home',          to: '/' },
+  { label: 'Niveaux',       to: '/levels' },
+  { label: 'Opportunités',  to: '/opportunities', badge: '🇩🇪' },
+  { label: 'Communauté',    to: '/community',     badge: 'NEW' },
+  { label: 'Profil',        to: '/profile' },
+];
+
+const SKILL_LINKS = [
+  { icon: '🎧', label: 'Hören',      to: '/horen' },
+  { icon: '📖', label: 'Lesen',      to: '/lesen' },
+  { icon: '✍️', label: 'Schreiben',  to: '/schreiben' },
+  { icon: '🎤', label: 'Sprechen',   to: '/sprechen' },
+  { icon: '🎮', label: 'Mini Games', to: '/minigames' },
+  { icon: '🇩🇪', label: 'Kultur',   to: '/kultur' },
 ];
 
 const LEVELS = [
@@ -36,9 +45,6 @@ const Footer = () => {
   const badgeBg     = il ? 'rgba(0,0,0,0.06)'          : 'rgba(255,255,255,0.07)';
   const badgeBorder = il ? 'rgba(0,0,0,0.10)'          : 'rgba(255,255,255,0.09)';
   const badgeClr    = il ? 'rgba(0,0,0,0.45)'          : 'rgba(255,255,255,0.45)';
-  const brandName   = il ? '#111'                      : '#fff';
-  const badgeDEbg   = il ? '#111'                      : '#fff';
-  const badgeDEclr  = il ? '#fff'                      : '#0d0d0d';
   const contactClr  = il ? 'rgba(0,0,0,0.50)'          : 'rgba(255,255,255,0.50)';
   const contactHov  = il ? '#000'                      : '#fff';
   const copyClr     = il ? 'rgba(0,0,0,0.28)'          : 'rgba(255,255,255,0.18)';
@@ -80,19 +86,43 @@ const Footer = () => {
               <span style={{ fontSize: 16, fontWeight: 700, color: il ? '#7124e5' : '#fff', letterSpacing: '-0.02em' }}>DeutschLearn</span>
             </Link>
             <p style={{ fontSize: 12, lineHeight: 1.7, color: descClr, margin: 0, maxWidth: 220 }}>
-              Free German learning platform for everyone — from A1 to B2.
+              Free German learning platform for everyone — from A1 to C2.
             </p>
-            <span style={{ fontSize: 12, color: flagClr }}>Madagascar 🇲🇬</span>
+            <span style={{ fontSize: 12, color: flagClr }}>Deutschland 🇩🇪</span>
           </div>
 
           {/* Navigation */}
           <div style={col}>
             <span style={colTitle}>Navigation</span>
             {NAV_LINKS.map(l => (
-              <Link key={l.to} to={l.to} style={lnk}
+              <Link key={l.to} to={l.to}
+                style={{ ...lnk, display: 'inline-flex', alignItems: 'center', gap: 6 }}
                 onMouseEnter={e => { e.currentTarget.style.color = lnkHover; }}
                 onMouseLeave={e => { e.currentTarget.style.color = lnkClr; }}>
                 {l.label}
+                {l.badge && (
+                  <span style={{
+                    fontSize: 9, fontWeight: 800,
+                    padding: l.badge === 'NEW' ? '1px 5px' : '0',
+                    borderRadius: 4,
+                    background: l.badge === 'NEW' ? '#8b5cf6' : 'transparent',
+                    color: l.badge === 'NEW' ? '#fff' : 'inherit',
+                  }}>{l.badge}</span>
+                )}
+              </Link>
+            ))}
+          </div>
+
+          {/* Skills */}
+          <div style={col}>
+            <span style={colTitle}>Compétences</span>
+            {SKILL_LINKS.map(s => (
+              <Link key={s.to} to={s.to}
+                style={{ ...lnk, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                onMouseEnter={e => { e.currentTarget.style.color = lnkHover; }}
+                onMouseLeave={e => { e.currentTarget.style.color = lnkClr; }}>
+                <span style={{ fontSize: 12 }}>{s.icon}</span>
+                {s.label}
               </Link>
             ))}
           </div>
