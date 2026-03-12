@@ -60,7 +60,7 @@ const Navbar = () => {
 
   const isActive = (p) => location.pathname === p;
 
-  const LangFlag = { EN: 'EN', DE: '🇩🇪', FR: 'FR' }; // EN, DE, FR
+  const LangFlag = { EN: '🇬🇧', DE: '🇩🇪', FR: '🇫🇷' };
 
   const purpleColor = '#8b5cf6';
 

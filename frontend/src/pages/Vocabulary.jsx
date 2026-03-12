@@ -3,46 +3,110 @@ import { vocabulary, getAllTopics } from '../data/vocabulary';
 import { progressService } from '../services/progress';
 import AudioWord from '../components/AudioWord';
 
-/* ── Dictionary table row ── */
-const DictTableRow = ({ word, isLearned, onLearn }) => (
-  <tr
-    onClick={onLearn}
-    style={{
-      cursor: 'pointer',
-      background: isLearned ? 'rgba(74,222,128,0.04)' : 'transparent',
-      borderBottom: '1px solid rgba(255,255,255,0.05)',
-      transition: 'background 0.15s',
-    }}
-    onMouseEnter={e => { if (!isLearned) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
-    onMouseLeave={e => { e.currentTarget.style.background = isLearned ? 'rgba(74,222,128,0.04)' : 'transparent'; }}
-  >
-    {/* 🇩🇪 Deutsch */}
-    <td style={{ padding: '10px 14px 10px 12px', verticalAlign: 'top', width: '33%' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+/* ── Dictionary row — table on desktop, card on mobile ── */
+const DictTableRow = ({ word, isLearned, onLearn }) => {
+  /* ── MOBILE card (shown below sm breakpoint via CSS class hidden/block) ── */
+  const mobileCard = (
+    <div
+      className="block sm:hidden"
+      onClick={onLearn}
+      style={{
+        cursor: 'pointer',
+        padding: '12px 14px',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        background: isLearned ? 'rgba(74,222,128,0.04)' : 'transparent',
+        transition: 'background 0.15s',
+      }}
+    >
+      {/* Row 1: dot + word + audio buttons + XP */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'nowrap', marginBottom: 6 }}>
         <div style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: isLearned ? '#4ade80' : 'rgba(255,255,255,0.15)' }} />
-        <span style={{ fontWeight: 700, color: '#fff', fontSize: 14 }}>{word.german}</span>
-        <div onClick={e => e.stopPropagation()} style={{ flexShrink: 0 }}><AudioWord word={word.german} /></div>
-        {!isLearned && <span style={{ marginLeft: 'auto', fontSize: 10, color: 'rgba(255,255,255,0.20)' }}>+2 XP</span>}
+        <span style={{ fontWeight: 700, color: '#fff', fontSize: 15, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {word.german}
+        </span>
+        {/* Audio buttons in their own block so they never wrap into translation columns */}
+        <div
+          onClick={e => e.stopPropagation()}
+          style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}
+        >
+          <AudioWord word={word.german} />
+        </div>
+        {!isLearned && (
+          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.20)', flexShrink: 0 }}>+2 XP</span>
+        )}
       </div>
+
+      {/* Row 2: example sentence */}
       {word.example && (
-        <div style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(255,255,255,0.30)', marginTop: 4, paddingLeft: 15 }}>{word.example}</div>
+        <div style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(255,255,255,0.30)', marginBottom: 6, paddingLeft: 15 }}>
+          {word.example}
+        </div>
       )}
-    </td>
 
-    {/* 🇬🇧 English */}
-    <td style={{ padding: '10px 14px', verticalAlign: 'top', width: '34%', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
-      <span style={{ fontWeight: 500, color: '#a78bfa', fontSize: 14 }}>{word.english}</span>
-      {word.exampleEn && (
-        <div style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(167,139,250,0.45)', marginTop: 4 }}>{word.exampleEn}</div>
-      )}
-    </td>
+      {/* Row 3: translations side by side */}
+      <div style={{ display: 'flex', gap: 12, paddingLeft: 15 }}>
+        <div style={{ flex: 1 }}>
+          <span style={{ fontSize: 13, marginRight: 4 }}>🇬🇧</span>
+          <span style={{ fontWeight: 500, color: '#a78bfa', fontSize: 13 }}>{word.english}</span>
+          {word.exampleEn && (
+            <div style={{ fontSize: 10, fontStyle: 'italic', color: 'rgba(167,139,250,0.35)', marginTop: 2 }}>{word.exampleEn}</div>
+          )}
+        </div>
+        <div style={{ flex: 1 }}>
+          <span style={{ fontSize: 13, marginRight: 4 }}>🇫🇷</span>
+          <span style={{ fontWeight: 500, color: '#60a5fa', fontSize: 13 }}>{word.french || '—'}</span>
+        </div>
+      </div>
+    </div>
+  );
 
-    {/* 🇫🇷 Français */}
-    <td style={{ padding: '10px 12px 10px 14px', verticalAlign: 'top', width: '33%', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
-      <span style={{ fontWeight: 500, color: '#60a5fa', fontSize: 14 }}>{word.french || '—'}</span>
-    </td>
-  </tr>
-);
+  /* ── DESKTOP table row (hidden on mobile) ── */
+  const desktopRow = (
+    <tr
+      className="hidden sm:table-row"
+      onClick={onLearn}
+      style={{
+        cursor: 'pointer',
+        background: isLearned ? 'rgba(74,222,128,0.04)' : 'transparent',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        transition: 'background 0.15s',
+      }}
+      onMouseEnter={e => { if (!isLearned) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
+      onMouseLeave={e => { e.currentTarget.style.background = isLearned ? 'rgba(74,222,128,0.04)' : 'transparent'; }}
+    >
+      {/* 🇩🇪 Deutsch */}
+      <td style={{ padding: '10px 14px 10px 12px', verticalAlign: 'top', width: '33%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: isLearned ? '#4ade80' : 'rgba(255,255,255,0.15)' }} />
+          <span style={{ fontWeight: 700, color: '#fff', fontSize: 14 }}>{word.german}</span>
+          <div onClick={e => e.stopPropagation()} style={{ flexShrink: 0 }}><AudioWord word={word.german} /></div>
+          {!isLearned && <span style={{ marginLeft: 'auto', fontSize: 10, color: 'rgba(255,255,255,0.20)' }}>+2 XP</span>}
+        </div>
+        {word.example && (
+          <div style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(255,255,255,0.30)', marginTop: 4, paddingLeft: 15 }}>{word.example}</div>
+        )}
+      </td>
+      {/* 🇬🇧 English */}
+      <td style={{ padding: '10px 14px', verticalAlign: 'top', width: '34%', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
+        <span style={{ fontWeight: 500, color: '#a78bfa', fontSize: 14 }}>{word.english}</span>
+        {word.exampleEn && (
+          <div style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(167,139,250,0.45)', marginTop: 4 }}>{word.exampleEn}</div>
+        )}
+      </td>
+      {/* 🇫🇷 Français */}
+      <td style={{ padding: '10px 12px 10px 14px', verticalAlign: 'top', width: '33%', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
+        <span style={{ fontWeight: 500, color: '#60a5fa', fontSize: 14 }}>{word.french || '—'}</span>
+      </td>
+    </tr>
+  );
+
+  return (
+    <>
+      {mobileCard}
+      {desktopRow}
+    </>
+  );
+};
 
 const LEVELS = ['A1', 'A2', 'A-L', 'M-Z'];
 
@@ -185,7 +249,15 @@ const Vocabulary = () => {
                 return (
                   <button
                     key={t}
-                    onClick={() => setTopic(t)}
+                    onClick={() => {
+                      setTopic(t);
+                      // On mobile (sidebar stacks above content), scroll down to words
+                      if (window.innerWidth < 1024) {
+                        setTimeout(() => {
+                          document.getElementById('vocab-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 50);
+                      }
+                    }}
                     className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-150 text-left w-full"
                     style={{
                       background: isActive ? la.bg : 'transparent',
@@ -207,7 +279,7 @@ const Vocabulary = () => {
                       {initials}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs font-medium truncate">{topicData.title?.split('/')[1]?.trim() || t}</div>
+                      <div className="text-xs font-medium truncate">{(() => { const raw = topicData.title || t; return raw.includes('/') ? raw.split('/')[1].trim() : raw; })()}</div>
                       <div className="text-[10px] mt-0.5" style={{ color: 'rgba(255,255,255,0.25)' }}>{topicWords.length} mots{pct > 0 ? ` · ${pct}%` : ''}</div>
                     </div>
                     {pct === 100 && <span className="text-[10px] font-bold shrink-0" style={{ color: '#4ade80' }}>✓</span>}
@@ -219,7 +291,7 @@ const Vocabulary = () => {
         </aside>
 
         {/* ── Main content ── */}
-        <div className="flex-1 min-w-0">
+        <div id="vocab-content" className="flex-1 min-w-0">
 
           {/* Topic header + search */}
           {currentTopic.title && (
@@ -279,7 +351,8 @@ const Vocabulary = () => {
             </div>
           ) : (
             <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.09)' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+              {/* Desktop table header — hidden on mobile */}
+              <table className="hidden sm:table" style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
                 <thead>
                   <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.10)' }}>
                     <th style={{ padding: '9px 14px 9px 12px', textAlign: 'left', fontWeight: 600, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.40)', width: '33%' }}>🇩🇪 Deutsch</th>
@@ -287,6 +360,10 @@ const Vocabulary = () => {
                     <th style={{ padding: '9px 12px 9px 14px', textAlign: 'left', fontWeight: 600, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.40)', borderLeft: '1px solid rgba(255,255,255,0.08)', width: '33%' }}>🇫🇷 Français</th>
                   </tr>
                 </thead>
+              </table>
+
+              {/* Rows — each DictTableRow renders a mobile card + a desktop <tr> */}
+              <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
                 <tbody>
                   {filtered.map((word, i) => {
                     const id = `${level}-${effectiveTopic}-${word.german}`;
@@ -320,6 +397,107 @@ const Vocabulary = () => {
               <p className="text-sm" style={{ color: 'rgba(255,255,255,0.40)' }}>Vous avez appris les {allWords.length} mots !</p>
             </div>
           )}
+
+          {/* ── Letter navigation (prev / next topic) ── */}
+          {(() => {
+            const idx  = topics.indexOf(effectiveTopic);
+            const prev = topics[idx - 1] ?? null;
+            const next = topics[idx + 1] ?? null;
+            if (!prev && !next) return null;
+
+            const getLabel = (key) => {
+              const t = vocabulary[level]?.[key];
+              if (!t) return key;
+              const raw = t.title || key;
+              // Letter categories: "M — machen · mögen" → "M"
+              if (raw.includes('—')) return raw.split('—')[0].trim();
+              // Topic categories: "Greetings / Begrüßungen" → "Greetings"
+              if (raw.includes('/')) return raw.split('/')[0].trim();
+              // Fallback: first 20 chars
+              return raw.length > 20 ? raw.slice(0, 18) + '…' : raw;
+            };
+
+            const scrollToTop = () => {
+              document.querySelector('main,#main,div[style*="min-height"]')?.scrollTo({ top: 0 });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            const go = (key) => { setTopic(key); setSearch(''); scrollToTop(); };
+
+            return (
+              <div className="mt-8 flex items-center gap-3">
+                {/* Previous */}
+                {prev ? (
+                  <button
+                    onClick={() => go(prev)}
+                    className="flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-150 hover:scale-[1.02] active:scale-95"
+                    style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      border: `1px solid ${la.border}`,
+                      color: la.color,
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = la.bg}
+                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                  >
+                    <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span>
+                      <span style={{ opacity: 0.5, fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', lineHeight: 1 }}>Retour</span>
+                      {getLabel(prev)}
+                    </span>
+                  </button>
+                ) : <div className="flex-1" />}
+
+                {/* Spacer */}
+                <div className="flex-1" />
+
+                {/* Position indicator */}
+                <div className="hidden sm:flex items-center gap-1">
+                  {topics.map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => go(t)}
+                      className="transition-all duration-150 rounded-full"
+                      style={{
+                        width: t === effectiveTopic ? 20 : 7, 
+                        height: 7,
+                        background: t === effectiveTopic ? la.color : 'rgba(255,255,255,0.15)',
+                        border: 'none',
+                        cursor: 'pointer',
+                      }}
+                      title={getLabel(t)}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex-1" />
+
+                {/* Next */}
+                {next ? (
+                  <button
+                    onClick={() => go(next)}
+                    className="flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-150 hover:scale-[1.02] active:scale-95"
+                    style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      border: `1px solid ${la.border}`,
+                      color: la.color,
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = la.bg}
+                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                  >
+                    <span className="text-right">
+                      <span style={{ opacity: 0.5, fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', lineHeight: 1 }}>Suivant</span>
+                      {getLabel(next)}
+                    </span>
+                    <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                ) : <div className="flex-1" />}
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>
