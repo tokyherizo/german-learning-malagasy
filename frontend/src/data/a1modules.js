@@ -299,9 +299,9 @@ export const A1_MODULES = [
         labelFr: "Communication",
         topics: [
           { title: "Tagesablauf", desc: "La routine quotidienne — aufstehen, frühstücken, arbeiten, schlafen — horaires et activités", xp: 55, duration: "18 min", icon: "⏰", lessonId: "a1-l6" },
-          { title: "Stress im Büro", desc: "Exprimer le stress professionnel — problèmes, plaintes et solutions au quotidien", xp: 50, duration: "15 min", icon: "😤", lessonId: null },
-          { title: "Am Computer", desc: "Vocabulaire informatique et numérique — tippen, speichern, hochladen, mailen…", xp: 45, duration: "15 min", icon: "💻", lessonId: null },
-          { title: "Einen Termin vereinbaren", desc: "Prendre, donner et confirmer un rendez-vous par téléphone ou email — formules utiles", xp: 55, duration: "18 min", icon: "📅", lessonId: null },
+          { title: "Stress im Büro", desc: "Exprimer le stress professionnel — problèmes, plaintes et solutions au quotidien", xp: 50, duration: "15 min", icon: "😤", lessonId: "a1-k5-stress" },
+          { title: "Am Computer", desc: "Vocabulaire informatique et numérique — tippen, speichern, hochladen, mailen…", xp: 45, duration: "15 min", icon: "💻", lessonId: "a1-k5-computer" },
+          { title: "Einen Termin vereinbaren", desc: "Prendre, donner et confirmer un rendez-vous par téléphone ou email — formules utiles", xp: 55, duration: "18 min", icon: "📅", lessonId: "a1-k5-termin" },
         ],
       },
       {
@@ -309,7 +309,7 @@ export const A1_MODULES = [
         label: "Wissenswertes",
         labelFr: "Culture & Civilisation",
         topics: [
-          { title: "Arbeit und Freizeit in Deutschland — Work-Life-Balance", desc: "Le temps de travail et de loisirs en Allemagne — Feierabend, Urlaub et comparaisons européennes", xp: 35, duration: "10 min", icon: "⚖️", lessonId: null },
+          { title: "Arbeit und Freizeit in Deutschland — Work-Life-Balance", desc: "Le temps de travail et de loisirs en Allemagne — Feierabend, Urlaub et comparaisons européennes", xp: 35, duration: "10 min", icon: "⚖️", lessonId: "a1-k5-wlb" },
         ],
       },
       {
@@ -317,8 +317,8 @@ export const A1_MODULES = [
         label: "Grammatik",
         labelFr: "Grammaire",
         topics: [
-          { title: "Verben: trennbare Verben (aufstehen, anfangen…)", desc: "Les verbes à particule séparable — la particule se place en fin de phrase : Ich stehe um 7 auf", xp: 65, duration: "22 min", icon: "⚙️", lessonId: null },
-          { title: "Temporale Präpositionen (um, am, im, von…bis)", desc: "um + heure, am + jour, im + mois/saison, von…bis, seit, vor, nach — exprimer le temps", xp: 55, duration: "18 min", icon: "🕐", lessonId: null },
+          { title: "Verben: trennbare Verben (aufstehen, anfangen…)", desc: "Les verbes à particule séparable — la particule se place en fin de phrase : Ich stehe um 7 auf", xp: 65, duration: "22 min", icon: "⚙️", lessonId: "a1-k5-trennbar" },
+          { title: "Temporale Präpositionen (um, am, im, von…bis)", desc: "um + heure, am + jour, im + mois/saison, von…bis, seit, vor, nach — exprimer le temps", xp: 55, duration: "18 min", icon: "🕐", lessonId: "a1-k5-temporal" },
         ],
       },
       {
@@ -326,15 +326,15 @@ export const A1_MODULES = [
         label: "Rückblick",
         labelFr: "Révision & Test",
         topics: [
-          { title: "Révision du chapitre", desc: "Révision de la routine, des verbes séparables et des prépositions temporelles", xp: 30, duration: "20 min", icon: "📖", lessonId: null },
-          { title: "Exercices de consolidation", desc: "Décrire sa journée type, rédiger un agenda, simuler une prise de rendez-vous", xp: 40, duration: "25 min", icon: "✏️", lessonId: null },
-          { title: "Mini-test", desc: "Évaluation formative — 12 questions sur le quotidien, les verbes séparables et l'heure", xp: 65, duration: "15 min", icon: "🎯", lessonId: null },
+          { title: "Révision du chapitre", desc: "Révision de la routine, des verbes séparables et des prépositions temporelles", xp: 30, duration: "20 min", icon: "📖", lessonId: "a1-k5-rev" },
+          { title: "Exercices de consolidation", desc: "Décrire sa journée type, rédiger un agenda, simuler une prise de rendez-vous", xp: 40, duration: "25 min", icon: "✏️", lessonId: "a1-k5-ex" },
+          { title: "Mini-test", desc: "Évaluation formative — 12 questions sur le quotidien, les verbes séparables et l'heure", xp: 65, duration: "15 min", icon: "🎯", lessonId: "a1-k5-test" },
         ],
       },
     ],
-    lessons: ["a1-l6"],
+    lessons: ["a1-l6","a1-k5-stress","a1-k5-computer","a1-k5-termin","a1-k5-wlb","a1-k5-trennbar","a1-k5-temporal","a1-k5-rev","a1-k5-ex","a1-k5-test"],
     grammarTopics: ["Verbes séparables", "Prépositions temporelles um/am/im", "L'heure formelle/informelle"],
-    miniTestId: "k5-test",
+    miniTestId: "a1-k5-test",
   },
 
   // ─────────────────────────────────────────
