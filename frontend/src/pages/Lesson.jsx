@@ -5,6 +5,7 @@ import { getExercisesByLesson } from '../data/exercises';
 import { progressService } from '../services/progress';
 import ProgressBar from '../components/ProgressBar';
 import AudioWord from '../components/AudioWord';
+import { A1_MODULES } from '../data/a1modules';
 
 /* ── Section type label badge (replaces emoji icon) ── */
 const SectionBadge = ({ accent = '#f1e063', label }) => (
@@ -243,6 +244,157 @@ const TipSection = ({ section }) => (
   </div>
 );
 
+/* ── Interactive Quiz section (embedded in lesson) ── */
+const QuizSection = ({ section }) => {
+  const questions = section.questions || [];
+  const total = questions.length;
+  const [idx, setIdx] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
+
+  const q = questions[idx];
+
+  const handlePick = (i) => {
+    if (selected !== null || done) return;
+    const isOk = i === q.correct;
+    setSelected(i);
+    if (isOk) setScore(s => s + 1);
+    setTimeout(() => {
+      if (idx < total - 1) {
+        setIdx(n => n + 1);
+        setSelected(null);
+      } else {
+        setDone(true);
+      }
+    }, 1500);
+  };
+
+  const reset = () => { setIdx(0); setSelected(null); setScore(0); setDone(false); };
+
+  const grade = (s) => {
+    const pct = s / total;
+    if (pct >= 0.9)  return { label: 'Ausgezeichnet!', color: '#4ade80',  sub: 'Perfekt — du beherrschst Kapitel 1 sehr gut!' };
+    if (pct >= 0.75) return { label: 'Sehr gut!',       color: '#818cf8',  sub: 'Bravo — fast alles richtig!' };
+    if (pct >= 0.55) return { label: 'Gut gemacht!',    color: '#38bdf8',  sub: 'Solide Basis — übe noch die Fehler.' };
+    return               { label: 'Nochmal üben!',  color: '#f472b6',  sub: 'Kein Problem — lies die Lektionen nochmal durch.' };
+  };
+
+  if (done) {
+    const g = grade(score);
+    return (
+      <SectionCard accent={g.color} label="Résultat" title="Test de fin — Kapitel 1">
+        <div className="text-center py-4">
+          <div className="text-6xl font-black mb-2" style={{ color: g.color }}>{score}<span className="text-2xl opacity-50">/{total}</span></div>
+          <div className="text-xl font-black text-white mb-1">{g.label}</div>
+          <p className="text-sm mb-6" style={{ color: 'rgba(255,255,255,0.45)' }}>{g.sub}</p>
+          <div className="w-full rounded-full h-2 mb-6" style={{ background: 'rgba(255,255,255,0.08)' }}>
+            <div className="h-2 rounded-full transition-all duration-700" style={{ width: `${(score / total) * 100}%`, background: `linear-gradient(90deg, ${g.color}, ${g.color}88)` }} />
+          </div>
+          <button
+            onClick={reset}
+            className="px-6 py-3 rounded-2xl text-sm font-bold transition-all"
+            style={{ background: `${g.color}18`, border: `1px solid ${g.color}40`, color: g.color }}
+            onMouseEnter={e => { e.currentTarget.style.background = `${g.color}28`; }}
+            onMouseLeave={e => { e.currentTarget.style.background = `${g.color}18`; }}
+          >
+            Nochmal versuchen — Retry
+          </button>
+        </div>
+      </SectionCard>
+    );
+  }
+
+  return (
+    <SectionCard accent="#f472b6" label="Mini-Test" title={section.title || 'Mini-Test — Kapitel 1'}>
+      {/* Progress header */}
+      <div className="flex items-center justify-between mb-3 text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+        <span>Question {idx + 1} / {total}</span>
+        <span className="font-bold" style={{ color: '#f472b6' }}>{score} pt{score !== 1 ? 's' : ''}</span>
+      </div>
+      <div className="w-full rounded-full h-1.5 mb-6" style={{ background: 'rgba(255,255,255,0.07)' }}>
+        <div
+          className="h-1.5 rounded-full transition-all duration-300"
+          style={{ width: `${(idx / total) * 100}%`, background: 'linear-gradient(90deg, #f472b6, #a78bfa)' }}
+        />
+      </div>
+
+      {/* Thematic tag */}
+      {q?.topic && (
+        <div className="inline-block text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded mb-3"
+          style={{ background: 'rgba(244,114,182,0.12)', color: 'rgba(244,114,182,0.70)', border: '1px solid rgba(244,114,182,0.18)' }}>
+          {q.topic}
+        </div>
+      )}
+
+      {/* Question */}
+      <p className="font-bold text-white text-base mb-5 leading-relaxed">{q?.question}</p>
+
+      {/* Options */}
+      <div className="grid gap-2.5 mb-4">
+        {q?.options.map((opt, i) => {
+          const isPicked   = selected === i;
+          const isCorrect  = i === q.correct;
+          const showResult = selected !== null;
+          return (
+            <button
+              key={i}
+              onClick={() => handlePick(i)}
+              disabled={selected !== null}
+              className="text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-all duration-200"
+              style={{
+                background: !showResult
+                  ? 'rgba(244,114,182,0.04)'
+                  : isPicked
+                    ? isCorrect ? 'rgba(74,222,128,0.12)' : 'rgba(248,113,113,0.10)'
+                    : isCorrect ? 'rgba(74,222,128,0.07)' : 'rgba(255,255,255,0.02)',
+                border: !showResult
+                  ? '1px solid rgba(244,114,182,0.15)'
+                  : isPicked
+                    ? isCorrect ? '1px solid rgba(74,222,128,0.45)' : '1px solid rgba(248,113,113,0.40)'
+                    : isCorrect ? '1px solid rgba(74,222,128,0.28)' : '1px solid rgba(255,255,255,0.05)',
+                color: !showResult
+                  ? 'rgba(255,255,255,0.80)'
+                  : isPicked
+                    ? isCorrect ? '#4ade80' : '#f87171'
+                    : isCorrect ? 'rgba(74,222,128,0.70)' : 'rgba(255,255,255,0.28)',
+                cursor: selected !== null ? 'default' : 'pointer',
+                transform: !showResult ? undefined : isPicked && isCorrect ? 'scale(1.01)' : undefined,
+              }}
+            >
+              <span className="font-black mr-2.5" style={{ fontSize: '0.7rem', color: 'rgba(244,114,182,0.50)' }}>
+                {String.fromCharCode(65 + i)}.
+              </span>
+              {opt}
+              {showResult && isPicked && (
+                <span className="ml-2 font-black">{isCorrect ? ' ✓' : ' ✗'}</span>
+              )}
+              {showResult && !isPicked && isCorrect && (
+                <span className="ml-2 font-black text-green-400"> ✓</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Explanation */}
+      {selected !== null && (
+        <div
+          className="rounded-xl px-4 py-3 text-sm"
+          style={{
+            background: selected === q.correct ? 'rgba(74,222,128,0.07)' : 'rgba(248,113,113,0.07)',
+            border:     selected === q.correct ? '1px solid rgba(74,222,128,0.22)' : '1px solid rgba(248,113,113,0.22)',
+            color:      selected === q.correct ? '#86efac' : '#fca5a5',
+          }}
+        >
+          <span className="font-bold mr-1">{selected === q.correct ? 'Richtig! ' : 'Falsch! '}</span>
+          {q.explanation}
+        </div>
+      )}
+    </SectionCard>
+  );
+};
+
 const renderSection = (section, i) => {
   const map = {
     intro:        <IntroSection key={i} section={section} />,
@@ -252,6 +404,7 @@ const renderSection = (section, i) => {
     number_table: <NumberTableSection key={i} section={section} />,
     tip:          <TipSection key={i} section={section} />,
     story_text:   <StorySection key={i} section={section} />,
+    quiz:         <QuizSection key={i} section={section} />,
   };
   return map[section.type] || null;
 };
@@ -343,6 +496,17 @@ const Lesson = () => {
   const lesson = getLessonById(id);
   const exercises = getExercisesByLesson(id);
   const [progress, setProgress] = useState(() => progressService.getProgress());
+
+  // Build a back URL that returns to the correct level + open Kapitel
+  const backUrl = (() => {
+    if (!lesson) return '/levels';
+    const level = lesson.level || 'A1';
+    if (level === 'A1') {
+      const mod = A1_MODULES.find(m => m.lessons.includes(lesson.id));
+      if (mod) return `/levels?level=A1&kapitel=${mod.id}`;
+    }
+    return `/levels?level=${level}`;
+  })();
   const [tab, setTab] = useState('lesson');
   const [completed, setCompleted] = useState(false);
   const [xpGained, setXpGained] = useState(0);
@@ -388,7 +552,7 @@ const Lesson = () => {
       <div style={{ background: '#111', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
         <div className="max-w-3xl mx-auto px-6 py-6">
           <Link
-            to="/levels"
+            to={backUrl}
             className="inline-flex items-center gap-1.5 text-sm hover:opacity-80 mb-4 transition-opacity"
             style={{ color: 'rgba(255,255,255,0.40)' }}
           >

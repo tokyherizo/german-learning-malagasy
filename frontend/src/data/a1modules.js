@@ -32,8 +32,8 @@ export const A1_MODULES = [
         labelFr: "Communication",
         topics: [
           { title: "Sich vorstellen", desc: "Se présenter : nom, prénom, nationalité, pays d'origine et profession", xp: 50, duration: "15 min", icon: "👤", lessonId: "a1-l1" },
-          { title: "Das Alphabet", desc: "L'alphabet allemand de A à Z, les umlauts Ä/Ö/Ü et le ß — apprendre à épeler les mots", xp: 40, duration: "12 min", icon: "🔤", lessonId: null },
-          { title: "Sprachen und Länder", desc: "Les pays d'Europe et leurs langues : Deutsch, Englisch, Französisch, Spanisch…", xp: 45, duration: "15 min", icon: "🗺️", lessonId: null },
+          { title: "Das Alphabet", desc: "L'alphabet allemand de A à Z, les umlauts Ä/Ö/Ü et le ß — apprendre à épeler les mots", xp: 40, duration: "12 min", icon: "🔤", lessonId: "a1-k1-abc" },
+          { title: "Sprachen und Länder", desc: "Les pays d'Europe et leurs langues : Deutsch, Englisch, Französisch, Spanisch…", xp: 45, duration: "15 min", icon: "🗺️", lessonId: "a1-k1-laender" },
           { title: "Die Zahlen 0–100", desc: "Les nombres cardinaux de zéro à cent — écriture, prononciation et calcul simple", xp: 60, duration: "20 min", icon: "🔢", lessonId: "a1-l2" },
           { title: "Personen und Hobbys", desc: "Décrire des personnes et parler de ses loisirs favoris : sport, musique, lecture", xp: 65, duration: "20 min", icon: "🎭", lessonId: "a1-l3" },
         ],
@@ -43,7 +43,7 @@ export const A1_MODULES = [
         label: "Wissenswertes",
         labelFr: "Culture & Civilisation",
         topics: [
-          { title: "Grußformeln in Deutschland, Österreich und der Schweiz", desc: "Formules de salutation régionales — Hallo/Guten Tag/Grüezi — formelles vs. informelles", xp: 35, duration: "10 min", icon: "🤝", lessonId: null },
+          { title: "Grußformeln in Deutschland, Österreich und der Schweiz", desc: "Formules de salutation régionales — Hallo/Guten Tag/Grüezi — formelles vs. informelles", xp: 35, duration: "10 min", icon: "🤝", lessonId: "a1-k1-gruss" },
         ],
       },
       {
@@ -52,7 +52,7 @@ export const A1_MODULES = [
         labelFr: "Grammaire",
         topics: [
           { title: "Personalpronomen & Verben im Präsens", desc: "ich, du, er/sie/es, wir, ihr, sie — conjugaison des verbes réguliers sein, heißen, kommen, wohnen", xp: 70, duration: "25 min", icon: "⚙️", lessonId: "a1-g2" },
-          { title: "Satzbau (SVK)", desc: "La structure de la phrase allemande : Sujet — Verbe en 2e position — Complément", xp: 50, duration: "15 min", icon: "📐", lessonId: null },
+          { title: "Satzbau (SVK)", desc: "La structure de la phrase allemande : Sujet — Verbe en 2e position — Complément", xp: 50, duration: "15 min", icon: "📐", lessonId: "a1-k1-svk" },
           { title: "Die Nomengruppe: Artikel & Genus", desc: "Les articles définis (der/die/das) et indéfinis (ein/eine) — apprendre le genre des noms", xp: 60, duration: "20 min", icon: "🏷️", lessonId: "a1-g1" },
         ],
       },
@@ -61,13 +61,13 @@ export const A1_MODULES = [
         label: "Rückblick",
         labelFr: "Révision & Test",
         topics: [
-          { title: "Révision du chapitre", desc: "Révision complète du vocabulaire et des structures communicatives du Kapitel 1", xp: 30, duration: "20 min", icon: "📖", lessonId: null },
-          { title: "Exercices de consolidation", desc: "Exercices variés : lacunes, reformulation, correspondances et traduction", xp: 40, duration: "25 min", icon: "✏️", lessonId: null },
-          { title: "Mini-test", desc: "Évaluation formative — 10 questions couvrant tout le vocabulaire et la grammaire du Kapitel 1", xp: 60, duration: "15 min", icon: "🎯", lessonId: null },
+          { title: "Révision du chapitre", desc: "Révision complète du vocabulaire et des structures communicatives du Kapitel 1", xp: 30, duration: "20 min", icon: "📖", lessonId: "a1-k1-rev" },
+          { title: "Exercices de consolidation", desc: "Exercices variés : lacunes, reformulation, correspondances et traduction", xp: 40, duration: "25 min", icon: "✏️", lessonId: "a1-k1-ex" },
+          { title: "Mini-test", desc: "Évaluation formative — 10 questions couvrant tout le vocabulaire et la grammaire du Kapitel 1", xp: 60, duration: "15 min", icon: "🎯", lessonId: "a1-k1-test" },
         ],
       },
     ],
-    lessons: ["a1-l1", "a1-l2", "a1-l3", "a1-g2", "a1-g1"],
+    lessons: ["a1-l1", "a1-l2", "a1-l3", "a1-g2", "a1-g1", "a1-k1-abc", "a1-k1-laender", "a1-k1-gruss", "a1-k1-svk", "a1-k1-rev", "a1-k1-ex", "a1-k1-test"],
     grammarTopics: ["Verbes au présent : sein, heißen, kommen, wohnen", "Structure SVK", "Genres : der/die/das"],
     miniTestId: "k1-test",
   },
@@ -98,9 +98,9 @@ export const A1_MODULES = [
         label: "Kommunikation",
         labelFr: "Communication",
         topics: [
-          { title: "Rund um die Arbeit: im Büro", desc: "Vocabulaire du bureau — objets, meubles, activités et interactions entre collègues", xp: 55, duration: "18 min", icon: "💼", lessonId: null },
-          { title: "Rund um die Arbeit: an der Universität", desc: "La vie universitaire — les cours, l'amphi, la cafétéria et les camarades d'études", xp: 50, duration: "15 min", icon: "🎓", lessonId: null },
-          { title: "Freizeit", desc: "Activités de loisirs : sport, musique, cinéma, lecture et sorties entre amis", xp: 45, duration: "15 min", icon: "⚽", lessonId: null },
+          { title: "Rund um die Arbeit: im Büro", desc: "Vocabulaire du bureau — objets, meubles, activités et interactions entre collègues", xp: 55, duration: "18 min", icon: "💼", lessonId: "a1-k2-buero" },
+          { title: "Rund um die Arbeit: an der Universität", desc: "La vie universitaire — les cours, l'amphi, la cafétéria et les camarades d'études", xp: 50, duration: "15 min", icon: "🎓", lessonId: "a1-k2-uni" },
+          { title: "Freizeit", desc: "Activités de loisirs : sport, musique, cinéma, lecture et sorties entre amis", xp: 45, duration: "15 min", icon: "⚽", lessonId: "a1-k2-freizeit" },
         ],
       },
       {
@@ -108,7 +108,7 @@ export const A1_MODULES = [
         label: "Wissenswertes",
         labelFr: "Culture & Civilisation",
         topics: [
-          { title: "Arbeits- und Studienkultur in Deutschland", desc: "La culture professionnelle et universitaire allemande — horaires, valeurs, Feierabend et ambiance", xp: 35, duration: "10 min", icon: "🏢", lessonId: null },
+          { title: "Arbeits- und Studienkultur in Deutschland", desc: "La culture professionnelle et universitaire allemande — horaires, valeurs, Feierabend et ambiance", xp: 35, duration: "10 min", icon: "🏢", lessonId: "a1-k2-kultur" },
         ],
       },
       {
@@ -116,11 +116,11 @@ export const A1_MODULES = [
         label: "Grammatik",
         labelFr: "Grammaire",
         topics: [
-          { title: "Die Nomengruppe (Akkusativ)", desc: "L'accusatif : articles définis den/die/das/die et indéfinis einen/eine/ein — COD de la phrase", xp: 60, duration: "20 min", icon: "📐", lessonId: null },
-          { title: "Verben: haben, arbeiten, spielen", desc: "Conjugaison de haben et des verbes réguliers en -en au présent indicatif (ich habe, du hast…)", xp: 50, duration: "15 min", icon: "⚙️", lessonId: null },
-          { title: "Die Negation: nicht / kein", desc: "Nier avec nicht (verbes, adverbes, adjectifs) et kein/keine/kein (noms indéfinis)", xp: 55, duration: "18 min", icon: "🚫", lessonId: null },
-          { title: "Lokale Präpositionen", desc: "in, an, auf, neben, vor, hinter, zwischen, über, unter — localiser un objet dans l'espace", xp: 50, duration: "15 min", icon: "📍", lessonId: null },
-          { title: "Fragen: W-Fragen & Ja/Nein-Fragen", desc: "Wer? Was? Wo? Wann? Wie? Warum? — formuler des questions directes et inverser le sujet/verbe", xp: 45, duration: "15 min", icon: "❓", lessonId: null },
+          { title: "Die Nomengruppe (Akkusativ)", desc: "L'accusatif : articles définis den/die/das/die et indéfinis einen/eine/ein — COD de la phrase", xp: 60, duration: "20 min", icon: "📐", lessonId: "a1-k2-akkusativ" },
+          { title: "Verben: haben, arbeiten, spielen", desc: "Conjugaison de haben et des verbes réguliers en -en au présent indicatif (ich habe, du hast…)", xp: 50, duration: "15 min", icon: "⚙️", lessonId: "a1-k2-verben" },
+          { title: "Die Negation: nicht / kein", desc: "Nier avec nicht (verbes, adverbes, adjectifs) et kein/keine/kein (noms indéfinis)", xp: 55, duration: "18 min", icon: "🚫", lessonId: "a1-k2-negation" },
+          { title: "Lokale Präpositionen", desc: "in, an, auf, neben, vor, hinter, zwischen, über, unter — localiser un objet dans l'espace", xp: 50, duration: "15 min", icon: "📍", lessonId: "a1-k2-praepositionen" },
+          { title: "Fragen: W-Fragen & Ja/Nein-Fragen", desc: "Wer? Was? Wo? Wann? Wie? Warum? — formuler des questions directes et inverser le sujet/verbe", xp: 45, duration: "15 min", icon: "❓", lessonId: "a1-k2-fragen" },
         ],
       },
       {
@@ -128,13 +128,13 @@ export const A1_MODULES = [
         label: "Rückblick",
         labelFr: "Révision & Test",
         topics: [
-          { title: "Révision du chapitre", desc: "Synthèse du vocabulaire professionnel, universitaire et des activités de loisirs", xp: 30, duration: "20 min", icon: "📖", lessonId: null },
-          { title: "Exercices de consolidation", desc: "Exercices : compléter les lacunes, transformer les phrases, relier, traduire", xp: 40, duration: "25 min", icon: "✏️", lessonId: null },
-          { title: "Mini-test", desc: "Évaluation formative — 12 questions sur l'accusatif, la négation et les questions", xp: 65, duration: "15 min", icon: "🎯", lessonId: null },
+          { title: "Révision du chapitre", desc: "Synthèse du vocabulaire professionnel, universitaire et des activités de loisirs", xp: 30, duration: "20 min", icon: "📖", lessonId: "a1-k2-rev" },
+          { title: "Exercices de consolidation", desc: "Exercices : compléter les lacunes, transformer les phrases, relier, traduire", xp: 40, duration: "25 min", icon: "✏️", lessonId: "a1-k2-ex" },
+          { title: "Mini-test", desc: "Évaluation formative — 12 questions sur l'accusatif, la négation et les questions", xp: 65, duration: "15 min", icon: "🎯", lessonId: "a1-k2-test" },
         ],
       },
     ],
-    lessons: [],
+    lessons: ["a1-k2-buero","a1-k2-uni","a1-k2-freizeit","a1-k2-kultur","a1-k2-akkusativ","a1-k2-verben","a1-k2-negation","a1-k2-praepositionen","a1-k2-fragen","a1-k2-rev","a1-k2-ex","a1-k2-test"],
     grammarTopics: ["L'accusatif", "Verbe haben au présent", "Négation nicht/kein", "Prépositions de lieu"],
     miniTestId: "k2-test",
   },
@@ -165,9 +165,9 @@ export const A1_MODULES = [
         label: "Kommunikation",
         labelFr: "Communication",
         topics: [
-          { title: "Im Hotel", desc: "Réserver et s'enregistrer à l'hôtel — chambre simple/double, prix, services et réclamations", xp: 55, duration: "18 min", icon: "🏨", lessonId: null },
-          { title: "Der Stadtplan", desc: "Lire un plan de ville, demander son chemin : geradeaus, links, rechts, die erste Straße…", xp: 50, duration: "15 min", icon: "🗺️", lessonId: null },
-          { title: "In München", desc: "Les monuments et quartiers de Munich : Marienplatz, Englischer Garten, Hofbräuhaus, Allianz Arena", xp: 45, duration: "15 min", icon: "🏙️", lessonId: null },
+          { title: "Im Hotel", desc: "Réserver et s'enregistrer à l'hôtel — chambre simple/double, prix, services et réclamations", xp: 55, duration: "18 min", icon: "🏨", lessonId: "a1-k3-hotel" },
+          { title: "Der Stadtplan", desc: "Lire un plan de ville, demander son chemin : geradeaus, links, rechts, die erste Straße…", xp: 50, duration: "15 min", icon: "🗺️", lessonId: "a1-k3-stadtplan" },
+          { title: "In München", desc: "Les monuments et quartiers de Munich : Marienplatz, Englischer Garten, Hofbräuhaus, Allianz Arena", xp: 45, duration: "15 min", icon: "🏙️", lessonId: "a1-k3-muenchen" },
         ],
       },
       {
@@ -175,7 +175,7 @@ export const A1_MODULES = [
         label: "Wissenswertes",
         labelFr: "Culture & Civilisation",
         topics: [
-          { title: "München — Sehenswürdigkeiten und Stadtgeschichte", desc: "Découverte culturelle de Munich : histoire, architecture bavaroise, Oktoberfest et gastronomie", xp: 35, duration: "10 min", icon: "🏛️", lessonId: null },
+          { title: "München — Sehenswürdigkeiten und Stadtgeschichte", desc: "Découverte culturelle de Munich : histoire, architecture bavaroise, Oktoberfest et gastronomie", xp: 35, duration: "10 min", icon: "🏛️", lessonId: "a1-k3-kultur" },
         ],
       },
       {
@@ -183,9 +183,9 @@ export const A1_MODULES = [
         label: "Grammatik",
         labelFr: "Grammaire",
         topics: [
-          { title: "Die Nomengruppe: Nominativ, Akkusativ, Dativ", desc: "Tableau complet des trois cas — articles définis/indéfinis selon le rôle du nom dans la phrase", xp: 70, duration: "25 min", icon: "📐", lessonId: null },
-          { title: "Verben: fahren, nehmen, gehen", desc: "Verbes de déplacement irréguliers — conjugaison et constructions : mit dem Zug fahren, zu Fuß gehen", xp: 55, duration: "18 min", icon: "⚙️", lessonId: null },
-          { title: "Präpositionen: in, an, auf, zu, mit", desc: "Prépositions de lieu et de direction — avec Dativ (statique) ou Akkusativ (mouvement vers)", xp: 60, duration: "20 min", icon: "📍", lessonId: null },
+          { title: "Die Nomengruppe: Nominativ, Akkusativ, Dativ", desc: "Tableau complet des trois cas — articles définis/indéfinis selon le rôle du nom dans la phrase", xp: 70, duration: "25 min", icon: "📐", lessonId: "a1-k3-kasus" },
+          { title: "Verben: fahren, nehmen, gehen", desc: "Verbes de déplacement irréguliers — conjugaison et constructions : mit dem Zug fahren, zu Fuß gehen", xp: 55, duration: "18 min", icon: "⚙️", lessonId: "a1-k3-verben" },
+          { title: "Präpositionen: in, an, auf, zu, mit", desc: "Prépositions de lieu et de direction — avec Dativ (statique) ou Akkusativ (mouvement vers)", xp: 60, duration: "20 min", icon: "📍", lessonId: "a1-k3-praepositionen" },
         ],
       },
       {
@@ -193,13 +193,13 @@ export const A1_MODULES = [
         label: "Rückblick",
         labelFr: "Révision & Test",
         topics: [
-          { title: "Révision du chapitre", desc: "Révision des trois cas, des prépositions de lieu et du vocabulaire de la ville et de l'hôtel", xp: 30, duration: "20 min", icon: "📖", lessonId: null },
-          { title: "Exercices de consolidation", desc: "Exercices pratiques — jeux de rôle réservation d'hôtel, itinéraires et descriptions de ville", xp: 40, duration: "25 min", icon: "✏️", lessonId: null },
-          { title: "Mini-test", desc: "Évaluation formative — 12 questions sur les cas, les prépositions et Munich", xp: 65, duration: "15 min", icon: "🎯", lessonId: null },
+          { title: "Révision du chapitre", desc: "Révision des trois cas, des prépositions de lieu et du vocabulaire de la ville et de l'hôtel", xp: 30, duration: "20 min", icon: "📖", lessonId: "a1-k3-rev" },
+          { title: "Exercices de consolidation", desc: "Exercices pratiques — jeux de rôle réservation d'hôtel, itinéraires et descriptions de ville", xp: 40, duration: "25 min", icon: "✏️", lessonId: "a1-k3-ex" },
+          { title: "Mini-test", desc: "Évaluation formative — 12 questions sur les cas, les prépositions et Munich", xp: 65, duration: "15 min", icon: "🎯", lessonId: "a1-k3-test" },
         ],
       },
     ],
-    lessons: [],
+    lessons: ["a1-k3-hotel","a1-k3-stadtplan","a1-k3-muenchen","a1-k3-kultur","a1-k3-kasus","a1-k3-verben","a1-k3-praepositionen","a1-k3-rev","a1-k3-ex","a1-k3-test"],
     grammarTopics: ["Le datif", "Prépositions in/an/auf/zu", "Verbes de déplacement"],
     miniTestId: "k3-test",
   },

@@ -1,11 +1,12 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { getLessonsByLevel } from '../data/lessons';
 import { exercises as EX_DATA } from '../data/exercises';
 import { vocabulary as VOCAB_DATA } from '../data/vocabulary';
 import { A1_MODULES } from '../data/a1modules';
 import { progressService } from '../services/progress';
 import ProgressBar from '../components/ProgressBar';
+import { useTheme } from '../context/ThemeContext';
 
 /* ─────────────────────────────────────────────
    LEVEL CONFIG — A1/A2 unlocked, B1–C2 locked
@@ -13,8 +14,8 @@ import ProgressBar from '../components/ProgressBar';
 const ALL_LEVELS = [
   {
     id: 'A1', label: 'A1', name: 'Débutant', nameDe: 'Anfänger',
-    desc: 'Begegnungen A1 — 8 Kapitel : salutations, travail, Munich, nourriture, quotidien, voyages, logement, événements',
-    descDe: 'Begegnungen A1 — 8 Kapitel: Begrüßungen, Arbeit, München, Essen, Alltag, Reisen, Wohnen, Ereignisse',
+    desc: 'Niveau A1 — 8 Kapitel : salutations, travail, Munich, nourriture, quotidien, voyages, logement, événements',
+    descDe: 'Niveau A1 — 8 Kapitel: Begrüßungen, Arbeit, München, Essen, Alltag, Reisen, Wohnen, Ereignisse',
     accent: '#818cf8', accentBg: 'rgba(129, 141, 248, 0.21)', accentBorder: 'rgba(129,140,248,0.25)',
     unlocked: true, color: 'indigo',
   },
@@ -57,13 +58,13 @@ const ALL_LEVELS = [
 const SKILL_TABS = [
   { id: 'lessons',   label: 'Leçons',    labelDe: 'Lektionen',   sym: 'L',  color: '#818cf8' },
   { id: 'grammar',   label: 'Grammaire', labelDe: 'Grammatik',   sym: '∑',  color: '#a78bfa' },
-  { id: 'reading',   label: 'Lesen',     labelDe: 'Lesen',       sym: 'R',  color: '#34d399' },
-  { id: 'exercises', label: 'Exercices', labelDe: 'Übungen',     sym: '✓',  color: '#60a5fa' },
-  { id: 'games',     label: 'Jeux',      labelDe: 'Spiele',      sym: 'G',  color: '#f59e0b' },
-  { id: 'writing',   label: 'Schreiben', labelDe: 'Schreiben',   sym: 'W',  color: '#f472b6' },
-  { id: 'listening', label: 'Hören',     labelDe: 'Hören',       sym: 'H',  color: '#22d3ee' },
-  { id: 'speaking',  label: 'Sprechen',  labelDe: 'Sprechen',    sym: 'S',  color: '#fb923c' },
-  { id: 'ai',        label: 'Parler IA', labelDe: 'KI Gespräch', sym: 'AI', color: '#c084fc' },
+ // { id: 'reading',   label: 'Lesen',     labelDe: 'Lesen',       sym: 'R',  color: '#34d399' },
+ // { id: 'exercises', label: 'Exercices', labelDe: 'Übungen',     sym: '✓',  color: '#60a5fa' },
+ // { id: 'games',     label: 'Jeux',      labelDe: 'Spiele',      sym: 'G',  color: '#f59e0b' },
+ // { id: 'writing',   label: 'Schreiben', labelDe: 'Schreiben',   sym: 'W',  color: '#f472b6' },
+ // { id: 'listening', label: 'Hören',     labelDe: 'Hören',       sym: 'H',  color: '#22d3ee' },
+// { id: 'speaking',  label: 'Sprechen',  labelDe: 'Sprechen',    sym: 'S',  color: '#fb923c' },
+ // { id: 'ai',        label: 'Parler IA', labelDe: 'KI Gespräch', sym: 'AI', color: '#c084fc' },
 ];
 
 /* ─────────────────────────────────────────────
@@ -236,30 +237,40 @@ const TopicRow = ({ topicObj, lesson, isCompleted, tCfg, index }) => {
 };
 
 /* ─────────────────────────────────────────────
-   A1 KAPITEL ACCORDION
+   A1 KAPITEL GRID — cards with click-to-expand
 ───────────────────────────────────────────── */
-const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
-  const [openSet, setOpenSet] = useState(() => new Set([modules[0]?.id]));
+const A1KapitelGrid = ({ modules, lessonsById, progress }) => {
+  const { theme } = useTheme();
+  const il = theme === 'light';
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const toggle = (id) => setOpenSet(prev => {
-    const next = new Set(prev);
-    next.has(id) ? next.delete(id) : next.add(id);
-    return next;
-  });
+  // Persist open Kapitel IDs in the URL so browser back restores the expanded state
+  const openSet = new Set(searchParams.get('kapitel')?.split(',').filter(Boolean) ?? []);
+
+  const toggle = (id) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      const current = new Set(next.get('kapitel')?.split(',').filter(Boolean) ?? []);
+      current.has(id) ? current.delete(id) : current.add(id);
+      if (current.size > 0) next.set('kapitel', [...current].join(','));
+      else next.delete('kapitel');
+      return next;
+    }, { replace: true });
+  };
 
   return (
     <div>
       {/* ── Header banner ── */}
       <div className="flex items-center justify-between mb-6 px-4 py-3 rounded-2xl"
-        style={{ background: 'rgba(129,140,248,0.07)', border: '1px solid rgba(129,140,248,0.18)' }}>
+        style={{ background: il ? 'rgba(129,140,248,0.10)' : 'rgba(129,140,248,0.07)', border: '1px solid rgba(129,140,248,0.25)' }}>
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-base"
             style={{ background: 'rgba(129,140,248,0.15)', color: '#818cf8', border: '1px solid rgba(129,140,248,0.30)' }}>
             A1
           </div>
           <div>
-            <div className="font-black text-white text-sm">Begegnungen A1</div>
-            <div className="text-[11px] text-white/35">{modules.length} Kapitel · Schubert Verlag · Teil A/B/C/D</div>
+            <div className="font-black text-sm" style={{ color: il ? '#0f172a' : '#fff' }}>Niveau A1</div>
+            <div className="text-[11px]" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}>{modules.length} Kapitel · Schubert Verlag · Teil A/B/C/D</div>
           </div>
         </div>
         <div className="flex gap-1.5">
@@ -275,8 +286,8 @@ const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
         </div>
       </div>
 
-      {/* ── Kapitel list ── */}
-      <div className="space-y-4">
+      {/* ── Kapitel card grid ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {modules.map((mod) => {
           const completedCount = mod.lessons.filter(id => progress.completedLessons.includes(id)).length;
           const totalCount     = mod.lessons.length;
@@ -285,28 +296,33 @@ const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
 
           return (
             <div key={mod.id}
-              className="rounded-2xl overflow-hidden transition-all duration-300"
+              className={`rounded-2xl overflow-hidden flex flex-col transition-all duration-300 ${isOpen ? 'md:col-span-2' : ''}`}
               style={{
-                border: `1.5px solid ${isOpen ? mod.color + '55' : mod.color + '20'}`,
-                background: isOpen
-                  ? `linear-gradient(135deg, ${mod.color}0d 0%, rgba(10,10,20,0.95) 100%)`
-                  : 'rgba(255,255,255,0.02)',
-                boxShadow: isOpen ? `0 0 32px ${mod.color}18` : 'none',
+                border: `1.5px solid ${isOpen ? mod.color + '55' : mod.color + '30'}`,
+                background: il
+                  ? (isOpen ? `#ffffff` : `#f8f9ff`)
+                  : `linear-gradient(135deg, ${mod.color}0a 0%, rgba(10,10,20,0.97) 100%)`,
+                boxShadow: isOpen
+                  ? (il ? `0 8px 32px ${mod.color}28` : `0 8px 32px ${mod.color}22`)
+                  : (il ? `0 2px 12px ${mod.color}14` : `0 4px 16px ${mod.color}0e`),
               }}>
 
               {/* ── Colored top accent bar ── */}
-              <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${mod.color}, ${mod.color}40, transparent)` }} />
+              <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${mod.color}, ${mod.color}40, transparent)` }} />
 
-              {/* ── Clickable Kapitel header ── */}
+              {/* ── Clickable card summary ── */}
               <button
                 onClick={() => toggle(mod.id)}
-                className="w-full text-left flex items-center gap-4 px-5 py-4 transition-all duration-200 hover:bg-white/[0.03] active:bg-white/[0.06]"
+                className="w-full text-left flex items-center gap-4 px-5 py-4 transition-colors duration-200"
+                style={{ '--hover-bg': il ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)' }}
+                onMouseEnter={e => e.currentTarget.style.background = il ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
               >
                 {/* Big number badge */}
                 <div className="shrink-0 flex flex-col items-center justify-center w-14 h-14 rounded-2xl shadow-lg"
                   style={{
                     background: `linear-gradient(135deg, ${mod.color}28, ${mod.color}10)`,
-                    border: `2px solid ${mod.color}${isOpen ? '60' : '30'}`,
+                    border: `2px solid ${mod.color}${isOpen ? '60' : '45'}`,
                   }}>
                   <span className="text-[9px] font-black tracking-[0.2em] uppercase" style={{ color: `${mod.color}90` }}>Kap.</span>
                   <span className="text-2xl font-black leading-none" style={{ color: mod.color }}>{mod.number}</span>
@@ -314,7 +330,6 @@ const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
 
                 {/* Title block */}
                 <div className="flex-1 min-w-0">
-                  {/* KAPITEL label + icon */}
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-[9px] font-black tracking-[0.3em] uppercase px-2 py-0.5 rounded-full"
                       style={{ background: `${mod.color}18`, color: mod.color, border: `1px solid ${mod.color}30` }}>
@@ -322,9 +337,8 @@ const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
                     </span>
                     <span className="text-lg">{mod.icon}</span>
                   </div>
-                  {/* Title */}
-                  <h3 className="font-black text-white text-base leading-tight mb-0.5 truncate">{mod.title}</h3>
-                  <p className="text-[11px] text-white/35 italic truncate mb-2">{mod.titleFr} — {mod.subtitle}</p>
+                  <h3 className="font-black text-base leading-tight mb-0.5 truncate" style={{ color: il ? '#0f172a' : '#fff' }}>{mod.title}</h3>
+                  <p className="text-[11px] italic truncate mb-2" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}>{mod.titleFr} — {mod.subtitle}</p>
 
                   {/* Progress bar */}
                   <div className="flex items-center gap-2">
@@ -339,45 +353,30 @@ const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
                   </div>
                 </div>
 
-                {/* Teil badges + chevron */}
-                <div className="shrink-0 flex flex-col items-end gap-2">
-                  <svg className="w-4 h-4 transition-transform duration-300"
-                    style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', color: isOpen ? mod.color : 'rgba(255,255,255,0.25)' }}
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                  <div className="hidden sm:flex flex-col gap-1">
-                    {mod.teile.map(t => {
-                      const tc = TEIL_CFG[t.teil] || TEIL_CFG.A;
-                      return (
-                        <div key={t.teil} className="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-black"
-                          style={{ background: tc.bg, color: tc.color, border: `1px solid ${tc.border}` }}>
-                          {t.teil}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                {/* Chevron */}
+                <svg className="w-4 h-4 shrink-0 transition-transform duration-300"
+                  style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', color: isOpen ? mod.color : 'rgba(255,255,255,0.25)' }}
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
 
-              {/* ── Expanded content: objectives + teile A→D ── */}
-              {isOpen && (
-                <div className="px-4 pb-4" style={{ borderTop: `1px solid ${mod.color}20` }}>
-
-                  {/* Objectives */}
-                  {mod.objectives.length > 0 && (
-                    <div className="mt-3 mb-4 grid sm:grid-cols-2 gap-1.5">
-                      {mod.objectives.map((obj, oi) => (
-                        <div key={oi} className="flex items-start gap-1.5 text-[11px] text-white/45">
-                          <span className="shrink-0 mt-0.5 text-[9px]" style={{ color: `${mod.color}80` }}>◆</span>
-                          {obj}
-                        </div>
-                      ))}
+              {/* ── Summary: objectives (always visible) ── */}
+              {mod.objectives.length > 0 && (
+                <div className="px-5 pb-4 grid sm:grid-cols-2 gap-1.5" style={{ borderTop: `1px solid ${il ? mod.color + '20' : mod.color + '12'}` }}>
+                  {mod.objectives.map((obj, oi) => (
+                    <div key={oi} className="flex items-start gap-1.5 text-[11px] pt-3" style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.40)' }}>
+                      <span className="shrink-0 mt-0.5 text-[9px]" style={{ color: `${mod.color}70` }}>◆</span>
+                      {obj}
                     </div>
-                  )}
+                  ))}
+                </div>
+              )}
 
-                  {/* Teile A → D */}
-                  <div className="space-y-3">
+              {/* ── Expanded: full Teil A→D content ── */}
+              {isOpen && (
+                <div className="px-4 pb-4 space-y-3" style={{ borderTop: `1px solid ${il ? mod.color + '30' : mod.color + '20'}` }}>
+                  <div className="pt-3 space-y-3">
                     {mod.teile.map(teil => {
                       const tc = TEIL_CFG[teil.teil] || TEIL_CFG.A;
                       return (
@@ -394,8 +393,8 @@ const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
                             <span className="text-[10px] font-extrabold tracking-widest" style={{ color: tc.color }}>
                               TEIL {teil.teil}
                             </span>
-                            <span className="text-white/40 text-xs">—</span>
-                            <span className="text-[11px] font-bold text-white/70">{tc.label}</span>
+                            <span className="text-xs" style={{ color: il ? 'rgba(15,23,42,0.30)' : 'rgba(255,255,255,0.40)' }}>—</span>
+                            <span className="text-[11px] font-bold" style={{ color: il ? 'rgba(15,23,42,0.60)' : 'rgba(255,255,255,0.70)' }}>{tc.label}</span>
                             <span className="ml-auto text-base">{tc.icon}</span>
                           </div>
 
@@ -429,7 +428,7 @@ const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
                       </div>
                       <div className="flex-1">
                         <div className="text-[10px] font-extrabold tracking-widest text-orange-400">MINI-TEST</div>
-                        <div className="text-[11px] text-white/35">Rückblick — test de fin · Kapitel {mod.number}</div>
+                        <div className="text-[11px]" style={{ color: il ? 'rgba(15,23,42,0.45)' : 'rgba(255,255,255,0.35)' }}>Rückblick — test de fin · Kapitel {mod.number}</div>
                       </div>
                       {mod.grammarTopics?.length > 0 && (
                         <div className="hidden sm:flex flex-wrap gap-1 justify-end max-w-[200px]">
@@ -446,6 +445,14 @@ const A1KapitelAccordion = ({ modules, lessonsById, progress }) => {
                         Bientôt
                       </span>
                     </div>
+
+                    {/* Collapse button */}
+                    <button
+                      onClick={() => toggle(mod.id)}
+                      className="w-full py-2 rounded-xl text-xs font-bold transition-colors duration-200 hover:bg-white/[0.04]"
+                      style={{ color: `${mod.color}80`, border: `1px solid ${mod.color}20` }}>
+                      ↑ Réduire Kapitel {mod.number}
+                    </button>
                   </div>
                 </div>
               )}
@@ -468,7 +475,7 @@ const LessonsPane = ({ levelId, level, progress }) => {
     const lessonsById = {};
     allLessons.forEach(l => { lessonsById[l.id] = l; });
 
-    return <A1KapitelAccordion modules={A1_MODULES} lessonsById={lessonsById} progress={progress} />;
+    return <A1KapitelGrid modules={A1_MODULES} lessonsById={lessonsById} progress={progress} />;
   }
 
   /* ── Default flat list for other levels ── */
@@ -1003,7 +1010,9 @@ const LevelDetail = ({ level, onBack }) => {
    MAIN PAGE — level grid (A1 → C2)
 ───────────────────────────────────────────── */
 const Levels = () => {
-  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedLevel = searchParams.get('level');
+  const setSelectedLevel = (id) => id ? setSearchParams({ level: id }) : setSearchParams({});
   const progress = progressService.getProgress();
 
   if (selectedLevel) {
