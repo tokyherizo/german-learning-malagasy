@@ -9,7 +9,7 @@ import ProgressBar from '../components/ProgressBar';
 import { useTheme } from '../context/ThemeContext';
 
 /* ─────────────────────────────────────────────
-   LEVEL CONFIG — A1/A2 unlocked, B1–C2 locked
+  LEVEL CONFIG — A1 unlocked, A2–C2 locked
 ───────────────────────────────────────────── */
 const ALL_LEVELS = [
   {
@@ -24,7 +24,7 @@ const ALL_LEVELS = [
     desc: 'Travail, météo, directions, école, santé, grammaire avancée',
     descDe: 'Arbeit, Wetter, Richtungen, Schule, Gesundheit, Grammatik',
     accent: '#13f1db', accentBg: 'rgba(17, 210, 240, 0.17)', accentBorder: 'rgba(167,139,250,0.25)',
-    unlocked: true, color: 'violet',
+    unlocked: false, color: 'violet',
   },
   {
     id: 'B1', label: 'B1', name: 'Intermédiaire', nameDe: 'Mittelstufe',
@@ -940,8 +940,8 @@ const LevelDetail = ({ level, onBack }) => {
             <span className="text-white/30 text-xs">/ {level.nameDe}</span>
             {a1KapitelInfo && (
               <span className="text-[9px] font-extrabold tracking-widest px-2 py-0.5 rounded"
-                style={{ background: 'rgba(129,140,248,0.12)', color: '#818cf8', border: '1px solid rgba(129,140,248,0.22)' }}>
-                BEGEGNUNGEN A1 · {a1KapitelInfo.total} KAPITEL
+                style={{ background: 'rgba(129,140,248,0.12)', color: '#fc7a01', border: '1px solid rgba(129,140,248,0.22)' }}>
+                A1 · {a1KapitelInfo.total} KAPITEL
               </span>
             )}
           </div>
@@ -1017,11 +1017,13 @@ const Levels = () => {
 
   if (selectedLevel) {
     const lvl = ALL_LEVELS.find(l => l.id === selectedLevel);
-    return (
-      <div className="min-h-screen pt-[68px]">
-        <LevelDetail level={lvl} onBack={() => setSelectedLevel(null)} />
-      </div>
-    );
+    if (lvl?.unlocked) {
+      return (
+        <div className="min-h-screen pt-[68px]">
+          <LevelDetail level={lvl} onBack={() => setSelectedLevel(null)} />
+        </div>
+      );
+    }
   }
 
   return (
@@ -1042,7 +1044,7 @@ const Levels = () => {
               <span className="text-grad">Deutsch lernen</span>
             </h1>
             <p className="text-white/45 text-sm max-w-md mx-auto">
-              Choisissez votre niveau — A1 et A2 disponibles. Leçons, Grammaire, Exercices, Jeux, Schreiben, Hören, Sprechen et IA dans chaque niveau.
+              Choisissez votre niveau — A1 disponible. A2 arrive bientot. Lecons, Grammaire, Exercices, Jeux, Schreiben, Horen, Sprechen et IA dans chaque niveau.
             </p>
           </div>
         </div>

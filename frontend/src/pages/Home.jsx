@@ -338,7 +338,7 @@ const Home = () => {
                   <div className="flex items-center gap-3">
                     <div
                       className="w-11 h-11 rounded-xl flex items-center justify-center text-xl"
-                      style={{ background: 'rgba(113,36,229,0.12)', border: '1px solid rgba(113,36,229,0.20)' }}
+                      style={{ background: 'rgba(174, 59, 246, 0.83)', border: '1px solid rgba(113, 36, 229, 0.86)' }}
                     >
                       🇩🇪
                     </div>

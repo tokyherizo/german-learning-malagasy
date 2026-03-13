@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, useCallback } from 'react';
+﻿import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -64,15 +64,16 @@ const IcTrash    = ({ s=15, c='currentColor' }) => (
 
 //  Reactions (Facebook-style) 
 const REACTIONS = [
-  { key: 'like',  emoji: '', label: "J'aime",  color: '#6366f1' },
-  { key: 'love',  emoji: '', label: "J'adore", color: '#ef4444' },
-  { key: 'haha',  emoji: '', label: 'Haha',    color: '#f59e0b' },
-  { key: 'wow',   emoji: '', label: 'Waouh',   color: '#f59e0b' },
-  { key: 'sad',   emoji: '', label: 'Triste',  color: '#06b6d4' },
-  { key: 'angry', emoji: '', label: 'Grrr',    color: '#f97316' },
+  { key: 'like',  emoji: '👍', label: "J'aime",  color: '#6366f1' },
+  { key: 'love',  emoji: '❤️', label: "J'adore", color: '#ef4444' },
+  { key: 'haha',  emoji: '😂', label: 'Haha',    color: '#f59e0b' },
+  { key: 'wow',   emoji: '😮', label: 'Waouh',   color: '#f59e0b' },
+  { key: 'sad',   emoji: '😢', label: 'Triste',  color: '#06b6d4' },
+  { key: 'angry', emoji: '😡', label: 'Grrr',    color: '#f97316' },
 ];
 
 const emptyReactions = () => ({ like: [], love: [], haha: [], wow: [], sad: [], angry: [] });
+const emptyCommentReactions = () => ({ like: [], love: [], haha: [], wow: [], sad: [], angry: [] });
 
 // Count total reactions across all types
 function totalReactions(reactions) {
@@ -100,8 +101,18 @@ function userReaction(reactions, userId) {
 }
 
 //  Constants 
-const API        = 'https://german-learning-malagasy.onrender.com/api';
+const API        = import.meta.env.VITE_API_URL || 'https://german-learning-malagasy.onrender.com/api';
 const CACHE_KEY  = 'deutschmg_community_posts';
+const CALLS_KEY  = 'deutschmg_community_calls';
+
+const REACTION_WEIGHTS = {
+  like: 1,
+  love: 3,
+  haha: 1.5,
+  wow: 2,
+  sad: 0.8,
+  angry: 0.8,
+};
 
 const LEVEL_COLORS = { A1: '#6366f1', A2: '#8b5cf6', B1: '#06b6d4', B2: '#10b981' };
 
@@ -171,6 +182,82 @@ const TRENDING_TOPICS = [
   { tag: '#Vokabeln',       count: 27 }, { tag: '#DeutschLernen', count: 54 },
   { tag: '#B1Prüfung',      count: 18 }, { tag: '#AlltagsDeutsch',count: 23 },
 ];
+
+function normaliseComment(comment) {
+  return {
+    ...comment,
+    reactions: {
+      ...emptyCommentReactions(),
+      ...(comment?.reactions || {}),
+    },
+  };
+}
+
+function normalisePost(post) {
+  const baseReactions = post?.reactions || emptyReactions();
+  const likesFallback = Array.isArray(post?.likes) ? post.likes : [];
+  const mergedReactions = {
+    ...emptyReactions(),
+    ...baseReactions,
+    like: (baseReactions.like && baseReactions.like.length > 0) ? baseReactions.like : likesFallback,
+  };
+  return {
+    ...post,
+    reactions: mergedReactions,
+    savedBy: Array.isArray(post?.savedBy) ? post.savedBy : [],
+    comments: Array.isArray(post?.comments) ? post.comments.map(normaliseComment) : [],
+  };
+}
+
+function reactionScore(reactions) {
+  if (!reactions) return 0;
+  return Object.entries(REACTION_WEIGHTS).reduce((sum, [k, w]) => {
+    const count = Array.isArray(reactions[k]) ? reactions[k].length : 0;
+    return sum + count * w;
+  }, 0);
+}
+
+function commentScore(comment) {
+  const ageHours = (Date.now() - new Date(comment.createdAt || Date.now()).getTime()) / 3600000;
+  const freshBoost = Math.max(0, 24 - ageHours) * 0.05;
+  return reactionScore(comment.reactions) + freshBoost;
+}
+
+function postScore(post, me, following) {
+  const ageHours = (Date.now() - new Date(post.createdAt || Date.now()).getTime()) / 3600000;
+  const freshness = Math.max(0, 72 - ageHours) * 0.2;
+  const rxScore = reactionScore(post.reactions);
+  const commentsWeight = (post.comments?.length || 0) * 1.6;
+  const savesWeight = (post.savedBy?.length || 0) * 1.2;
+  const affinity = post.authorId === me ? 1.4 : (following.includes(post.authorId) ? 1.25 : 1);
+  return (rxScore + commentsWeight + savesWeight + freshness) * affinity;
+}
+
+function slugRoom(value) {
+  return (value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function loadCalls() {
+  try {
+    const raw = localStorage.getItem(CALLS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCalls(calls) {
+  try {
+    localStorage.setItem(CALLS_KEY, JSON.stringify(calls));
+  } catch {
+    /* ignore */
+  }
+}
 
 //  localStorage helpers 
 function loadCached() {
@@ -287,11 +374,12 @@ function ReactionButton({ reactions, currentUserId, il, onReact }) {
             ))}
           </span>
         ) : (
-          <span style={{ fontSize: 15 }}></span>
+          <span style={{ fontSize: 15 }}>👍</span>
         )}
         {myReaction && (
           <span style={{ color: myReaction.color, fontWeight: 700 }}>{myReaction.label}</span>
         )}
+        {!myReaction && <span>Reagir</span>}
         {total > 0 && <span style={{ color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)', fontWeight: 400 }}>{total}</span>}
       </button>
     </div>
@@ -315,8 +403,46 @@ function ActionBtn({ icon, label, active, activeColor, il, onClick }) {
   );
 }
 
+function CommentReactionBar({ comment, currentUserId, il, onReact }) {
+  const reactions = comment.reactions || emptyCommentReactions();
+  const mine = userReaction(reactions, currentUserId);
+  const total = totalReactions(reactions);
+  const tops = topReactions(reactions);
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+      <div style={{ display: 'flex', gap: 4 }}>
+        {REACTIONS.map(r => {
+          const active = mine === r.key;
+          return (
+            <button
+              key={r.key}
+              title={r.label}
+              onClick={() => onReact(active ? null : r.key)}
+              style={{
+                border: active ? `1px solid ${r.color}66` : `1px solid ${il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.12)'}`,
+                background: active ? `${r.color}20` : 'transparent',
+                borderRadius: 999,
+                padding: '1px 5px',
+                fontSize: 12,
+                cursor: 'pointer',
+                lineHeight: 1.4,
+              }}
+            >
+              {r.emoji}
+            </button>
+          );
+        })}
+      </div>
+      <span style={{ fontSize: 11, color: il ? 'rgba(15,23,42,0.50)' : 'rgba(255,255,255,0.55)' }}>
+        {tops.join(' ')} {total > 0 ? total : ''}
+      </span>
+    </div>
+  );
+}
+
 //  PostCard 
-function PostCard({ post, currentUserId, il, onReact, onSave, onComment, onDelete }) {
+function PostCard({ post, currentUserId, il, onReact, onSave, onComment, onCommentReact, onDelete }) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText]   = useState('');
   const [submitting, setSubmitting]     = useState(false);
@@ -330,6 +456,10 @@ function PostCard({ post, currentUserId, il, onReact, onSave, onComment, onDelet
   const saved  = (post.savedBy || []).includes(currentUserId);
   const isOwn  = post.authorId === currentUserId;
   const rxns   = post.reactions || emptyReactions();
+  const sortedComments = useMemo(
+    () => [...(post.comments || [])].sort((a, b) => commentScore(b) - commentScore(a)),
+    [post.comments]
+  );
 
   const handleComment = async () => {
     if (!commentText.trim() || submitting) return;
@@ -386,24 +516,30 @@ function PostCard({ post, currentUserId, il, onReact, onSave, onComment, onDelet
           onClick={() => setShowComments(v => !v)} active={showComments} activeColor="#6366f1" />
 
         <ActionBtn icon={<IcBookmark s={16} c={saved ? '#6366f1' : 'currentColor'} filled={saved} />}
-          label="" active={saved} activeColor="#6366f1" il={il}
+          label={saved ? 'Sauve' : 'Sauver'} active={saved} activeColor="#6366f1" il={il}
           onClick={() => onSave(post._id)} />
 
         <div style={{ flex: 1 }} />
-        <ActionBtn icon={<IcShare s={15} c="currentColor" />} label="" il={il}
+        <ActionBtn icon={<IcShare s={15} c="currentColor" />} label="Partager" il={il}
           onClick={() => { if (navigator.share) navigator.share({ text: post.content }); else navigator.clipboard?.writeText(post.content); }} />
       </div>
 
       {/* Comments */}
       {showComments && (
         <div style={{ marginTop: 14 }}>
-          {post.comments.map(c => (
+          {sortedComments.map(c => (
             <div key={c._id} style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
               <Avatar name={c.userName} level="A1" size={28} />
               <div style={{ flex: 1, background: inputBg, borderRadius: 10, padding: '8px 12px' }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: txt }}>{c.userName}</span>
                 <span style={{ fontSize: 11, color: txts, marginLeft: 8 }}>{timeAgo(c.createdAt)}</span>
                 <p style={{ fontSize: 13, color: txt, margin: '4px 0 0', lineHeight: 1.5 }}>{c.text}</p>
+                <CommentReactionBar
+                  comment={c}
+                  currentUserId={currentUserId}
+                  il={il}
+                  onReact={(reaction) => onCommentReact(post._id, c._id, reaction)}
+                />
               </div>
             </div>
           ))}
@@ -420,7 +556,7 @@ function PostCard({ post, currentUserId, il, onReact, onSave, onComment, onDelet
                 style={{ padding: '8px 14px', background: '#6366f1', color: '#fff', border: 'none',
                   borderRadius: 10, fontSize: 12, fontWeight: 700,
                   cursor: commentText.trim() ? 'pointer' : 'not-allowed',
-                  opacity: commentText.trim() ? 1 : 0.5 }}></button>
+                  opacity: commentText.trim() ? 1 : 0.5 }}>Envoyer</button>
             </div>
           </div>
         </div>
@@ -462,7 +598,7 @@ function CreatePostModal({ il, user, onClose, onSubmit }) {
           maxWidth: 540, padding: 28, boxShadow: '0 24px 80px rgba(0,0,0,0.4)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <span style={{ fontSize: 17, fontWeight: 800, color: txt }}>Nouveau post</span>
-          <button onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: txts, fontSize: 18 }}></button>
+          <button onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: txts, fontSize: 18 }}>×</button>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
           <Avatar name={user?.name} level={user?.germanLevel} size={36} />
@@ -517,7 +653,7 @@ function CreatePostModal({ il, user, onClose, onSubmit }) {
                 background: content.trim() ? '#6366f1' : (il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)'),
                 color: content.trim() ? '#fff' : txts, border: 'none', fontSize: 13, fontWeight: 700,
                 cursor: content.trim() ? 'pointer' : 'not-allowed', transition: 'all 0.15s' }}>
-              {saving ? 'Publication' : 'Publier'}
+              {saving ? 'Publication...' : 'Publier'}
             </button>
           </div>
         </div>
@@ -533,10 +669,16 @@ export default function Community() {
   const il = theme === 'light';
 
   // Init: localStorage cache first, fallback to seed
-  const [posts, _setPosts]      = useState(() => loadCached() || SEED_POSTS);
+  const [posts, _setPosts]      = useState(() => {
+    const source = loadCached() || SEED_POSTS;
+    return source.map(normalisePost);
+  });
   const [filter, setFilter]     = useState('all');
+  const [feedMode, setFeedMode] = useState('smart');
   const [showCreate, setShowCreate] = useState(false);
   const [following, setFollowing]   = useState([]);
+  const [roomInput, setRoomInput]   = useState('');
+  const [callRooms, setCallRooms]   = useState(() => loadCalls());
 
   // Helper that updates state + cache atomically
   const setPosts = useCallback((updater) => {
@@ -553,21 +695,27 @@ export default function Community() {
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (data?.posts?.length) {
-          // Normalise: old posts may have `likes` array instead of `reactions`
-          const normalised = data.posts.map(p => ({
-            ...p,
-            reactions: p.reactions || emptyReactions(),
-            savedBy:   p.savedBy   || [],
-          }));
+          const normalised = data.posts.map(normalisePost);
           setPosts(normalised);
         }
       })
       .catch(() => { /* keep cache */ });
   }, [setPosts]);
 
-  const filteredPosts = filter === 'all' ? posts : posts.filter(p => p.type === filter);
+  useEffect(() => {
+    saveCalls(callRooms);
+  }, [callRooms]);
+
   const me     = user?.id || user?._id || 'local_user';
   const myName = user?.name || 'Moi';
+
+  const filteredPosts = useMemo(() => {
+    const list = filter === 'all' ? [...posts] : posts.filter(p => p.type === filter);
+    if (feedMode === 'recent') {
+      return list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    return list.sort((a, b) => postScore(b, me, following) - postScore(a, me, following));
+  }, [posts, filter, feedMode, me, following]);
 
   //  Handlers 
   const handleReact = useCallback((postId, reactionKey) => {
@@ -601,7 +749,14 @@ export default function Community() {
   }, [me, setPosts]);
 
   const handleComment = useCallback(async (postId, text) => {
-    const newComment = { _id: `c${Date.now()}`, userId: me, userName: myName, text, createdAt: new Date().toISOString() };
+    const newComment = {
+      _id: `c${Date.now()}`,
+      userId: me,
+      userName: myName,
+      text,
+      createdAt: new Date().toISOString(),
+      reactions: emptyCommentReactions(),
+    };
     setPosts(ps => ps.map(p => p._id !== postId ? p : { ...p, comments: [...p.comments, newComment] }));
     try {
       await fetch(`${API}/community/posts/${postId}/comments`, {
@@ -610,6 +765,34 @@ export default function Community() {
       });
     } catch { /* ignore */ }
   }, [me, myName, setPosts]);
+
+  const handleCommentReact = useCallback((postId, commentId, reactionKey) => {
+    setPosts(ps => ps.map(p => {
+      if (p._id !== postId) return p;
+      const nextComments = (p.comments || []).map(c => {
+        if (c._id !== commentId) return c;
+        const current = { ...emptyCommentReactions(), ...(c.reactions || {}) };
+        const cleared = Object.fromEntries(
+          Object.entries(current).map(([k, arr]) => [k, (arr || []).filter(id => id !== me)])
+        );
+        if (reactionKey) {
+          cleared[reactionKey] = [...(cleared[reactionKey] || []), me];
+        }
+        return { ...c, reactions: cleared };
+      });
+      return { ...p, comments: nextComments };
+    }));
+
+    try {
+      fetch(`${API}/community/posts/${postId}/comments/${commentId}/react`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: me, reaction: reactionKey }),
+      });
+    } catch {
+      /* ignore */
+    }
+  }, [me, setPosts]);
 
   const handleDelete = useCallback((postId) => {
     setPosts(ps => ps.filter(p => p._id !== postId));
@@ -644,6 +827,34 @@ export default function Community() {
 
   const toggleFollow = (uid) => setFollowing(fs => fs.includes(uid) ? fs.filter(f => f !== uid) : [...fs, uid]);
 
+  const openPracticeCall = useCallback((roomName, audioOnly = false) => {
+    const room = slugRoom(roomName) || `deutsch-practice-${Date.now().toString(36)}`;
+    const hash = audioOnly
+      ? '#config.prejoinPageEnabled=true&config.startAudioOnly=true&config.startWithVideoMuted=true'
+      : '#config.prejoinPageEnabled=true&config.startWithAudioMuted=false';
+    window.open(`https://meet.jit.si/${room}${hash}`, '_blank', 'noopener,noreferrer');
+  }, []);
+
+  const createRoomAndJoin = useCallback((audioOnly = false) => {
+    const level = user?.germanLevel || 'A1';
+    const room = `deutsch-${level.toLowerCase()}-${Date.now().toString(36)}`;
+    const record = {
+      id: `room_${Date.now()}`,
+      room,
+      host: myName,
+      level,
+      mode: audioOnly ? 'audio' : 'video',
+      createdAt: new Date().toISOString(),
+    };
+    setCallRooms(prev => [record, ...prev].slice(0, 12));
+    setRoomInput(room);
+    openPracticeCall(room, audioOnly);
+  }, [myName, openPracticeCall, user]);
+
+  const joinTypedRoom = useCallback((audioOnly = false) => {
+    openPracticeCall(roomInput, audioOnly);
+  }, [openPracticeCall, roomInput]);
+
   // Palette
   const bg     = il ? '#f0f2f5' : '#0d0d0d';
   const cardBg = il ? '#ffffff' : '#111111';
@@ -662,6 +873,8 @@ export default function Community() {
   ];
 
   const myPostsCount = posts.filter(p => p.authorId === me).length;
+  const totalComments = posts.reduce((acc, p) => acc + (p.comments?.length || 0), 0);
+  const totalReacts = posts.reduce((acc, p) => acc + totalReactions(p.reactions), 0);
 
   return (
     <div style={{ background: bg, minHeight: 'calc(100vh - 52px)', paddingTop: 52 }}>
@@ -729,6 +942,63 @@ export default function Community() {
             <span style={{ fontSize: 12, color: txts }}>{filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''}</span>
           </div>
 
+          <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setFeedMode('smart')}
+              style={{
+                padding: '6px 12px',
+                borderRadius: 999,
+                border: `1px solid ${feedMode === 'smart' ? '#6366f150' : border}`,
+                background: feedMode === 'smart' ? '#6366f118' : cardBg,
+                color: feedMode === 'smart' ? '#6366f1' : txts,
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              Pour toi (algorithme)
+            </button>
+            <button
+              onClick={() => setFeedMode('recent')}
+              style={{
+                padding: '6px 12px',
+                borderRadius: 999,
+                border: `1px solid ${feedMode === 'recent' ? '#6366f150' : border}`,
+                background: feedMode === 'recent' ? '#6366f118' : cardBg,
+                color: feedMode === 'recent' ? '#6366f1' : txts,
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              Plus recents
+            </button>
+          </div>
+
+          <div style={{
+            background: cardBg,
+            border: `1px solid ${border}`,
+            borderRadius: 14,
+            padding: '10px 12px',
+            marginBottom: 14,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, minmax(0,1fr))',
+            gap: 10,
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 18, fontWeight: 800, color: txt }}>{posts.length}</div>
+              <div style={{ fontSize: 11, color: txts }}>Posts</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 18, fontWeight: 800, color: txt }}>{totalComments}</div>
+              <div style={{ fontSize: 11, color: txts }}>Commentaires</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 18, fontWeight: 800, color: txt }}>{totalReacts}</div>
+              <div style={{ fontSize: 11, color: txts }}>Reactions</div>
+            </div>
+          </div>
+
           {/* Shortcut bar */}
           <div style={{ background: cardBg, border: `1px solid ${border}`, borderRadius: 16, padding: '14px 16px',
               marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
@@ -742,7 +1012,7 @@ export default function Community() {
 
           {filteredPosts.length === 0 && (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: txts }}>
-              <div style={{ fontSize: 36, marginBottom: 12 }}></div>
+              <div style={{ fontSize: 36, marginBottom: 12 }}>🗂️</div>
               <div style={{ fontSize: 15, fontWeight: 600 }}>Aucun post pour l'instant</div>
               <div style={{ fontSize: 13, marginTop: 6 }}>Soyez le premier à partager quelque chose !</div>
             </div>
@@ -751,12 +1021,136 @@ export default function Community() {
           {filteredPosts.map(post => (
             <PostCard key={post._id} post={post} currentUserId={me} il={il}
               onReact={handleReact} onSave={handleSave}
-              onComment={handleComment} onDelete={handleDelete} />
+              onComment={handleComment}
+              onCommentReact={handleCommentReact}
+              onDelete={handleDelete} />
           ))}
         </div>
 
         {/*  RIGHT PANEL  */}
         <div style={{ position: 'sticky', top: 72 }}>
+          {/* Language practice calls */}
+          <div style={{ background: sideB, border: `1px solid ${border}`, borderRadius: 16, padding: '16px', marginBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 12 }}>
+              <IcVideo s={14} c={txts} />
+              <span style={{ fontSize: 11, fontWeight: 700, color: txts, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+                Practice Calls (Audio / Video)
+              </span>
+            </div>
+
+            <div style={{ display: 'grid', gap: 8, marginBottom: 10 }}>
+              <button
+                onClick={() => createRoomAndJoin(false)}
+                style={{
+                  padding: '8px 10px',
+                  borderRadius: 10,
+                  border: 'none',
+                  background: '#6366f1',
+                  color: '#fff',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                Demarrer un salon video
+              </button>
+              <button
+                onClick={() => createRoomAndJoin(true)}
+                style={{
+                  padding: '8px 10px',
+                  borderRadius: 10,
+                  border: `1px solid ${border}`,
+                  background: il ? '#f8fafc' : '#181818',
+                  color: txt,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                Demarrer un salon audio
+              </button>
+            </div>
+
+            <input
+              value={roomInput}
+              onChange={(e) => setRoomInput(e.target.value)}
+              placeholder="Entrer un nom de salon"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                background: il ? '#f8fafc' : '#181818',
+                border: `1px solid ${border}`,
+                borderRadius: 10,
+                padding: '8px 10px',
+                color: txt,
+                fontSize: 12,
+                marginBottom: 8,
+                outline: 'none',
+              }}
+            />
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+              <button
+                onClick={() => joinTypedRoom(false)}
+                style={{
+                  padding: '7px 8px',
+                  borderRadius: 9,
+                  border: `1px solid ${border}`,
+                  background: 'transparent',
+                  color: txt,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                Rejoindre video
+              </button>
+              <button
+                onClick={() => joinTypedRoom(true)}
+                style={{
+                  padding: '7px 8px',
+                  borderRadius: 9,
+                  border: `1px solid ${border}`,
+                  background: 'transparent',
+                  color: txt,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                Rejoindre audio
+              </button>
+            </div>
+
+            {callRooms.length > 0 && (
+              <div style={{ borderTop: `1px solid ${border}`, paddingTop: 10 }}>
+                {callRooms.slice(0, 4).map(room => (
+                  <div key={room.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 8 }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: txt, overflow: 'hidden', textOverflow: 'ellipsis' }}>{room.room}</div>
+                      <div style={{ fontSize: 10, color: txts }}>{room.level} · hote: {room.host}</div>
+                    </div>
+                    <button
+                      onClick={() => openPracticeCall(room.room, room.mode === 'audio')}
+                      style={{
+                        padding: '5px 8px',
+                        borderRadius: 8,
+                        border: 'none',
+                        background: '#6366f1',
+                        color: '#fff',
+                        fontSize: 10,
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Join
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Suggested users */}
           <div style={{ background: sideB, border: `1px solid ${border}`, borderRadius: 16, padding: '16px', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 14 }}>

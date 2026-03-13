@@ -261,12 +261,12 @@ export const A1_MODULES = [
         labelFr: "Révision & Test",
         topics: [
           { title: "Révision du chapitre", desc: "Révision du vocabulaire alimentaire, de l'accusatif et des verbes irréguliers", xp: 30, duration: "20 min", icon: "📖", lessonId: "k4-d1" },
-          { title: "Exercices de consolidation", desc: "Jeux de rôle : commander au restaurant, décrire un menu, exprimer ses préférences", xp: 40, duration: "25 min", icon: "✏️", lessonId: null },
-          { title: "Mini-test", desc: "Évaluation formative — 12 questions sur l'alimentation, les verbes et les pronoms", xp: 65, duration: "15 min", icon: "🎯", lessonId: null },
+          { title: "Exercices de consolidation", desc: "Jeux de rôle : commander au restaurant, décrire un menu, exprimer ses préférences", xp: 40, duration: "25 min", icon: "✏️", lessonId: "k4-d2" },
+          { title: "Mini-test", desc: "Évaluation formative — 12 questions sur l'alimentation, les verbes et les pronoms", xp: 65, duration: "15 min", icon: "🎯", lessonId: "k4-test" },
         ],
       },
     ],
-    lessons: ["k4-a1", "k4-a2", "k4-a3", "k4-a4", "k4-b1", "k4-c1", "k4-c2", "k4-c3", "k4-d1"],
+    lessons: ["k4-a1", "k4-a2", "k4-a3", "k4-a4", "k4-b1", "k4-c1", "k4-c2", "k4-c3", "k4-d1", "k4-d2", "k4-test"],
     grammarTopics: ["L'accusatif avec articles", "Verbes essen/trinken/mögen", "Pronoms personnels accusatif"],
     miniTestId: "k4-test",
   },
@@ -364,10 +364,10 @@ export const A1_MODULES = [
         label: "Kommunikation",
         labelFr: "Communication",
         topics: [
-          { title: "Die Jahreszeiten und das Wetter", desc: "Les quatre saisons et expressions météo — Es regnet, Es schneit, Es ist sonnig, heiß, kalt…", xp: 50, duration: "15 min", icon: "🌤️", lessonId: null },
-          { title: "Reiseziele", desc: "Décrire des destinations en Europe et dans le monde — attraits touristiques et comparaisons", xp: 55, duration: "18 min", icon: "🗺️", lessonId: null },
-          { title: "Reisevorbereitungen", desc: "Préparer un voyage — la valise, les documents, le billet, la réservation d'hôtel", xp: 50, duration: "15 min", icon: "🧳", lessonId: null },
-          { title: "Verkehrsmittel", desc: "Les transports — Zug, Bus, Auto, Flugzeug, Fahrrad — avantages, prix et billets", xp: 45, duration: "15 min", icon: "🚂", lessonId: null },
+          { title: "Die Jahreszeiten und das Wetter", desc: "Les quatre saisons et expressions météo — Es regnet, Es schneit, Es ist sonnig, heiß, kalt…", xp: 50, duration: "15 min", icon: "🌤️", lessonId: "a1-k6-weather" },
+          { title: "Reiseziele", desc: "Décrire des destinations en Europe et dans le monde — attraits touristiques et comparaisons", xp: 55, duration: "18 min", icon: "🗺️", lessonId: "a1-k6-dest" },
+          { title: "Reisevorbereitungen", desc: "Préparer un voyage — la valise, les documents, le billet, la réservation d'hôtel", xp: 50, duration: "15 min", icon: "🧳", lessonId: "a1-k6-prepare" },
+          { title: "Verkehrsmittel", desc: "Les transports — Zug, Bus, Auto, Flugzeug, Fahrrad — avantages, prix et billets", xp: 45, duration: "15 min", icon: "🚂", lessonId: "a1-k6-transport" },
         ],
       },
       {
@@ -375,7 +375,7 @@ export const A1_MODULES = [
         label: "Wissenswertes",
         labelFr: "Culture & Civilisation",
         topics: [
-          { title: "Reisegewohnheiten der Deutschen — beliebteste Urlaubsziele", desc: "Les Allemands en vacances — destinations favorites, durée des séjours et budget typique", xp: 35, duration: "10 min", icon: "🏖️", lessonId: null },
+          { title: "Reisegewohnheiten der Deutschen — beliebteste Urlaubsziele", desc: "Les Allemands en vacances — destinations favorites, durée des séjours et budget typique", xp: 35, duration: "10 min", icon: "🏖️", lessonId: "a1-k6-kultur" },
         ],
       },
       {
@@ -383,9 +383,9 @@ export const A1_MODULES = [
         label: "Grammatik",
         labelFr: "Grammaire",
         topics: [
-          { title: "Satzverbindungen: Konjunktionen (und, aber, oder, denn, weil)", desc: "Relier des propositions : coordonnantes (und/aber/oder/denn) et subordonnantes (weil → verbe en fin)", xp: 60, duration: "20 min", icon: "🔗", lessonId: null },
-          { title: "Verben: Modalverben Einführung (wollen, möchten, können)", desc: "wollen (vouloir), möchten (souhaiter poliment), können (pouvoir/savoir) — structure avec infinitif", xp: 70, duration: "25 min", icon: "⚙️", lessonId: null },
-          { title: "Die Nomengruppe: Dativ nach mit/nach/von/zu", desc: "Le datif avec les prépositions mit, nach, von, zu, bei, seit, ab — tableaux et exercices", xp: 60, duration: "20 min", icon: "📐", lessonId: null },
+          { title: "Satzverbindungen: Konjunktionen (und, aber, oder, denn, weil)", desc: "Relier des propositions : coordonnantes (und/aber/oder/denn) et subordonnantes (weil → verbe en fin)", xp: 60, duration: "20 min", icon: "🔗", lessonId: "a1-k6-konj" },
+          { title: "Verben: Modalverben Einführung (wollen, möchten, können)", desc: "wollen (vouloir), möchten (souhaiter poliment), können (pouvoir/savoir) — structure avec infinitif", xp: 70, duration: "25 min", icon: "⚙️", lessonId: "a1-k6-modal" },
+          { title: "Die Nomengruppe: Dativ nach mit/nach/von/zu", desc: "Le datif avec les prépositions mit, nach, von, zu, bei, seit, ab — tableaux et exercices", xp: 60, duration: "20 min", icon: "📐", lessonId: "a1-k6-dativ" },
         ],
       },
       {
@@ -393,15 +393,15 @@ export const A1_MODULES = [
         label: "Rückblick",
         labelFr: "Révision & Test",
         topics: [
-          { title: "Révision du chapitre", desc: "Révision de la météo, des destinations, des transports et des verbes modaux", xp: 30, duration: "20 min", icon: "📖", lessonId: null },
-          { title: "Exercices de consolidation", desc: "Planifier un voyage en groupe, décrire une destination, rédiger un itinéraire", xp: 40, duration: "25 min", icon: "✏️", lessonId: null },
-          { title: "Mini-test", desc: "Évaluation formative — 14 questions sur les voyages, les conjonctions et les modaux", xp: 70, duration: "15 min", icon: "🎯", lessonId: null },
+          { title: "Révision du chapitre", desc: "Révision de la météo, des destinations, des transports et des verbes modaux", xp: 30, duration: "20 min", icon: "📖", lessonId: "a1-k6-rev" },
+          { title: "Exercices de consolidation", desc: "Planifier un voyage en groupe, décrire une destination, rédiger un itinéraire", xp: 40, duration: "25 min", icon: "✏️", lessonId: "a1-k6-ex" },
+          { title: "Mini-test", desc: "Évaluation formative — 14 questions sur les voyages, les conjonctions et les modaux", xp: 70, duration: "15 min", icon: "🎯", lessonId: "a1-k6-test" },
         ],
       },
     ],
-    lessons: [],
+    lessons: ["a1-k6-weather","a1-k6-dest","a1-k6-prepare","a1-k6-transport","a1-k6-kultur","a1-k6-konj","a1-k6-modal","a1-k6-dativ","a1-k6-rev","a1-k6-ex","a1-k6-test"],
     grammarTopics: ["Conjonctions de coordination", "Verbes modaux wollen/möchten/können", "Datif avec mit/nach/von/zu"],
-    miniTestId: "k6-test",
+    miniTestId: "a1-k6-test",
   },
 
   // ─────────────────────────────────────────
@@ -431,9 +431,9 @@ export const A1_MODULES = [
         label: "Kommunikation",
         labelFr: "Communication",
         topics: [
-          { title: "Eine Wohnung in der Stadt", desc: "Décrire un appartement — superficie, pièces, loyer, situation et annonce immobilière", xp: 55, duration: "18 min", icon: "🏠", lessonId: null },
-          { title: "Die Wohnungseinrichtung", desc: "Les meubles et l'électroménager — Sofa, Schrank, Bett, Herd, Kühlschrank, Waschmaschine…", xp: 50, duration: "15 min", icon: "🛋️", lessonId: null },
-          { title: "Die Hausordnung", desc: "Le règlement de co-propriété — règles de vie commune, horaires de bruit, tri des déchets", xp: 45, duration: "15 min", icon: "📋", lessonId: null },
+          { title: "Eine Wohnung in der Stadt", desc: "Décrire un appartement — superficie, pièces, loyer, situation et annonce immobilière", xp: 55, duration: "18 min", icon: "🏠", lessonId: "a1-k7-wohnung" },
+          { title: "Die Wohnungseinrichtung", desc: "Les meubles et l'électroménager — Sofa, Schrank, Bett, Herd, Kühlschrank, Waschmaschine…", xp: 50, duration: "15 min", icon: "🛋️", lessonId: "a1-k7-einrichtung" },
+          { title: "Die Hausordnung", desc: "Le règlement de co-propriété — règles de vie commune, horaires de bruit, tri des déchets", xp: 45, duration: "15 min", icon: "📋", lessonId: "a1-k7-hausordnung" },
         ],
       },
       {
@@ -441,7 +441,7 @@ export const A1_MODULES = [
         label: "Wissenswertes",
         labelFr: "Culture & Civilisation",
         topics: [
-          { title: "Wohnen in Deutschland — Mieten, Kaufen und Nachbarschaft", desc: "Location vs. propriété en Allemagne — arrondissements, Nebenkosten et vie de quartier", xp: 35, duration: "10 min", icon: "🏘️", lessonId: null },
+          { title: "Wohnen in Deutschland — Mieten, Kaufen und Nachbarschaft", desc: "Location vs. propriété en Allemagne — arrondissements, Nebenkosten et vie de quartier", xp: 35, duration: "10 min", icon: "🏘️", lessonId: "a1-k7-kultur" },
         ],
       },
       {
@@ -449,10 +449,10 @@ export const A1_MODULES = [
         label: "Grammatik",
         labelFr: "Grammaire",
         topics: [
-          { title: "Lokalangaben: Wo? (Dativ) vs. Wohin? (Akkusativ)", desc: "Wo? (état statique → Dativ) vs. Wohin? (direction/mouvement → Akkusativ) — prépositions locales", xp: 70, duration: "25 min", icon: "📐", lessonId: null },
-          { title: "Verben: liegen/stehen/hängen vs. legen/stellen/hängen", desc: "Verbes de position (état) vs. verbes de placement (action) — où est-il? où le met-on?", xp: 60, duration: "20 min", icon: "⚙️", lessonId: null },
-          { title: "Adjektive (attributiv und prädikativ)", desc: "Les adjectifs : prédicatifs (sans accord : Das Sofa ist bequem) vs. attributifs (accord : ein bequemes Sofa)", xp: 55, duration: "18 min", icon: "🎨", lessonId: null },
-          { title: "Nomen: Komposita (Wohnzimmer, Schlafzimmer…)", desc: "Formation des mots composés allemands — le dernier mot donne le genre : das Wohnzimmer (das Zimmer)", xp: 50, duration: "15 min", icon: "🔧", lessonId: null },
+          { title: "Lokalangaben: Wo? (Dativ) vs. Wohin? (Akkusativ)", desc: "Wo? (état statique → Dativ) vs. Wohin? (direction/mouvement → Akkusativ) — prépositions locales", xp: 70, duration: "25 min", icon: "📐", lessonId: "a1-k7-wohin" },
+          { title: "Verben: liegen/stehen/hängen vs. legen/stellen/hängen", desc: "Verbes de position (état) vs. verbes de placement (action) — où est-il? où le met-on?", xp: 60, duration: "20 min", icon: "⚙️", lessonId: "a1-k7-position" },
+          { title: "Adjektive (attributiv und prädikativ)", desc: "Les adjectifs : prédicatifs (sans accord : Das Sofa ist bequem) vs. attributifs (accord : ein bequemes Sofa)", xp: 55, duration: "18 min", icon: "🎨", lessonId: "a1-k7-adjektive" },
+          { title: "Nomen: Komposita (Wohnzimmer, Schlafzimmer…)", desc: "Formation des mots composés allemands — le dernier mot donne le genre : das Wohnzimmer (das Zimmer)", xp: 50, duration: "15 min", icon: "🔧", lessonId: "a1-k7-komposita" },
         ],
       },
       {
@@ -460,15 +460,15 @@ export const A1_MODULES = [
         label: "Rückblick",
         labelFr: "Révision & Test",
         topics: [
-          { title: "Révision du chapitre", desc: "Révision du vocabulaire du logement, des prépositions locales et des adjectifs", xp: 30, duration: "20 min", icon: "📖", lessonId: null },
-          { title: "Exercices de consolidation", desc: "Décrire son appartement idéal, commenter un plan de logement, rédiger une annonce", xp: 40, duration: "25 min", icon: "✏️", lessonId: null },
-          { title: "Mini-test", desc: "Évaluation formative — 14 questions sur le logement, les cas et les adjectifs", xp: 70, duration: "15 min", icon: "🎯", lessonId: null },
+          { title: "Révision du chapitre", desc: "Révision du vocabulaire du logement, des prépositions locales et des adjectifs", xp: 30, duration: "20 min", icon: "📖", lessonId: "a1-k7-rev" },
+          { title: "Exercices de consolidation", desc: "Décrire son appartement idéal, commenter un plan de logement, rédiger une annonce", xp: 40, duration: "25 min", icon: "✏️", lessonId: "a1-k7-ex" },
+          { title: "Mini-test", desc: "Évaluation formative — 14 questions sur le logement, les cas et les adjectifs", xp: 70, duration: "15 min", icon: "🎯", lessonId: "a1-k7-test" },
         ],
       },
     ],
-    lessons: [],
+    lessons: ["a1-k7-wohnung","a1-k7-einrichtung","a1-k7-hausordnung","a1-k7-kultur","a1-k7-wohin","a1-k7-position","a1-k7-adjektive","a1-k7-komposita","a1-k7-rev","a1-k7-ex","a1-k7-test"],
     grammarTopics: ["Wo? Dativ vs. Wohin? Akkusativ", "Verbes de position", "Adjectifs attributifs"],
-    miniTestId: "k7-test",
+    miniTestId: "a1-k7-test",
   },
 
   // ─────────────────────────────────────────
@@ -498,10 +498,10 @@ export const A1_MODULES = [
         label: "Kommunikation",
         labelFr: "Communication",
         topics: [
-          { title: "Gute Wünsche und schöne Geschenke", desc: "Formuler des vœux — Herzlichen Glückwunsch! Alles Gute! — offrir et réagir à un cadeau", xp: 50, duration: "15 min", icon: "🎁", lessonId: null },
-          { title: "Die Gesundheit", desc: "Vocabulaire de la santé — les parties du corps, les symptômes courants et chez le médecin", xp: 55, duration: "18 min", icon: "🏥", lessonId: null },
-          { title: "Entschuldigungen", desc: "Présenter ses excuses et expliquer une absence — Entschuldigung, es tut mir leid, leider…", xp: 45, duration: "15 min", icon: "🙏", lessonId: null },
-          { title: "Was ist noch alles passiert?", desc: "Raconter des événements passés avec le Perfekt — ce qui s'est passé hier, la semaine dernière", xp: 60, duration: "20 min", icon: "📰", lessonId: null },
+          { title: "Gute Wünsche und schöne Geschenke", desc: "Formuler des vœux — Herzlichen Glückwunsch! Alles Gute! — offrir et réagir à un cadeau", xp: 50, duration: "15 min", icon: "🎁", lessonId: "a1-k8-wishes" },
+          { title: "Die Gesundheit", desc: "Vocabulaire de la santé — les parties du corps, les symptômes courants et chez le médecin", xp: 55, duration: "18 min", icon: "🏥", lessonId: "a1-k8-health" },
+          { title: "Entschuldigungen", desc: "Présenter ses excuses et expliquer une absence — Entschuldigung, es tut mir leid, leider…", xp: 45, duration: "15 min", icon: "🙏", lessonId: "a1-k8-apology" },
+          { title: "Was ist noch alles passiert?", desc: "Raconter des événements passés avec le Perfekt — ce qui s'est passé hier, la semaine dernière", xp: 60, duration: "20 min", icon: "📰", lessonId: "a1-k8-passiert" },
         ],
       },
       {
@@ -509,7 +509,7 @@ export const A1_MODULES = [
         label: "Wissenswertes",
         labelFr: "Culture & Civilisation",
         topics: [
-          { title: "Feste und Bräuche in Deutschland — Geburtstag, Weihnachten, Karneval", desc: "Les fêtes allemandes — traditions d'anniversaire, Weihnachtsmarkt, Karneval à Cologne et Bavière", xp: 40, duration: "12 min", icon: "🎊", lessonId: null },
+          { title: "Feste und Bräuche in Deutschland — Geburtstag, Weihnachten, Karneval", desc: "Les fêtes allemandes — traditions d'anniversaire, Weihnachtsmarkt, Karneval à Cologne et Bavière", xp: 40, duration: "12 min", icon: "🎊", lessonId: "a1-k8-kultur" },
         ],
       },
       {
@@ -517,8 +517,8 @@ export const A1_MODULES = [
         label: "Grammatik",
         labelFr: "Grammaire",
         topics: [
-          { title: "Verben: Perfekt mit haben (gemacht, gespielt…)", desc: "Le Perfekt — haben/sein + Partizip II — participes réguliers (ge-…-t), irréguliers (ge-…-en) et préfixés", xp: 75, duration: "28 min", icon: "⚙️", lessonId: null },
-          { title: "Modalverben: müssen, dürfen, sollen", desc: "müssen (devoir — obligation), dürfen (avoir le droit — permission), sollen (être censé — instruction)", xp: 65, duration: "22 min", icon: "🔧", lessonId: null },
+          { title: "Verben: Perfekt mit haben (gemacht, gespielt…)", desc: "Le Perfekt — haben/sein + Partizip II — participes réguliers (ge-…-t), irréguliers (ge-…-en) et préfixés", xp: 75, duration: "28 min", icon: "⚙️", lessonId: "a1-k8-perfekt" },
+          { title: "Modalverben: müssen, dürfen, sollen", desc: "müssen (devoir — obligation), dürfen (avoir le droit — permission), sollen (être censé — instruction)", xp: 65, duration: "22 min", icon: "🔧", lessonId: "a1-k8-modal" },
         ],
       },
       {
@@ -526,15 +526,15 @@ export const A1_MODULES = [
         label: "Rückblick",
         labelFr: "Révision & Test",
         topics: [
-          { title: "Révision finale A1", desc: "Bilan complet du niveau A1 — vocabulaire, grammaire, communication et culture germanophone", xp: 50, duration: "30 min", icon: "📖", lessonId: null },
-          { title: "Exercices de bilan", desc: "Exercices variés couvrant tous les 8 Kapitel — compréhension, expression écrite et orale", xp: 60, duration: "35 min", icon: "✏️", lessonId: null },
-          { title: "Test final A1", desc: "Évaluation finale du niveau A1 — compréhension écrite/orale, production et grammaire", xp: 100, duration: "30 min", icon: "🏆", lessonId: null },
+          { title: "Révision finale A1", desc: "Bilan complet du niveau A1 — vocabulaire, grammaire, communication et culture germanophone", xp: 50, duration: "30 min", icon: "📖", lessonId: "a1-k8-rev" },
+          { title: "Exercices de bilan", desc: "Exercices variés couvrant tous les 8 Kapitel — compréhension, expression écrite et orale", xp: 60, duration: "35 min", icon: "✏️", lessonId: "a1-k8-ex" },
+          { title: "Test final A1", desc: "Évaluation finale du niveau A1 — compréhension écrite/orale, production et grammaire", xp: 100, duration: "30 min", icon: "🏆", lessonId: "a1-k8-finaltest" },
         ],
       },
     ],
-    lessons: [],
+    lessons: ["a1-k8-wishes","a1-k8-health","a1-k8-apology","a1-k8-passiert","a1-k8-kultur","a1-k8-perfekt","a1-k8-modal","a1-k8-rev","a1-k8-ex","a1-k8-finaltest"],
     grammarTopics: ["Le Perfekt : haben + Partizip II", "Verbes modaux müssen/dürfen/sollen", "Sein + Partizip II"],
-    miniTestId: "k8-test",
+    miniTestId: "a1-k8-finaltest",
   },
 ];
 

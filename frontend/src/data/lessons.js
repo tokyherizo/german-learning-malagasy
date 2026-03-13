@@ -1,5 +1,8 @@
 import { k4Lessons } from './k4lessons.js';
 import { k5Lessons } from './k5lessons.js';
+import { k6Lessons } from './k6lessons.js';
+import { k7Lessons } from './k7lessons.js';
+import { k8Lessons } from './k8lessons.js';
 // Lessons / Lektionen
 export const lessons = {
   A1: [
@@ -2924,7 +2927,10 @@ export const lessons = {
     },
 
     ...k4Lessons,
-    ...k5Lessons
+    ...k5Lessons,
+    ...k6Lessons,
+    ...k7Lessons,
+    ...k8Lessons
   ],
   A2: [
     {

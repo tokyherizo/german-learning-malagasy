@@ -521,6 +521,198 @@ export const k4Lessons = [
         textDe: "Kapitel 4 geschafft! Merke: Restaurantvokabular, nur maskuline Artikel ändern sich im Akkusativ (der→den), und übe die Essensverben mit Vokalwechsel."
       }
     ]
+  },
+
+  // ── K4-D2 : Exercices de consolidation ──
+  {
+    id: "k4-d2",
+    level: "A1",
+    number: 12,
+    title: "Exercices de consolidation",
+    subtitle: "Jeux de role: restaurant, menu, preferences alimentaires",
+    icon: "✏️",
+    duration: "25 min",
+    xp: 40,
+    color: "#f472b6",
+    kapitel: 4,
+    sections: [
+      {
+        type: "intro",
+        title: "Training Kapitel 4",
+        content: "In this consolidation lesson, you practise real communication tasks: ordering at the hotel buffet, requesting tableware, ordering in a restaurant, and expressing food preferences with correct accusative forms.",
+        contentDe: "In dieser Lektion trainierst du reale Kommunikationssituationen: Fruehstueck bestellen, Geschirr erfragen, im Restaurant bestellen und Vorlieben mit korrektem Akkusativ ausdruecken."
+      },
+      {
+        type: "grammar",
+        title: "Uebung 1: Akkusativ mit Artikeln",
+        items: [
+          { pronoun: "Ich nehme ... Kaffee.", verb: "Ich nehme einen Kaffee.", meaning: "Masculine: ein -> einen." },
+          { pronoun: "Ich bestelle ... Suppe.", verb: "Ich bestelle eine Suppe.", meaning: "Feminine stays: eine." },
+          { pronoun: "Ich moechte ... Brot.", verb: "Ich moechte ein Brot.", meaning: "Neuter stays: ein." },
+          { pronoun: "Ich esse ... Salat.", verb: "Ich esse keinen Salat.", meaning: "Negation masculine: keinen." }
+        ]
+      },
+      {
+        type: "grammar",
+        title: "Uebung 2: Verben essen/trinken/moegen/nehmen",
+        items: [
+          { pronoun: "du + essen", verb: "Du isst heute ein Sandwich.", meaning: "Vowel change e->i." },
+          { pronoun: "er + nehmen", verb: "Er nimmt den Tee.", meaning: "Irregular stem in 3rd person singular." },
+          { pronoun: "wir + trinken", verb: "Wir trinken Wasser.", meaning: "Regular conjugation." },
+          { pronoun: "ich + moegen", verb: "Ich mag Pizza.", meaning: "Special modal-like pattern." }
+        ]
+      },
+      {
+        type: "dialogue",
+        title: "Rollenspiel: Im Restaurant",
+        lines: [
+          { speaker: "Kellner", text: "Guten Abend, was darf ich Ihnen bringen?", translation: "Good evening, what can I bring you?" },
+          { speaker: "Gast A", text: "Ich haette gern die Tomatensuppe und einen Salat.", translation: "I would like the tomato soup and a salad." },
+          { speaker: "Gast B", text: "Ich nehme das Schnitzel mit Pommes, bitte.", translation: "I'll take the schnitzel with fries, please." },
+          { speaker: "Kellner", text: "Und zu trinken?", translation: "And to drink?" },
+          { speaker: "Gast A", text: "Ein Wasser fuer mich und einen Saft fuer ihn.", translation: "A water for me and a juice for him." },
+          { speaker: "Gast B", text: "Und spaeter die Rechnung, bitte.", translation: "And later the bill, please." }
+        ]
+      },
+      {
+        type: "vocabulary",
+        title: "Uebung 3: Vorlieben ausdruecken",
+        words: [
+          { german: "Ich esse gern ...", english: "I like eating ...", example: "Ich esse gern Gemuese." },
+          { german: "Ich trinke lieber ...", english: "I prefer drinking ...", example: "Ich trinke lieber Tee als Kaffee." },
+          { german: "Ich mag ... nicht", english: "I do not like ...", example: "Ich mag Fisch nicht." },
+          { german: "Fuer mich bitte ...", english: "For me please ...", example: "Fuer mich bitte ein stilles Wasser." },
+          { german: "Was empfehlen Sie?", english: "What do you recommend?", example: "Was empfehlen Sie als Hauptgericht?" }
+        ]
+      },
+      {
+        type: "tip",
+        text: "To sound natural in food contexts, combine one article phrase + one preference phrase: 'Ich nehme einen Kaffee. Ich trinke lieber ohne Zucker.'",
+        textDe: "Natuerlicher Ausdruck beim Essen: kombiniere einen Artikel-Satz und eine Vorliebe: 'Ich nehme einen Kaffee. Ich trinke lieber ohne Zucker.'"
+      }
+    ]
+  },
+
+  // ── K4-D3 : Mini-test ──
+  {
+    id: "k4-test",
+    level: "A1",
+    number: 13,
+    title: "Mini-test",
+    subtitle: "12 questions sur alimentation, verbes et pronoms",
+    icon: "🎯",
+    duration: "15 min",
+    xp: 65,
+    color: "#f472b6",
+    kapitel: 4,
+    sections: [
+      {
+        type: "intro",
+        title: "Mini-test Kapitel 4",
+        content: "Check your mastery of food vocabulary, restaurant communication, accusative articles, key verbs, and accusative personal pronouns.",
+        contentDe: "Teste dein Wissen zu Essenswortschatz, Restaurantkommunikation, Akkusativartikeln, wichtigen Verben und Akkusativpronomen."
+      },
+      {
+        type: "quiz",
+        title: "Mini-test K4 (12 questions)",
+        questions: [
+          {
+            topic: "Fruehstueck",
+            question: "Was bedeutet 'Fruehstueck im Hotel'?",
+            options: ["Dinner at home", "Breakfast at the hotel", "Lunch at school", "Coffee break"],
+            correct: 1,
+            explanation: "'Fruehstueck' means breakfast."
+          },
+          {
+            topic: "Geschirr",
+            question: "Was ist 'die Gabel'?",
+            options: ["knife", "fork", "spoon", "plate"],
+            correct: 1,
+            explanation: "'die Gabel' = fork."
+          },
+          {
+            topic: "Essen",
+            question: "Welcher Satz ist korrekt?",
+            options: ["Ich trinke Brot.", "Ich esse Wasser.", "Ich esse Brot.", "Ich nehme trinken."],
+            correct: 2,
+            explanation: "You eat bread: 'Ich esse Brot.'"
+          },
+          {
+            topic: "Restaurant",
+            question: "Wie fragt man nach der Rechnung?",
+            options: ["Die Speisekarte, bitte.", "Das Trinkgeld, bitte.", "Die Rechnung, bitte.", "Ein Tisch, bitte."],
+            correct: 2,
+            explanation: "Standard phrase: 'Die Rechnung, bitte.'"
+          },
+          {
+            topic: "Akkusativ",
+            question: "Welche Form ist richtig? Ich nehme ___ Kaffee.",
+            options: ["ein", "einen", "eine", "einem"],
+            correct: 1,
+            explanation: "'Kaffee' is masculine; accusative uses 'einen'."
+          },
+          {
+            topic: "Akkusativ",
+            question: "Welche Form ist richtig? Ich bestelle ___ Suppe.",
+            options: ["ein", "einen", "eine", "einem"],
+            correct: 2,
+            explanation: "'Suppe' is feminine; accusative stays 'eine'."
+          },
+          {
+            topic: "Verben",
+            question: "Was ist korrekt? Du ___ Pizza.",
+            options: ["esse", "esst", "isst", "essen"],
+            correct: 2,
+            explanation: "'essen' -> 'du isst'."
+          },
+          {
+            topic: "Verben",
+            question: "Was ist korrekt? Er ___ den Tee.",
+            options: ["nehmt", "nimmt", "nimmst", "nehme"],
+            correct: 1,
+            explanation: "'nehmen' -> 'er nimmt'."
+          },
+          {
+            topic: "Pronomen",
+            question: "Akkusativ von 'ich' ist ...",
+            options: ["mir", "mich", "mein", "meine"],
+            correct: 1,
+            explanation: "Nominative 'ich' -> accusative 'mich'."
+          },
+          {
+            topic: "Pronomen",
+            question: "Akkusativ von 'er' ist ...",
+            options: ["ihm", "ihn", "sein", "ihre"],
+            correct: 1,
+            explanation: "Nominative 'er' -> accusative 'ihn'."
+          },
+          {
+            topic: "Vorlieben",
+            question: "Welcher Satz drueckt Vorliebe aus?",
+            options: ["Ich habe Rechnung.", "Ich esse gern Obst.", "Ich nehme den Tisch.", "Ich trinke den Teller."],
+            correct: 1,
+            explanation: "'gern' expresses liking/preference."
+          },
+          {
+            topic: "Gesamt",
+            question: "Welche Version ist komplett korrekt?",
+            options: [
+              "Ich nehme einen Kaffee und ich mag ihn ohne Zucker.",
+              "Ich nehme ein Kaffee und ich mag ihm ohne Zucker.",
+              "Ich nehme einen Kaffee und ich mag ihm ohne Zucker.",
+              "Ich nehme ein Kaffee und ich mag ihn ohne Zucker."
+            ],
+            correct: 0,
+            explanation: "Correct article + correct accusative pronoun."
+          }
+        ]
+      },
+      {
+        type: "tip",
+        text: "Target score: 9/12 or more. If lower, review this order: 1) accusative articles, 2) essen/nehmen forms, 3) accusative pronouns.",
+        textDe: "Ziel: 9/12 oder mehr. Darunter bitte wiederholen: 1) Akkusativartikel, 2) essen/nehmen-Formen, 3) Akkusativpronomen."
+      }
+    ]
   }
 ];
 
