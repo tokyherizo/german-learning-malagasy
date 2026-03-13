@@ -4,6 +4,14 @@ const CommentSchema = new mongoose.Schema({
   userId:   { type: String, required: true },
   userName: { type: String, required: true },
   text:     { type: String, required: true, maxlength: 500 },
+  reactions: {
+    like:  [{ type: String }],
+    love:  [{ type: String }],
+    haha:  [{ type: String }],
+    wow:   [{ type: String }],
+    sad:   [{ type: String }],
+    angry: [{ type: String }],
+  },
   createdAt:{ type: Date, default: Date.now },
 }, { _id: true });
 
@@ -16,6 +24,14 @@ const PostSchema = new mongoose.Schema({
   imageUrl:   { type: String, default: '' },
   videoUrl:   { type: String, default: '' },
   lessonRef:  { type: String, default: '' },   // lesson id if type===lesson
+  reactions: {
+    like:  [{ type: String }],
+    love:  [{ type: String }],
+    haha:  [{ type: String }],
+    wow:   [{ type: String }],
+    sad:   [{ type: String }],
+    angry: [{ type: String }],
+  },
   likes:      [{ type: String }],              // array of userIds
   savedBy:    [{ type: String }],              // array of userIds
   comments:   [CommentSchema],
