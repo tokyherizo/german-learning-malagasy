@@ -260,6 +260,17 @@ function slugRoom(value) {
     .replace(/^-|-$/g, '');
 }
 
+function buildCallUrl(roomName, audioOnly = false) {
+  const room = slugRoom(roomName) || `deutsch-practice-${Date.now().toString(36)}`;
+  const hash = audioOnly
+    ? '#config.prejoinPageEnabled=false&config.startAudioOnly=true&config.startWithVideoMuted=true'
+    : '#config.prejoinPageEnabled=false&config.startWithAudioMuted=false';
+  return {
+    room,
+    url: `https://meet.jit.si/${room}${hash}`,
+  };
+}
+
 function loadCalls() {
   try {
     const raw = localStorage.getItem(CALLS_KEY);
@@ -680,6 +691,154 @@ function CreatePostModal({ il, user, onClose, onSubmit }) {
   );
 }
 
+function CreateRoomModal({ il, user, onClose, onCreate }) {
+  const [form, setForm] = useState({
+    name: '',
+    theme: CALL_THEMES[0],
+    level: user?.germanLevel || 'A1',
+    category: CALL_CATEGORIES[0],
+    mode: 'video',
+  });
+
+  const bg      = il ? '#ffffff' : '#111';
+  const border  = il ? 'rgba(0,0,0,0.10)' : 'rgba(255,255,255,0.10)';
+  const txt     = il ? '#0f172a' : '#f1f5f9';
+  const txts    = il ? 'rgba(15,23,42,0.5)' : 'rgba(255,255,255,0.4)';
+  const inputBg = il ? '#f8fafc' : '#181818';
+
+  const handleCreate = () => {
+    onCreate(form);
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1100,
+        background: il ? 'rgba(0,0,0,0.45)' : 'rgba(0,0,0,0.72)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem',
+      }}
+      onClick={e => e.target === e.currentTarget && onClose()}
+    >
+      <div style={{ background: bg, border: `1px solid ${border}`, borderRadius: 20, width: '100%', maxWidth: 560, padding: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <span style={{ fontSize: 17, fontWeight: 800, color: txt }}>Creer un salon</span>
+          <button onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: txts, fontSize: 18 }}>×</button>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 8, marginBottom: 10 }}>
+          <input
+            value={form.name}
+            onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
+            placeholder="Nom du salon (optionnel)"
+            style={{ width: '100%', boxSizing: 'border-box', background: inputBg, border: `1px solid ${border}`, borderRadius: 10, padding: '10px 12px', color: txt, fontSize: 13, outline: 'none' }}
+          />
+          <select
+            value={form.level}
+            onChange={(e) => setForm(prev => ({ ...prev, level: e.target.value }))}
+            style={{ width: '100%', boxSizing: 'border-box', background: inputBg, border: `1px solid ${border}`, borderRadius: 10, padding: '10px 12px', color: txt, fontSize: 13, outline: 'none' }}
+          >
+            {CALL_LEVELS.map(level => <option key={level} value={level}>{level}</option>)}
+          </select>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+          <select
+            value={form.theme}
+            onChange={(e) => setForm(prev => ({ ...prev, theme: e.target.value }))}
+            style={{ width: '100%', boxSizing: 'border-box', background: inputBg, border: `1px solid ${border}`, borderRadius: 10, padding: '10px 12px', color: txt, fontSize: 13, outline: 'none' }}
+          >
+            {CALL_THEMES.map(theme => <option key={theme} value={theme}>{theme}</option>)}
+          </select>
+
+          <select
+            value={form.category}
+            onChange={(e) => setForm(prev => ({ ...prev, category: e.target.value }))}
+            style={{ width: '100%', boxSizing: 'border-box', background: inputBg, border: `1px solid ${border}`, borderRadius: 10, padding: '10px 12px', color: txt, fontSize: 13, outline: 'none' }}
+          >
+            {CALL_CATEGORIES.map(category => <option key={category} value={category}>{category}</option>)}
+          </select>
+
+          <select
+            value={form.mode}
+            onChange={(e) => setForm(prev => ({ ...prev, mode: e.target.value }))}
+            style={{ width: '100%', boxSizing: 'border-box', background: inputBg, border: `1px solid ${border}`, borderRadius: 10, padding: '10px 12px', color: txt, fontSize: 13, outline: 'none' }}
+          >
+            <option value="video">Video</option>
+            <option value="audio">Audio</option>
+          </select>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginTop: 14 }}>
+          <button
+            onClick={onClose}
+            style={{ padding: '9px 16px', borderRadius: 10, background: 'transparent', border: `1px solid ${border}`, color: txts, fontSize: 13, cursor: 'pointer' }}
+          >
+            Annuler
+          </button>
+          <button
+            onClick={handleCreate}
+            style={{ padding: '9px 18px', borderRadius: 10, background: '#6366f1', color: '#fff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+          >
+            Demarrer le salon
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InAppCallModal({ il, call, onClose }) {
+  const border = il ? 'rgba(0,0,0,0.10)' : 'rgba(255,255,255,0.10)';
+  const txt = il ? '#0f172a' : '#f1f5f9';
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1200,
+        background: il ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.78)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '12px',
+      }}
+      onClick={e => e.target === e.currentTarget && onClose()}
+    >
+      <div style={{ width: '100%', maxWidth: 1020, borderRadius: 16, overflow: 'hidden', border: `1px solid ${border}`, background: il ? '#fff' : '#101010' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderBottom: `1px solid ${border}` }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: txt, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              Salon: {call.room}
+            </div>
+            <div style={{ fontSize: 11, color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)' }}>
+              {call.level || 'A1'} · {call.theme || 'Conversation libre'} · {call.category || 'Q&A'} · {call.mode}
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ padding: '7px 12px', borderRadius: 8, border: 'none', background: '#ef4444', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+          >
+            Quitter
+          </button>
+        </div>
+
+        <iframe
+          src={call.url}
+          title={`call-${call.room}`}
+          allow="camera; microphone; fullscreen; display-capture"
+          style={{ width: '100%', height: '72vh', border: 0, display: 'block', background: '#000' }}
+        />
+      </div>
+    </div>
+  );
+}
+
 //  Main Community Page 
 export default function Community() {
   const { theme } = useTheme();
@@ -694,16 +853,10 @@ export default function Community() {
   const [filter, setFilter]     = useState('all');
   const [feedMode, setFeedMode] = useState('smart');
   const [showCreate, setShowCreate] = useState(false);
+  const [showRoomModal, setShowRoomModal] = useState(false);
   const [following, setFollowing]   = useState([]);
-  const [roomInput, setRoomInput]   = useState('');
   const [callRooms, setCallRooms]   = useState(() => loadCalls());
-  const [roomForm, setRoomForm]     = useState(() => ({
-    name: '',
-    theme: CALL_THEMES[0],
-    level: user?.germanLevel || 'A1',
-    category: CALL_CATEGORIES[0],
-    mode: 'video',
-  }));
+  const [activeCall, setActiveCall] = useState(null);
 
   // Helper that updates state + cache atomically
   const setPosts = useCallback((updater) => {
@@ -852,17 +1005,21 @@ export default function Community() {
 
   const toggleFollow = (uid) => setFollowing(fs => fs.includes(uid) ? fs.filter(f => f !== uid) : [...fs, uid]);
 
-  const openPracticeCall = useCallback((roomName, audioOnly = false) => {
-    const room = slugRoom(roomName) || `deutsch-practice-${Date.now().toString(36)}`;
-    const hash = audioOnly
-      ? '#config.prejoinPageEnabled=true&config.startAudioOnly=true&config.startWithVideoMuted=true'
-      : '#config.prejoinPageEnabled=true&config.startWithAudioMuted=false';
-    window.open(`https://meet.jit.si/${room}${hash}`, '_blank', 'noopener,noreferrer');
+  const openPracticeCall = useCallback((roomName, audioOnly = false, meta = {}) => {
+    const { room, url } = buildCallUrl(roomName, audioOnly);
+    setActiveCall({
+      room,
+      mode: audioOnly ? 'audio' : 'video',
+      theme: meta.theme,
+      category: meta.category,
+      level: meta.level,
+      url,
+    });
   }, []);
 
-  const createRoomAndJoin = useCallback(() => {
-    const level = roomForm.level || user?.germanLevel || 'A1';
-    const roomFromInput = slugRoom(roomForm.name);
+  const createRoomAndJoin = useCallback((roomDetails) => {
+    const level = roomDetails.level || user?.germanLevel || 'A1';
+    const roomFromInput = slugRoom(roomDetails.name);
     const fallbackRoom = `deutsch-${level.toLowerCase()}-${Date.now().toString(36)}`;
     const room = roomFromInput || fallbackRoom;
     const record = {
@@ -870,20 +1027,14 @@ export default function Community() {
       room,
       host: myName,
       level,
-      theme: roomForm.theme,
-      category: roomForm.category,
-      mode: roomForm.mode,
+      theme: roomDetails.theme,
+      category: roomDetails.category,
+      mode: roomDetails.mode,
       createdAt: new Date().toISOString(),
     };
     setCallRooms(prev => [record, ...prev].slice(0, 12));
-    setRoomInput(room);
-    openPracticeCall(room, roomForm.mode === 'audio');
-  }, [myName, openPracticeCall, roomForm, user]);
-
-  const joinTypedRoom = useCallback((audioOnly = false) => {
-    if (!roomInput.trim()) return;
-    openPracticeCall(roomInput, audioOnly);
-  }, [openPracticeCall, roomInput]);
+    openPracticeCall(room, roomDetails.mode === 'audio', roomDetails);
+  }, [myName, openPracticeCall, user]);
 
   // Palette
   const bg     = il ? '#f0f2f5' : '#0d0d0d';
@@ -908,11 +1059,11 @@ export default function Community() {
 
   return (
     <div style={{ background: bg, minHeight: 'calc(100vh - 52px)', paddingTop: 52 }}>
-      <div className="comm-layout" style={{ maxWidth: 1080, margin: '0 auto', padding: '28px 16px',
-          display: 'grid', gridTemplateColumns: '260px 1fr 240px', gap: 20, alignItems: 'start' }}>
+      <div className="comm-layout" style={{ maxWidth: 1240, margin: '0 auto', padding: '28px 20px',
+          display: 'grid', gridTemplateColumns: '280px minmax(0, 1fr) 280px', gap: 22, alignItems: 'start' }}>
 
         {/*  LEFT SIDEBAR  */}
-        <div style={{ position: 'sticky', top: 72 }}>
+        <div className="comm-left" style={{ position: 'sticky', top: 72 }}>
           {/* User card */}
           <div style={{ background: sideB, border: `1px solid ${border}`, borderRadius: 16, padding: '18px 16px', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
@@ -966,7 +1117,7 @@ export default function Community() {
         </div>
 
         {/*  MAIN FEED  */}
-        <div>
+        <div className="comm-main">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <h1 style={{ fontSize: 20, fontWeight: 800, color: txt, margin: 0 }}>Communauté</h1>
             <span style={{ fontSize: 12, color: txts }}>{filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''}</span>
@@ -1005,7 +1156,7 @@ export default function Community() {
             </button>
           </div>
 
-          <div style={{
+          <div className="comm-stats-grid" style={{
             background: cardBg,
             border: `1px solid ${border}`,
             borderRadius: 14,
@@ -1038,163 +1189,23 @@ export default function Community() {
               <span style={{ fontSize: 11, color: txts }}>{callRooms.length} salon{callRooms.length > 1 ? 's' : ''}</span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 8, marginBottom: 8 }}>
-              <input
-                value={roomForm.name}
-                onChange={(e) => setRoomForm(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Nom du salon (optionnel)"
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  background: il ? '#f8fafc' : '#181818',
-                  border: `1px solid ${border}`,
-                  borderRadius: 10,
-                  padding: '8px 10px',
-                  color: txt,
-                  fontSize: 12,
-                  outline: 'none',
-                }}
-              />
-              <select
-                value={roomForm.level}
-                onChange={(e) => setRoomForm(prev => ({ ...prev, level: e.target.value }))}
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  background: il ? '#f8fafc' : '#181818',
-                  border: `1px solid ${border}`,
-                  borderRadius: 10,
-                  padding: '8px 10px',
-                  color: txt,
-                  fontSize: 12,
-                  outline: 'none',
-                }}
-              >
-                {CALL_LEVELS.map(level => <option key={level} value={level}>{level}</option>)}
-              </select>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 10 }}>
-              <select
-                value={roomForm.theme}
-                onChange={(e) => setRoomForm(prev => ({ ...prev, theme: e.target.value }))}
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  background: il ? '#f8fafc' : '#181818',
-                  border: `1px solid ${border}`,
-                  borderRadius: 10,
-                  padding: '8px 10px',
-                  color: txt,
-                  fontSize: 12,
-                  outline: 'none',
-                }}
-              >
-                {CALL_THEMES.map(theme => <option key={theme} value={theme}>{theme}</option>)}
-              </select>
-              <select
-                value={roomForm.category}
-                onChange={(e) => setRoomForm(prev => ({ ...prev, category: e.target.value }))}
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  background: il ? '#f8fafc' : '#181818',
-                  border: `1px solid ${border}`,
-                  borderRadius: 10,
-                  padding: '8px 10px',
-                  color: txt,
-                  fontSize: 12,
-                  outline: 'none',
-                }}
-              >
-                {CALL_CATEGORIES.map(category => <option key={category} value={category}>{category}</option>)}
-              </select>
-              <select
-                value={roomForm.mode}
-                onChange={(e) => setRoomForm(prev => ({ ...prev, mode: e.target.value }))}
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  background: il ? '#f8fafc' : '#181818',
-                  border: `1px solid ${border}`,
-                  borderRadius: 10,
-                  padding: '8px 10px',
-                  color: txt,
-                  fontSize: 12,
-                  outline: 'none',
-                }}
-              >
-                <option value="video">Video</option>
-                <option value="audio">Audio</option>
-              </select>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
-              <button
-                onClick={createRoomAndJoin}
-                style={{
-                  padding: '8px 10px',
-                  borderRadius: 10,
-                  border: 'none',
-                  background: '#6366f1',
-                  color: '#fff',
-                  fontSize: 12,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                Creer et demarrer
-              </button>
-              <input
-                value={roomInput}
-                onChange={(e) => setRoomInput(e.target.value)}
-                placeholder="Nom du salon a rejoindre"
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  background: il ? '#f8fafc' : '#181818',
-                  border: `1px solid ${border}`,
-                  borderRadius: 10,
-                  padding: '8px 10px',
-                  color: txt,
-                  fontSize: 12,
-                  outline: 'none',
-                }}
-              />
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
-              <button
-                onClick={() => joinTypedRoom(false)}
-                style={{
-                  padding: '7px 8px',
-                  borderRadius: 9,
-                  border: `1px solid ${border}`,
-                  background: 'transparent',
-                  color: txt,
-                  fontSize: 11,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                Rejoindre video
-              </button>
-              <button
-                onClick={() => joinTypedRoom(true)}
-                style={{
-                  padding: '7px 8px',
-                  borderRadius: 9,
-                  border: `1px solid ${border}`,
-                  background: 'transparent',
-                  color: txt,
-                  fontSize: 11,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                Rejoindre audio
-              </button>
-            </div>
+            <button
+              onClick={() => setShowRoomModal(true)}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                borderRadius: 10,
+                border: 'none',
+                background: '#6366f1',
+                color: '#fff',
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                marginBottom: 10,
+              }}
+            >
+              Creer un salon
+            </button>
 
             {callRooms.length > 0 && (
               <div style={{ borderTop: `1px solid ${border}`, paddingTop: 10 }}>
@@ -1208,7 +1219,7 @@ export default function Community() {
                       <div style={{ fontSize: 10, color: txts }}>hote: {room.host}</div>
                     </div>
                     <button
-                      onClick={() => openPracticeCall(room.room, room.mode === 'audio')}
+                      onClick={() => openPracticeCall(room.room, room.mode === 'audio', room)}
                       style={{
                         padding: '5px 8px',
                         borderRadius: 8,
@@ -1257,7 +1268,7 @@ export default function Community() {
         </div>
 
         {/*  RIGHT PANEL  */}
-        <div style={{ position: 'sticky', top: 72 }}>
+        <div className="comm-right" style={{ position: 'sticky', top: 72 }}>
           {/* Suggested users */}
           <div style={{ background: sideB, border: `1px solid ${border}`, borderRadius: 16, padding: '16px', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 14 }}>
@@ -1307,19 +1318,66 @@ export default function Community() {
         <CreatePostModal il={il} user={user} onClose={() => setShowCreate(false)} onSubmit={handleCreatePost} />
       )}
 
+      {showRoomModal && (
+        <CreateRoomModal
+          il={il}
+          user={user}
+          onClose={() => setShowRoomModal(false)}
+          onCreate={(form) => {
+            createRoomAndJoin(form);
+            setShowRoomModal(false);
+          }}
+        />
+      )}
+
+      {activeCall && (
+        <InAppCallModal
+          il={il}
+          call={activeCall}
+          onClose={() => setActiveCall(null)}
+        />
+      )}
+
       <style>{`
         @keyframes rxappear {
           from { opacity: 0; transform: scale(0.85) translateY(6px); }
           to   { opacity: 1; transform: scale(1) translateY(0); }
         }
+        .comm-left,
+        .comm-right {
+          width: 100%;
+        }
         @media (max-width: 900px) {
-          .comm-layout { grid-template-columns: 1fr !important; }
-          .comm-layout > div:first-child,
-          .comm-layout > div:last-child { position: static !important; display: none; }
+          .comm-layout {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+            padding: 18px 12px !important;
+          }
+          .comm-left,
+          .comm-right {
+            position: static !important;
+          }
+          .comm-main { order: 1; }
+          .comm-left { order: 2; }
+          .comm-right { order: 3; }
+          .comm-stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+        @media (max-width: 560px) {
+          .comm-stats-grid {
+            grid-template-columns: 1fr !important;
+          }
         }
         @media (max-width: 1100px) and (min-width: 901px) {
-          .comm-layout { grid-template-columns: 220px 1fr !important; }
-          .comm-layout > div:last-child { display: none; }
+          .comm-layout {
+            grid-template-columns: 250px minmax(0, 1fr) !important;
+            gap: 16px !important;
+          }
+          .comm-right {
+            grid-column: 1 / -1;
+            position: static !important;
+          }
         }
       `}</style>
     </div>
