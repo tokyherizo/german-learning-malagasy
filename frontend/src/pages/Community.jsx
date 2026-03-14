@@ -183,6 +183,24 @@ const TRENDING_TOPICS = [
   { tag: '#B1Prüfung',      count: 18 }, { tag: '#AlltagsDeutsch',count: 23 },
 ];
 
+const CALL_THEMES = [
+  'Conversation libre',
+  'Grammaire',
+  'Prononciation',
+  'Vocabulaire',
+  'Preparation examen',
+];
+
+const CALL_CATEGORIES = [
+  'Jeux de role',
+  'Correction orale',
+  'Debat',
+  'Presentation',
+  'Q&A',
+];
+
+const CALL_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
 function normaliseComment(comment) {
   return {
     ...comment,
@@ -679,6 +697,13 @@ export default function Community() {
   const [following, setFollowing]   = useState([]);
   const [roomInput, setRoomInput]   = useState('');
   const [callRooms, setCallRooms]   = useState(() => loadCalls());
+  const [roomForm, setRoomForm]     = useState(() => ({
+    name: '',
+    theme: CALL_THEMES[0],
+    level: user?.germanLevel || 'A1',
+    category: CALL_CATEGORIES[0],
+    mode: 'video',
+  }));
 
   // Helper that updates state + cache atomically
   const setPosts = useCallback((updater) => {
@@ -835,23 +860,28 @@ export default function Community() {
     window.open(`https://meet.jit.si/${room}${hash}`, '_blank', 'noopener,noreferrer');
   }, []);
 
-  const createRoomAndJoin = useCallback((audioOnly = false) => {
-    const level = user?.germanLevel || 'A1';
-    const room = `deutsch-${level.toLowerCase()}-${Date.now().toString(36)}`;
+  const createRoomAndJoin = useCallback(() => {
+    const level = roomForm.level || user?.germanLevel || 'A1';
+    const roomFromInput = slugRoom(roomForm.name);
+    const fallbackRoom = `deutsch-${level.toLowerCase()}-${Date.now().toString(36)}`;
+    const room = roomFromInput || fallbackRoom;
     const record = {
       id: `room_${Date.now()}`,
       room,
       host: myName,
       level,
-      mode: audioOnly ? 'audio' : 'video',
+      theme: roomForm.theme,
+      category: roomForm.category,
+      mode: roomForm.mode,
       createdAt: new Date().toISOString(),
     };
     setCallRooms(prev => [record, ...prev].slice(0, 12));
     setRoomInput(room);
-    openPracticeCall(room, audioOnly);
-  }, [myName, openPracticeCall, user]);
+    openPracticeCall(room, roomForm.mode === 'audio');
+  }, [myName, openPracticeCall, roomForm, user]);
 
   const joinTypedRoom = useCallback((audioOnly = false) => {
+    if (!roomInput.trim()) return;
     openPracticeCall(roomInput, audioOnly);
   }, [openPracticeCall, roomInput]);
 
@@ -999,48 +1029,109 @@ export default function Community() {
             </div>
           </div>
 
-          {/* Shortcut bar */}
-          <div style={{ background: cardBg, border: `1px solid ${border}`, borderRadius: 16, padding: '14px 16px',
-              marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
-            onClick={() => setShowCreate(true)}>
-            <Avatar name={user?.name} level={user?.germanLevel} size={36} />
-            <div style={{ flex: 1, background: il ? '#f8fafc' : '#1a1a1a', border: `1px solid ${border}`,
-                borderRadius: 24, padding: '10px 16px', fontSize: 13, color: txts }}>
-              Partagez quelque chose avec la communauté
-            </div>
-          </div>
-
-          {filteredPosts.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '60px 20px', color: txts }}>
-              <div style={{ fontSize: 36, marginBottom: 12 }}>🗂️</div>
-              <div style={{ fontSize: 15, fontWeight: 600 }}>Aucun post pour l'instant</div>
-              <div style={{ fontSize: 13, marginTop: 6 }}>Soyez le premier à partager quelque chose !</div>
-            </div>
-          )}
-
-          {filteredPosts.map(post => (
-            <PostCard key={post._id} post={post} currentUserId={me} il={il}
-              onReact={handleReact} onSave={handleSave}
-              onComment={handleComment}
-              onCommentReact={handleCommentReact}
-              onDelete={handleDelete} />
-          ))}
-        </div>
-
-        {/*  RIGHT PANEL  */}
-        <div style={{ position: 'sticky', top: 72 }}>
-          {/* Language practice calls */}
-          <div style={{ background: sideB, border: `1px solid ${border}`, borderRadius: 16, padding: '16px', marginBottom: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 12 }}>
-              <IcVideo s={14} c={txts} />
-              <span style={{ fontSize: 11, fontWeight: 700, color: txts, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
-                Practice Calls (Audio / Video)
-              </span>
+          <div style={{ background: cardBg, border: `1px solid ${border}`, borderRadius: 16, padding: '16px', marginBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                <IcVideo s={14} c={txts} />
+                <span style={{ fontSize: 12, fontWeight: 800, color: txt }}>Salons de pratique (audio/video)</span>
+              </div>
+              <span style={{ fontSize: 11, color: txts }}>{callRooms.length} salon{callRooms.length > 1 ? 's' : ''}</span>
             </div>
 
-            <div style={{ display: 'grid', gap: 8, marginBottom: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 8, marginBottom: 8 }}>
+              <input
+                value={roomForm.name}
+                onChange={(e) => setRoomForm(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Nom du salon (optionnel)"
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  background: il ? '#f8fafc' : '#181818',
+                  border: `1px solid ${border}`,
+                  borderRadius: 10,
+                  padding: '8px 10px',
+                  color: txt,
+                  fontSize: 12,
+                  outline: 'none',
+                }}
+              />
+              <select
+                value={roomForm.level}
+                onChange={(e) => setRoomForm(prev => ({ ...prev, level: e.target.value }))}
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  background: il ? '#f8fafc' : '#181818',
+                  border: `1px solid ${border}`,
+                  borderRadius: 10,
+                  padding: '8px 10px',
+                  color: txt,
+                  fontSize: 12,
+                  outline: 'none',
+                }}
+              >
+                {CALL_LEVELS.map(level => <option key={level} value={level}>{level}</option>)}
+              </select>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 10 }}>
+              <select
+                value={roomForm.theme}
+                onChange={(e) => setRoomForm(prev => ({ ...prev, theme: e.target.value }))}
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  background: il ? '#f8fafc' : '#181818',
+                  border: `1px solid ${border}`,
+                  borderRadius: 10,
+                  padding: '8px 10px',
+                  color: txt,
+                  fontSize: 12,
+                  outline: 'none',
+                }}
+              >
+                {CALL_THEMES.map(theme => <option key={theme} value={theme}>{theme}</option>)}
+              </select>
+              <select
+                value={roomForm.category}
+                onChange={(e) => setRoomForm(prev => ({ ...prev, category: e.target.value }))}
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  background: il ? '#f8fafc' : '#181818',
+                  border: `1px solid ${border}`,
+                  borderRadius: 10,
+                  padding: '8px 10px',
+                  color: txt,
+                  fontSize: 12,
+                  outline: 'none',
+                }}
+              >
+                {CALL_CATEGORIES.map(category => <option key={category} value={category}>{category}</option>)}
+              </select>
+              <select
+                value={roomForm.mode}
+                onChange={(e) => setRoomForm(prev => ({ ...prev, mode: e.target.value }))}
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  background: il ? '#f8fafc' : '#181818',
+                  border: `1px solid ${border}`,
+                  borderRadius: 10,
+                  padding: '8px 10px',
+                  color: txt,
+                  fontSize: 12,
+                  outline: 'none',
+                }}
+              >
+                <option value="video">Video</option>
+                <option value="audio">Audio</option>
+              </select>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
               <button
-                onClick={() => createRoomAndJoin(false)}
+                onClick={createRoomAndJoin}
                 style={{
                   padding: '8px 10px',
                   borderRadius: 10,
@@ -1052,42 +1143,25 @@ export default function Community() {
                   cursor: 'pointer',
                 }}
               >
-                Demarrer un salon video
+                Creer et demarrer
               </button>
-              <button
-                onClick={() => createRoomAndJoin(true)}
+              <input
+                value={roomInput}
+                onChange={(e) => setRoomInput(e.target.value)}
+                placeholder="Nom du salon a rejoindre"
                 style={{
-                  padding: '8px 10px',
-                  borderRadius: 10,
-                  border: `1px solid ${border}`,
+                  width: '100%',
+                  boxSizing: 'border-box',
                   background: il ? '#f8fafc' : '#181818',
+                  border: `1px solid ${border}`,
+                  borderRadius: 10,
+                  padding: '8px 10px',
                   color: txt,
                   fontSize: 12,
-                  fontWeight: 700,
-                  cursor: 'pointer',
+                  outline: 'none',
                 }}
-              >
-                Demarrer un salon audio
-              </button>
+              />
             </div>
-
-            <input
-              value={roomInput}
-              onChange={(e) => setRoomInput(e.target.value)}
-              placeholder="Entrer un nom de salon"
-              style={{
-                width: '100%',
-                boxSizing: 'border-box',
-                background: il ? '#f8fafc' : '#181818',
-                border: `1px solid ${border}`,
-                borderRadius: 10,
-                padding: '8px 10px',
-                color: txt,
-                fontSize: 12,
-                marginBottom: 8,
-                outline: 'none',
-              }}
-            />
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
               <button
@@ -1124,11 +1198,14 @@ export default function Community() {
 
             {callRooms.length > 0 && (
               <div style={{ borderTop: `1px solid ${border}`, paddingTop: 10 }}>
-                {callRooms.slice(0, 4).map(room => (
-                  <div key={room.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 8 }}>
+                {callRooms.slice(0, 6).map(room => (
+                  <div key={room.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 9 }}>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ fontSize: 11, fontWeight: 700, color: txt, overflow: 'hidden', textOverflow: 'ellipsis' }}>{room.room}</div>
-                      <div style={{ fontSize: 10, color: txts }}>{room.level} · hote: {room.host}</div>
+                      <div style={{ fontSize: 10, color: txts }}>
+                        {(room.level || 'A1')} · {(room.theme || 'Conversation libre')} · {(room.category || 'Q&A')} · {(room.mode || 'video')}
+                      </div>
+                      <div style={{ fontSize: 10, color: txts }}>hote: {room.host}</div>
                     </div>
                     <button
                       onClick={() => openPracticeCall(room.room, room.mode === 'audio')}
@@ -1151,6 +1228,36 @@ export default function Community() {
             )}
           </div>
 
+          {/* Shortcut bar */}
+          <div style={{ background: cardBg, border: `1px solid ${border}`, borderRadius: 16, padding: '14px 16px',
+              marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+            onClick={() => setShowCreate(true)}>
+            <Avatar name={user?.name} level={user?.germanLevel} size={36} />
+            <div style={{ flex: 1, background: il ? '#f8fafc' : '#1a1a1a', border: `1px solid ${border}`,
+                borderRadius: 24, padding: '10px 16px', fontSize: 13, color: txts }}>
+              Partagez quelque chose avec la communauté
+            </div>
+          </div>
+
+          {filteredPosts.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '60px 20px', color: txts }}>
+              <div style={{ fontSize: 36, marginBottom: 12 }}>🗂️</div>
+              <div style={{ fontSize: 15, fontWeight: 600 }}>Aucun post pour l'instant</div>
+              <div style={{ fontSize: 13, marginTop: 6 }}>Soyez le premier à partager quelque chose !</div>
+            </div>
+          )}
+
+          {filteredPosts.map(post => (
+            <PostCard key={post._id} post={post} currentUserId={me} il={il}
+              onReact={handleReact} onSave={handleSave}
+              onComment={handleComment}
+              onCommentReact={handleCommentReact}
+              onDelete={handleDelete} />
+          ))}
+        </div>
+
+        {/*  RIGHT PANEL  */}
+        <div style={{ position: 'sticky', top: 72 }}>
           {/* Suggested users */}
           <div style={{ background: sideB, border: `1px solid ${border}`, borderRadius: 16, padding: '16px', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 14 }}>
