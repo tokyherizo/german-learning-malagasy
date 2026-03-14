@@ -263,8 +263,8 @@ function slugRoom(value) {
 function buildCallUrl(roomName, audioOnly = false) {
   const room = slugRoom(roomName) || `deutsch-practice-${Date.now().toString(36)}`;
   const hash = audioOnly
-    ? '#config.prejoinPageEnabled=false&config.startAudioOnly=true&config.startWithVideoMuted=true'
-    : '#config.prejoinPageEnabled=false&config.startWithAudioMuted=false';
+    ? '#config.prejoinPageEnabled=false&config.startAudioOnly=true&config.startWithVideoMuted=true&config.startWithAudioMuted=false&config.disableDeepLinking=true'
+    : '#config.prejoinPageEnabled=false&config.startWithAudioMuted=false&config.disableDeepLinking=true';
   return {
     room,
     url: `https://meet.jit.si/${room}${hash}`,
@@ -806,11 +806,11 @@ function InAppCallModal({ il, call, onClose }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '12px',
+        padding: 0,
       }}
       onClick={e => e.target === e.currentTarget && onClose()}
     >
-      <div style={{ width: '100%', maxWidth: 1020, borderRadius: 16, overflow: 'hidden', border: `1px solid ${border}`, background: il ? '#fff' : '#101010' }}>
+      <div style={{ width: '100vw', height: '100vh', borderRadius: 0, overflow: 'hidden', border: 'none', background: il ? '#fff' : '#101010', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderBottom: `1px solid ${border}` }}>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: txt, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -832,7 +832,7 @@ function InAppCallModal({ il, call, onClose }) {
           src={call.url}
           title={`call-${call.room}`}
           allow="camera; microphone; fullscreen; display-capture"
-          style={{ width: '100%', height: '72vh', border: 0, display: 'block', background: '#000' }}
+          style={{ width: '100%', flex: 1, minHeight: 0, border: 0, display: 'block', background: '#000' }}
         />
       </div>
     </div>
@@ -1361,12 +1361,8 @@ export default function Community() {
           .comm-left { order: 2; }
           .comm-right { order: 3; }
           .comm-stats-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          }
-        }
-        @media (max-width: 560px) {
-          .comm-stats-grid {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 8px !important;
           }
         }
         @media (max-width: 1100px) and (min-width: 901px) {
