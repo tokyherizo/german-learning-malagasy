@@ -372,16 +372,18 @@ const Navbar = () => {
           {/* Mobile Kultur links */}
           <div className="h-px my-1" style={{ background: il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)' }} />
           <div className="px-3 py-1 text-[10px] font-black uppercase tracking-widest" style={{ color: il ? 'rgba(15,23,42,0.35)' : 'rgba(255,255,255,0.30)' }}>🇩🇪 Kultur</div>
-          {kulturLinks.map(({ id, icon, label }) => (
-            <Link key={id} to={`/kultur#${id}`}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-              style={{
-                color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)',
-                background: 'transparent',
-              }}>
-              <span>{icon}</span>{label}
-            </Link>
-          ))}
+          <Link
+            to="/kultur"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            style={{
+              color: isActive('/kultur') ? (il ? '#0f172a' : '#fff') : (il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.5)'),
+              background: isActive('/kultur') ? purpleColor + '20' : 'transparent',
+              borderLeft: isActive('/kultur') ? `2px solid ${purpleColor}` : 'none',
+            }}
+          >
+            <span>🇩🇪</span>
+            <span>Culture allemande</span>
+          </Link>
 
           {/* Mobile language switcher (EN/DE only) */}
           <div className="h-px my-2" style={{ background: il ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)' }} />

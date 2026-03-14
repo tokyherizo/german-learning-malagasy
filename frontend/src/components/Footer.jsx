@@ -23,7 +23,6 @@ const LEVELS = [
   { lvl: 'A1' },
   { lvl: 'A2' },
   { lvl: 'B1/B2' },
-  { lvl: 'C1/C2' },
 ];
 
 const col = { display: 'flex', flexDirection: 'column', gap: 4 };
@@ -88,7 +87,7 @@ const Footer = () => {
               <span style={{ fontSize: 16, fontWeight: 700, color: il ? '#7124e5' : '#fff', letterSpacing: '-0.02em' }}>DeutschLearn</span>
             </Link>
             <p style={{ fontSize: 12, lineHeight: 1.7, color: descClr, margin: 0, maxWidth: 220 }}>
-              {t?.footer?.desc || 'Free German learning platform for everyone — from A1 to A2.'}
+              {'Plateforme gratuite pour apprendre l\'allemand — du A1 au A2.'}
             </p>
             <span style={{ fontSize: 12, color: flagClr }}>{t?.footer?.tagline || 'Deutschland 🇩🇪'}</span>
           </div>
@@ -169,7 +168,7 @@ const Footer = () => {
           justifyContent: 'space-between', alignItems: 'center',
         }}>
           <span style={{ fontSize: 11, color: copyClr }}>
-            {t?.footer?.copy ? t.footer.copy(y) : `© ${y} DeutschLearn`}
+            {`Plateforme gratuite pour apprendre l'allemand — du A1 au A2`}
           </span>
           <a href={`mailto:${EMAIL}`} style={{
             fontSize: 11, color: mailBotClr, textDecoration: 'none', transition: 'color 0.15s',
