@@ -200,6 +200,10 @@ const CALL_CATEGORIES = [
 ];
 
 const CALL_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const CALL_LANGUAGES = [
+  { value: 'fr', label: 'Francais' },
+  { value: 'en', label: 'English' },
+];
 
 function normaliseComment(comment) {
   return {
@@ -260,14 +264,15 @@ function slugRoom(value) {
     .replace(/^-|-$/g, '');
 }
 
-function buildCallUrl(roomName, audioOnly = false) {
+function buildCallUrl(roomName, audioOnly = false, language = 'fr') {
   const room = slugRoom(roomName) || `deutsch-practice-${Date.now().toString(36)}`;
+  const uiLanguage = language === 'en' ? 'en' : 'fr';
   const hash = audioOnly
     ? '#config.prejoinPageEnabled=false&config.startAudioOnly=true&config.startWithVideoMuted=true&config.startWithAudioMuted=false&config.disableDeepLinking=true'
     : '#config.prejoinPageEnabled=false&config.startWithAudioMuted=false&config.disableDeepLinking=true';
   return {
     room,
-    url: `https://meet.jit.si/${room}${hash}`,
+    url: `https://meet.jit.si/${room}?lang=${uiLanguage}${hash}`,
   };
 }
 
@@ -698,6 +703,7 @@ function CreateRoomModal({ il, user, onClose, onCreate }) {
     level: user?.germanLevel || 'A1',
     category: CALL_CATEGORIES[0],
     mode: 'video',
+    language: 'fr',
   });
 
   const bg      = il ? '#ffffff' : '#111';
@@ -746,7 +752,7 @@ function CreateRoomModal({ il, user, onClose, onCreate }) {
           </select>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           <select
             value={form.theme}
             onChange={(e) => setForm(prev => ({ ...prev, theme: e.target.value }))}
@@ -770,6 +776,14 @@ function CreateRoomModal({ il, user, onClose, onCreate }) {
           >
             <option value="video">Video</option>
             <option value="audio">Audio</option>
+          </select>
+
+          <select
+            value={form.language}
+            onChange={(e) => setForm(prev => ({ ...prev, language: e.target.value }))}
+            style={{ width: '100%', boxSizing: 'border-box', background: inputBg, border: `1px solid ${border}`, borderRadius: 10, padding: '10px 12px', color: txt, fontSize: 13, outline: 'none' }}
+          >
+            {CALL_LANGUAGES.map(language => <option key={language.value} value={language.value}>{language.label}</option>)}
           </select>
         </div>
 
@@ -818,6 +832,8 @@ function InAppCallModal({ il, call, onClose }) {
             </div>
             <div style={{ fontSize: 11, color: il ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.45)' }}>
               {call.level || 'A1'} · {call.theme || 'Conversation libre'} · {call.category || 'Q&A'} · {call.mode}
+              {' · '}
+              {call.language === 'en' ? 'English' : 'Francais'}
             </div>
           </div>
           <button
@@ -1006,13 +1022,15 @@ export default function Community() {
   const toggleFollow = (uid) => setFollowing(fs => fs.includes(uid) ? fs.filter(f => f !== uid) : [...fs, uid]);
 
   const openPracticeCall = useCallback((roomName, audioOnly = false, meta = {}) => {
-    const { room, url } = buildCallUrl(roomName, audioOnly);
+    const language = meta.language === 'en' ? 'en' : 'fr';
+    const { room, url } = buildCallUrl(roomName, audioOnly, language);
     setActiveCall({
       room,
       mode: audioOnly ? 'audio' : 'video',
       theme: meta.theme,
       category: meta.category,
       level: meta.level,
+      language,
       url,
     });
   }, []);
@@ -1030,6 +1048,7 @@ export default function Community() {
       theme: roomDetails.theme,
       category: roomDetails.category,
       mode: roomDetails.mode,
+      language: roomDetails.language === 'en' ? 'en' : 'fr',
       createdAt: new Date().toISOString(),
     };
     setCallRooms(prev => [record, ...prev].slice(0, 12));
@@ -1215,6 +1234,8 @@ export default function Community() {
                       <div style={{ fontSize: 11, fontWeight: 700, color: txt, overflow: 'hidden', textOverflow: 'ellipsis' }}>{room.room}</div>
                       <div style={{ fontSize: 10, color: txts }}>
                         {(room.level || 'A1')} · {(room.theme || 'Conversation libre')} · {(room.category || 'Q&A')} · {(room.mode || 'video')}
+                        {' · '}
+                        {(room.language === 'en' ? 'English' : 'Francais')}
                       </div>
                       <div style={{ fontSize: 10, color: txts }}>hote: {room.host}</div>
                     </div>
